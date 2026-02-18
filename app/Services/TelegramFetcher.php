@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\TgMessage;
 use danog\MadelineProto\API;
+use danog\MadelineProto\Logger;
 use danog\MadelineProto\Settings;
 use danog\MadelineProto\Settings\Database\Mysql;
 use Illuminate\Support\Carbon;
@@ -36,6 +37,12 @@ class TelegramFetcher
         $settings->getAppInfo()
             ->setApiId((int) config('parser.telegram.api_id'))
             ->setApiHash(config('parser.telegram.api_hash'));
+
+        // Кладём лог MadelineProto в storage/logs вместо корня проекта
+        $settings->getLogger()
+            ->setType(Logger::LOGGER_FILE)
+            ->setExtra(storage_path('logs/madelineproto.log'))
+            ->setLevel(Logger::LEVEL_WARNING);
 
         $sessionPath = base_path(config('parser.telegram.session_path'));
         $sessionDir  = dirname($sessionPath);
