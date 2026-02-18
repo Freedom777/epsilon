@@ -24,7 +24,6 @@ return new class extends Migration
             $table->unsignedBigInteger('price')->nullable();
             $table->enum('currency', ['gold', 'cookie'])->default('gold');
 
-            $table->unsignedInteger('quantity')->nullable();
 
             // Заточка (+1..+10)
             $table->unsignedTinyInteger('enhancement')->nullable()

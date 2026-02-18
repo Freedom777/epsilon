@@ -233,7 +233,6 @@ class MarketControllerTest extends TestCase
             'type'               => 'sell',
             'price'              => 8000,
             'currency'           => 'gold',
-            'quantity'           => null,
             'enhancement'        => 3,
             'durability_current' => 47,
             'durability_max'     => 47,

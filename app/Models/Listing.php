@@ -14,7 +14,6 @@ class Listing extends Model
         'type',
         'price',
         'currency',
-        'quantity',
         'enhancement',
         'durability_current',
         'durability_max',
@@ -26,7 +25,6 @@ class Listing extends Model
     protected $casts = [
         'posted_at'          => 'datetime',
         'price'              => 'integer',
-        'quantity'           => 'integer',
         'enhancement'        => 'integer',
         'durability_current' => 'integer',
         'durability_max'     => 'integer',

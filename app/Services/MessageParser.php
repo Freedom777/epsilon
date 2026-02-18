@@ -5,43 +5,50 @@ namespace App\Services;
 /**
  * MessageParser
  *
- * Парсит текст Telegram-сообщения из торгового чата.
- * Возвращает структурированный массив объявлений.
+ * Парсит текст Telegram-сообщения из торгового чата Epsilion War.
  *
- * Формат возвращаемых данных:
- * [
- *   'types'    => ['sell', 'buy', 'trade', 'service'],
- *   'listings' => [
- *     [
- *       'type'               => 'sell',       // buy | sell
- *       'icon'               => '🔖',
- *       'name'               => 'Безопасный свиток заточки', // чистое название без грейда/заточки/прочности
- *       'grade'              => 'III',         // I|II|III|III+|IV|V|null
- *       'enhancement'        => 3,             // 1..10 | null
- *       'durability_current' => 47,            // null если не указана
- *       'durability_max'     => 47,            // null если не указана
- *       'price'              => 1350,
- *       'currency'           => 'gold',        // gold | cookie
- *       'quantity'           => null,
- *     ],
- *   ],
- *   'exchanges' => [...],
- *   'service_listings' => [...],
- * ]
+ * Поддерживаемые форматы цен:
+ *   5000💰 / 5 000💰 / 5.000💰         — золото
+ *   100🍪                               — печеньки
+ *   5000з / 5000 з / 5000 злато        — золото (текстовый формат)
+ *   100 печ / 100 печеньки             — печеньки (текстовый формат)
+ *
+ * Поддерживаемые форматы грейда:
+ *   [III+] / [III] / [II] / [I] / [IV] / [V]   — обычные
+ *   [lll+] / [ll] / [l]                         — с латинскими L вместо I
+ *
+ * Рецепты:
+ *   📄 Рецепт [III]: Ледяные перчатки стража   — название = "Рецепт: Ледяные перчатки стража"
  */
 class MessageParser
 {
     private const GOLD_SYMBOL   = '💰';
     private const COOKIE_SYMBOL = '🍪';
 
-    // Грейд: [III+], [III], [II], [IV], [V], [I]
-    private const GRADE_PATTERN = '/\[\s*(III\+|III|II|IV|V|I)\s*\]/ui';
+    // Символьные валюты: 💰 или 🍪
+    private const PRICE_SYMBOL_PATTERN = '/(\d[\d\s.]{0,12})\s*(' . self::GOLD_SYMBOL . '|' . self::COOKIE_SYMBOL . ')/u';
 
-    // Заточка: +3, +10 (но не +100%, не в начале строки после цены)
+    // Текстовые валюты: з, злато, зол (золото); печ, печеньки (cookie)
+    private const PRICE_TEXT_GOLD_PATTERN   = '/(\d[\d\s.]{0,12})\s*(?:з(?:лато|ол)?\.?)(?:\b|$)/ui';
+    private const PRICE_TEXT_COOKIE_PATTERN = '/(\d[\d\s.]{0,12})\s*(?:печеньк[аиу]?|печ\.?)(?:\b|$)/ui';
+
+    // Грейд: [III+], [lll+], [II], [ll], [I], [l], [IV], [V]
+    // Поддерживаем как кириллические/латинские I и L
+    private const GRADE_PATTERN = '/\[\s*(III\+|III|II|IV|V|I|lll\+|lll|ll|l)\s*\]/ui';
+
+    // Заточка: +3, +10
     private const ENHANCEMENT_PATTERN = '/(?<![%\d])\+([1-9]|10)(?![\d%])/u';
 
-    // Прочность: (47/47), 47/47, (60/60)
+    // Прочность: (47/47), 47/47
     private const DURABILITY_PATTERN = '/\(?\s*(\d{1,5})\s*\/\s*(\d{1,5})\s*\)?/u';
+
+    // Нормализация латинских l → римские I в грейде
+    private const GRADE_NORMALIZE = [
+        'lll+' => 'III+',
+        'lll'  => 'III',
+        'll'   => 'II',
+        'l'    => 'I',
+    ];
 
     private array $tagMap;
     private array $keywordMap;
@@ -111,7 +118,7 @@ class MessageParser
     public function detectTypes(string $text): array
     {
         $textLower = mb_strtolower($text);
-        $types = [];
+        $types     = [];
 
         foreach ($this->tagMap as $type => $tags) {
             foreach ($tags as $tag) {
@@ -123,8 +130,7 @@ class MessageParser
         }
 
         if (empty($types)) {
-            $lines = explode("\n", $text);
-            foreach ($lines as $line) {
+            foreach (explode("\n", $text) as $line) {
                 $lineLower = mb_strtolower(trim($line));
                 foreach ($this->keywordMap as $type => $keywords) {
                     foreach ($keywords as $keyword) {
@@ -164,39 +170,33 @@ class MessageParser
      *
      * Примеры:
      *   🔖 Безопасный свиток заточки [III] - 1350💰
-     *   📿 Amulet Of Sea Water +3 [III+] (47/47) - 5000💰
-     *   🥩 Кусок мяса - - 358шт - 75💰
-     *   🔪 Эспадон Маржаны [III+] +4 - 16000💰
-     *   📄 Рецепт[IV]:🗡 Кольцо ярости бездны - 3000💰
+     *   🔖 Безопасный свиток заточки [III] - 1350 з
+     *   🎽 Crusher Armor [III] +7 (10/41) - 24000💰
+     *   📿 Amulet Waves [III+] +5 -- 10.000💰
+     *   📄 Рецепт [III]: Ледяные перчатки стража - 250з
+     *   🎨 Внешний вид: Орк-призрак - 90 печ
      */
     public function parseProductLine(string $line): ?array
     {
-        // 1. Извлекаем цену (число + символ валюты)
-        $price    = null;
-        $currency = 'gold';
+        // 1. Извлекаем цену — сначала символьные валюты, потом текстовые
+        [$price, $currency, $line] = $this->extractPrice($line);
 
-        $pricePattern = '/(\d[\d\s]{0,12})\s*(' . self::GOLD_SYMBOL . '|' . self::COOKIE_SYMBOL . ')/u';
-        if (preg_match($pricePattern, $line, $m)) {
-            $price    = (int) preg_replace('/\s+/', '', $m[1]);
-            $currency = $m[2] === self::GOLD_SYMBOL ? 'gold' : 'cookie';
-            $line     = trim(preg_replace($pricePattern, '', $line, 1));
-        }
-
-        // 2. Извлекаем грейд [III+], [III], [II], [IV], [V], [I]
+        // 2. Нормализуем грейд (латинские l → римские I) и извлекаем
+        $line  = $this->normalizeFakeRomanGrade($line);
         $grade = null;
         if (preg_match(self::GRADE_PATTERN, $line, $m)) {
-            $grade = mb_strtoupper(trim($m[1]));
+            $grade = $this->normalizeGrade($m[1]);
             $line  = preg_replace(self::GRADE_PATTERN, '', $line, 1);
         }
 
-        // 3. Извлекаем заточку +N (только целые числа 1-10, не процент)
+        // 3. Заточка +N
         $enhancement = null;
         if (preg_match(self::ENHANCEMENT_PATTERN, $line, $m)) {
             $enhancement = (int) $m[1];
             $line        = preg_replace(self::ENHANCEMENT_PATTERN, '', $line, 1);
         }
 
-        // 4. Извлекаем прочность (47/47) или 60/60
+        // 4. Прочность (47/47)
         $durabilityCurrent = null;
         $durabilityMax     = null;
         if (preg_match(self::DURABILITY_PATTERN, $line, $m)) {
@@ -205,15 +205,7 @@ class MessageParser
             $line              = preg_replace(self::DURABILITY_PATTERN, '', $line, 1);
         }
 
-        // 5. Извлекаем количество (Nшт, N шт, с двойным дефисом или без)
-        //    Паттерн: необязательные дефисы/пробелы + число + шт
-        $quantity = null;
-        if (preg_match('/(?:[-–—\s]+)?(\d+)\s*шт/ui', $line, $m)) {
-            $quantity = (int) $m[1];
-            $line     = preg_replace('/(?:[-–—\s]+)?\d+\s*шт/ui', '', $line, 1);
-        }
-
-        // 6. Извлекаем иконку (один или несколько эмодзи в начале)
+        // 5. Иконка в начале
         $icon = null;
         $line = trim($line);
         if (preg_match('/^([\p{So}\p{Sk}\p{Sm}\x{1F000}-\x{1FFFF}\x{2600}-\x{27FF}\x{2300}-\x{23FF}]+)\s*/u', $line, $m)) {
@@ -221,7 +213,11 @@ class MessageParser
             $line = trim(mb_substr($line, mb_strlen($m[0])));
         }
 
-        // 7. Финальная очистка названия
+        // 6. Рецепт: убираем "[грейд]:" между "Рецепт" и названием
+        //    "Рецепт [III]: Ледяные перчатки" → "Рецепт: Ледяные перчатки"
+        $line = preg_replace('/^(рецепт)\s*(?:\[[^\]]+\])?\s*:/ui', '$1:', $line);
+
+        // 7. Финальная очистка
         $name = $this->cleanName($line);
 
         if (mb_strlen($name) < 2) {
@@ -237,7 +233,6 @@ class MessageParser
             'durability_max'     => $durabilityMax,
             'price'              => $price,
             'currency'           => $currency,
-            'quantity'           => $quantity,
         ];
     }
 
@@ -276,14 +271,16 @@ class MessageParser
                     $surchargeCurrency  = null;
                     $surchargeDirection = null;
 
-                    $pricePattern = '/(\d[\d\s]*)\s*(' . self::GOLD_SYMBOL . '|' . self::COOKIE_SYMBOL . ')/u';
-                    if (preg_match($pricePattern, $wantPart, $ms)) {
-                        $surcharge          = (int) preg_replace('/\s+/', '', $ms[1]);
-                        $surchargeCurrency  = $ms[2] === self::GOLD_SYMBOL ? 'gold' : 'cookie';
-                        $wantPart           = trim(preg_replace($pricePattern, '', $wantPart));
-                        $surchargeDirection = preg_match('/с\s+вашей|вашей\s+доплат/ui', $linesArr[$j])
-                            ? 'them'
-                            : 'me';
+                    [, $wantPartCurrency, $wantPartClean] = $this->extractPrice($wantPart);
+                    if ($wantPartCurrency !== 'gold' || strpos($wantPart, self::GOLD_SYMBOL) !== false
+                        || preg_match('/\d/', $wantPart)) {
+                        // Есть цена в want — это доплата
+                        [$surcharge, $surchargeCurrency] = $this->extractPriceRaw($wantPart);
+                        if ($surcharge) {
+                            $wantPart           = $wantPartClean;
+                            $surchargeDirection = preg_match('/с\s+вашей|вашей\s+доплат/ui', $linesArr[$j])
+                                ? 'them' : 'me';
+                        }
                     }
 
                     [$wantIcon, $wantName] = $this->extractIconAndName($wantPart);
@@ -349,24 +346,83 @@ class MessageParser
         return $services;
     }
 
+    // =========================================================================
+    // Извлечение цены (публичный хелпер для тестов)
+    // =========================================================================
+
     /**
-     * Хелпер для тестов.
+     * @return array [price|null, currency, cleaned_line]
      */
-    public function extractPrice(string $text): ?array
+    public function extractPrice(string $line): array
     {
-        $pattern = '/(\d[\d\s]*)\s*(' . self::GOLD_SYMBOL . '|' . self::COOKIE_SYMBOL . ')/u';
-        if (preg_match($pattern, $text, $m)) {
-            return [
-                'price'    => (int) preg_replace('/\s+/', '', $m[1]),
-                'currency' => $m[2] === self::GOLD_SYMBOL ? 'gold' : 'cookie',
-            ];
+        // Символьные: 5000💰 / 100🍪
+        if (preg_match(self::PRICE_SYMBOL_PATTERN, $line, $m)) {
+            $price    = $this->parseNumber($m[1]);
+            $currency = $m[2] === self::GOLD_SYMBOL ? 'gold' : 'cookie';
+            $line     = trim(preg_replace(self::PRICE_SYMBOL_PATTERN, '', $line, 1));
+            return [$price, $currency, $line];
         }
-        return null;
+
+        // Текстовые cookie: 100 печ
+        if (preg_match(self::PRICE_TEXT_COOKIE_PATTERN, $line, $m)) {
+            $price = $this->parseNumber($m[1]);
+            $line  = trim(preg_replace(self::PRICE_TEXT_COOKIE_PATTERN, '', $line, 1));
+            return [$price, 'cookie', $line];
+        }
+
+        // Текстовые gold: 5000з / 5000 злато
+        if (preg_match(self::PRICE_TEXT_GOLD_PATTERN, $line, $m)) {
+            $price = $this->parseNumber($m[1]);
+            $line  = trim(preg_replace(self::PRICE_TEXT_GOLD_PATTERN, '', $line, 1));
+            return [$price, 'gold', $line];
+        }
+
+        return [null, 'gold', $line];
     }
 
     // =========================================================================
     // Приватные хелперы
     // =========================================================================
+
+    /**
+     * Вернуть только цену и валюту без изменения строки.
+     */
+    private function extractPriceRaw(string $line): array
+    {
+        [$price, $currency] = $this->extractPrice($line);
+        return [$price, $currency];
+    }
+
+    /**
+     * Парсим число: убираем пробелы и точки как разделители тысяч.
+     * "19.999" → 19999, "3 300" → 3300, "333.333" → 333333
+     */
+    private function parseNumber(string $raw): int
+    {
+        // Убираем пробелы и точки (разделители тысяч)
+        return (int) preg_replace('/[\s.]+/', '', $raw);
+    }
+
+    /**
+     * Нормализуем латинские "l" в квадратных скобках в римские "I".
+     * "[lll+]" → "[III+]", "[ll]" → "[II]"
+     */
+    private function normalizeFakeRomanGrade(string $line): string
+    {
+        return preg_replace_callback('/\[\s*(l{1,3}\+?)\s*\]/ui', function ($m) {
+            $key = mb_strtolower($m[1]);
+            return '[' . (self::GRADE_NORMALIZE[$key] ?? mb_strtoupper($m[1])) . ']';
+        }, $line);
+    }
+
+    /**
+     * Нормализуем строку грейда к верхнему регистру.
+     */
+    private function normalizeGrade(string $grade): string
+    {
+        $lower = mb_strtolower(trim($grade));
+        return self::GRADE_NORMALIZE[$lower] ?? mb_strtoupper($grade);
+    }
 
     private function splitIntoSections(string $text): array
     {
@@ -429,25 +485,18 @@ class MessageParser
         return [$icon ?: null, $name ?: null];
     }
 
-    /**
-     * Очистка названия товара:
-     * - Убираем ведущие и хвостовые разделители и мусорные символы
-     * - Убираем /шт, \шт в конце
-     * - Убираем +, =, / в конце
-     * - Убираем лишние пробелы
-     */
     private function cleanName(string $name): string
     {
-        // Убираем /шт и \шт в конце (до trim)
+        // /шт и \шт в конце
         $name = preg_replace('/\s*[\/\\\\]?\s*шт\s*$/ui', '', $name);
 
-        // Убираем хвостовые мусорные символы
+        // Хвостовой мусор: +, =, /, -, :, –, —
         $name = rtrim($name, " \t+-=/:–—\\|,.");
 
-        // Убираем ведущие разделители и пробелы
+        // Ведущий мусор
         $name = ltrim($name, " \t-–—:.,");
 
-        // Убираем двойные и более пробелы
+        // Множественные пробелы
         $name = preg_replace('/\s{2,}/', ' ', $name);
 
         return trim($name);

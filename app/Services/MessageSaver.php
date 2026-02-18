@@ -124,7 +124,6 @@ class MessageSaver
                 'type'               => $item['type'],
                 'price'              => $item['price']              ?? null,
                 'currency'           => $item['currency']           ?? 'gold',
-                'quantity'           => $item['quantity']           ?? null,
                 'enhancement'        => $item['enhancement']        ?? null,
                 'durability_current' => $item['durability_current'] ?? null,
                 'durability_max'     => $item['durability_max']     ?? null,
