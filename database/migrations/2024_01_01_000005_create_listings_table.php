@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('tg_message_id')->constrained('tg_messages')->cascadeOnDelete();
+            // nullable: seeded-записи (базовая линия цен) не имеют реального сообщения
+            $table->foreignId('tg_message_id')->nullable()->constrained('tg_messages')->nullOnDelete();
             $table->foreignId('tg_user_id')->nullable()->constrained('tg_users')->nullOnDelete();
 
             // nullable: товар может быть на модерации в products_pending
