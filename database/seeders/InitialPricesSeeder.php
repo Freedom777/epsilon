@@ -87,7 +87,6 @@ class InitialPricesSeeder extends Seeder
                     'type'           => $type,
                     'price'          => $price,
                     'currency'       => $currency,
-                    'quantity'       => null,
                     'posted_at'      => $seededAt->copy()->subHours($i * 24),
                     'status'         => 'ok',
                     'anomaly_reason' => null,
