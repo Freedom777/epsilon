@@ -96,10 +96,7 @@ class FetchTelegramMessages extends Command
         }
 
         // Автоматически: с последнего сообщения в БД или за FETCH_DAYS дней
-        $chatId      = config('parser.telegram.chat_id');
-        $lastMessage = TgMessage::where('tg_chat_id', $chatId)
-            ->orderByDesc('sent_at')
-            ->first();
+        $lastMessage = TgMessage::orderByDesc('sent_at')->first();
 
         if ($lastMessage) {
             $this->info("Последнее сообщение в БД: {$lastMessage->sent_at}. Загружаем с этой даты.");
@@ -116,11 +113,9 @@ class FetchTelegramMessages extends Command
      */
     private function parseUnparsed(MessageSaver $saver): int
     {
-        $chatId = config('parser.telegram.chat_id');
-        $count  = 0;
+        $count = 0;
 
-        TgMessage::where('tg_chat_id', $chatId)
-            ->where('is_parsed', false)
+        TgMessage::where('is_parsed', false)
             ->chunkById(100, function ($messages) use ($saver, &$count) {
                 foreach ($messages as $message) {
                     $saver->parseAndSave($message);
