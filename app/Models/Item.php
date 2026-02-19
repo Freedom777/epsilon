@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Equipment extends Model
+class Item extends Model
 {
     public $incrementing = false;
     protected $keyType = 'integer';

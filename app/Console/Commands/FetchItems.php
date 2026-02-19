@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Equipment;
+use App\Models\Item;
 use Illuminate\Console\Command;
 use danog\MadelineProto\API;
 
-class FetchEquipments extends Command
+class FetchItems extends Command
 {
-    protected $signature = 'equipments:fetch
+    protected $signature = 'items:fetch
                             {--from=1      : ID с которого начинать}
                             {--to=100      : ID по который брать включительно}
                             {--chat=       : Username или числовой ID чата}
@@ -62,14 +62,14 @@ class FetchEquipments extends Command
             $bar->setMessage((string) $n);
 
             if ($skipDone) {
-                $existing = Equipment::find($n);
+                $existing = Item::find($n);
                 if ($existing && $existing->status === 'ok') {
                     $bar->advance();
                     continue;
                 }
             }
 
-            Equipment::updateOrCreate(
+            Item::updateOrCreate(
                 ['id' => $n],
                 ['status' => 'process', 'raw_response' => null]
             );
@@ -78,22 +78,22 @@ class FetchEquipments extends Command
                 $response = $this->sendCommandAndGetResponse($madelineProto, $chatId, "/getequip {$n}");
 
                 if ($response === null) {
-                    Equipment::where('id', $n)->update(['status' => 'error']);
+                    Item::where('id', $n)->update(['status' => 'error']);
                     $this->newLine();
                     $this->warn("ID {$n}: нет ответа за " . self::RESPONSE_TIMEOUT . " сек");
                 } elseif (trim($response) === '' || $response === '❗️ Экипировка не найдена') {
-                    Equipment::where('id', $n)->update(['status' => 'empty']);
+                    Item::where('id', $n)->update(['status' => 'empty']);
                 } else {
                     $parsed = $this->parseResponse($response);
 
-                    Equipment::where('id', $n)->update([
+                    Item::where('id', $n)->update([
                         'raw_response' => $response,
                         'status'       => 'ok',
                         ...$parsed,
                     ]);
                 }
             } catch (\Throwable $e) {
-                Equipment::where('id', $n)->update(['status' => 'error']);
+                Item::where('id', $n)->update(['status' => 'error']);
                 $this->newLine();
                 $this->error("ID {$n}: {$e->getMessage()}");
             }
