@@ -33,7 +33,7 @@ class FetchAssets extends Command
         $skipDone   = (bool) $this->option('skip-done');
 
         if (!$chatId) {
-            $this->error('Укажите --chat или пропишите TELEGRAM_ASSET_CHAT в .env');
+            $this->error('Укажите --chat или пропишите TELEGRAM_EPSILON_CHAT_ID в .env');
             return self::FAILURE;
         }
 
@@ -79,7 +79,7 @@ class FetchAssets extends Command
                     Asset::where('id', $n)->update(['status' => 'error']);
                     $this->newLine();
                     $this->warn("ID {$n}: нет ответа за " . self::RESPONSE_TIMEOUT . " сек");
-                } elseif (trim($response) === '') {
+                } elseif (trim($response) === '' || $response === '❗️ Ресурс не найден') {
                     Asset::where('id', $n)->update(['status' => 'empty']);
                 } else {
                     [$title, $description] = $this->parseResponse($response);
