@@ -37,7 +37,8 @@ php artisan key:generate
 Заполни в `.env`:
 - `TELEGRAM_API_ID` и `TELEGRAM_API_HASH` — получить на https://my.telegram.org
 - `TELEGRAM_PHONE` — номер телефона аккаунта
-- `TELEGRAM_CHAT_ID` — ID или username чата
+- `TELEGRAM_TRADE_CHAT_ID` — ID или username торгового чата в Epsilon War (epsilion_trade)
+- `TELEGRAM_EPSILON_CHAT_ID` — ID или username бота игры Epsilon War (EpsilionWarBot)
 - Настройки баз данных (см. [DATABASE.md](docs/DATABASE.md))
 
 ### 3. Создание баз данных

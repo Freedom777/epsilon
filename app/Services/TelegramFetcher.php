@@ -96,7 +96,7 @@ class TelegramFetcher
      */
     private function determineFetchFrom(int $days): Carbon
     {
-        $chatId = config('parser.telegram.chat_id');
+        $chatId = config('parser.telegram.trade_chat_id');
 
         $lastMessage = TgMessage::where('tg_chat_id', $chatId)
             ->orderByDesc('sent_at')
@@ -118,7 +118,7 @@ class TelegramFetcher
      */
     private function fetchMessagesInRange(Carbon $from, Carbon $to): void
     {
-        $chatId     = config('parser.telegram.chat_id');
+        $chatId     = config('parser.telegram.trade_chat_id');
         $batchSize  = (int) config('parser.fetch.batch_size', 100);
         $offsetId   = 0;
         $totalSaved = 0;
@@ -213,7 +213,7 @@ class TelegramFetcher
      */
     private function parseUnparsed(): void
     {
-        $chatId = config('parser.telegram.chat_id');
+        $chatId = config('parser.telegram.trade_chat_id');
 
         TgMessage::where('tg_chat_id', $chatId)
             ->where('is_parsed', false)
