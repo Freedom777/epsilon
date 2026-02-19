@@ -33,14 +33,14 @@ class FetchEquipments extends Command
     {
         $from        = (int) $this->option('from');
         $to          = (int) $this->option('to');
-        $chatId      = $this->option('chat') ?: config('services.telegram.asset_chat');
-        $sessionPath = $this->option('session') ?: config('services.telegram.session_path');
+        $chatId      = $this->option('chat') ?: config('parser.telegram.epsilon_chat_id');
+        $sessionPath = $this->option('session') ?: config('parser.telegram.session_path');
         $delayMin    = (int) $this->option('delay-min');
         $delayMax    = (int) $this->option('delay-max');
         $skipDone    = (bool) $this->option('skip-done');
 
         if (!$chatId) {
-            $this->error('Укажите --chat или пропишите TELEGRAM_ASSET_CHAT в .env');
+            $this->error('Укажите --chat или пропишите TELEGRAM_EPSILON_CHAT_ID в .env');
             return self::FAILURE;
         }
 
@@ -81,7 +81,7 @@ class FetchEquipments extends Command
                     Equipment::where('id', $n)->update(['status' => 'error']);
                     $this->newLine();
                     $this->warn("ID {$n}: нет ответа за " . self::RESPONSE_TIMEOUT . " сек");
-                } elseif (trim($response) === '') {
+                } elseif (trim($response) === '' || $response === '❗️ Экипировка не найдена') {
                     Equipment::where('id', $n)->update(['status' => 'empty']);
                 } else {
                     $parsed = $this->parseResponse($response);
