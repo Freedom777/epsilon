@@ -6,7 +6,6 @@ use App\Models\Asset;
 use App\Models\Item;
 use App\Models\ProductPending;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class MatchResult
 {
@@ -45,6 +44,10 @@ class MatchingService
 
     public function match(string $rawTitle, ?string $grade = null): ?MatchResult
     {
+        if (blank($rawTitle)) {
+            return null;
+        }
+
         $normalized = $this->normalize($rawTitle);
 
         // 1. Точный матч в items
@@ -220,6 +223,10 @@ class MatchingService
 
     public function normalize(string $title): string
     {
+        if (blank($title)) {
+            return '';
+        }
+
         // Убираем всё кроме кириллицы, цифр, латиницы и спецсимволов %+-
         $title = preg_replace('/[^\x{0400}-\x{04FF}0-9a-zA-Z%+\- ]/u', '', $title);
         // Убираем грейд в конце: [I], [II], [III+] и т.д.
