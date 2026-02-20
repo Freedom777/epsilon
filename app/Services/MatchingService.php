@@ -197,6 +197,15 @@ class MatchingService
 
     private function queuePending(string $rawTitle, string $normalized): void
     {
+        // Убираем невалидные UTF-8 последовательности из raw_title
+        $cleanRawTitle = mb_convert_encoding($rawTitle, 'UTF-8', 'UTF-8');
+        $cleanRawTitle = preg_replace('/[\x{FFFD}]/u', '', $cleanRawTitle) ?? $cleanRawTitle;
+        $cleanRawTitle = trim($cleanRawTitle);
+
+        if (blank($cleanRawTitle)) {
+            return;
+        }
+
         $existing = ProductPending::where('normalized_title', $normalized)
             ->where('status', 'pending')
             ->first();
@@ -205,7 +214,7 @@ class MatchingService
             $existing->increment('occurrences');
         } else {
             ProductPending::create([
-                'raw_title'        => $rawTitle,
+                'raw_title'        => $cleanRawTitle,
                 'normalized_title' => $normalized,
                 'source_type'      => null,
                 'suggested_id'     => null,
