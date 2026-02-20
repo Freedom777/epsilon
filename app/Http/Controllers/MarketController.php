@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asset;
+use App\Models\Item;
 use App\Models\Listing;
-use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,27 +16,22 @@ class MarketController extends Controller
      * GET /api/market
      *
      * Параметры:
-     *   ?format=json|html     — формат ответа (default: json)
-     *   ?currency=gold|cookie — фильтр по валюте (default: все)
-     *   ?product_id=1,2,3     — фильтр по ID товаров (default: все)
-     *   ?days=30              — за сколько дней (default: 30)
+     *   ?format=json|html          — формат ответа (default: json)
+     *   ?currency=gold|cookie      — фильтр по валюте (default: все)
+     *   ?asset_id=1,2,3            — фильтр по ID расходников
+     *   ?item_id=1,2,3             — фильтр по ID экипировки
+     *   ?days=30                   — за сколько дней (default: 30)
      */
     public function index(Request $request): JsonResponse|Response
     {
-        $format     = $request->get('format', 'json');
-        $currency   = $request->get('currency');
-        $productIds = $request->get('product_id');
-        $days       = (int) $request->get('days', config('parser.api.default_days', 30));
+        $format   = $request->string('format', 'json')->value();
+        $currency = $request->string('currency')->value() ?: null;
+        $days     = $request->integer('days', config('parser.fetch.days', 30));
 
-        // Парсим product_id если передан через запятую
-        $productIdList = null;
-        if ($productIds) {
-            $productIdList = array_filter(
-                array_map('intval', explode(',', $productIds))
-            );
-        }
+        $assetIds = $this->parseIdList($request->string('asset_id')->value());
+        $itemIds  = $this->parseIdList($request->string('item_id')->value());
 
-        $data = $this->buildMarketData($currency, $productIdList, $days);
+        $data = $this->buildMarketData($currency, $assetIds, $itemIds, $days);
 
         if ($format === 'html') {
             return response($this->renderHtml($data, $currency, $days))
@@ -44,135 +40,162 @@ class MarketController extends Controller
 
         return response()->json([
             'meta' => [
-                'days'       => $days,
-                'currency'   => $currency ?? 'all',
-                'total'      => count($data),
-                'generated'  => now()->toIso8601String(),
+                'days'      => $days,
+                'currency'  => $currency ?? 'all',
+                'total'     => count($data),
+                'generated' => now()->toIso8601String(),
             ],
             'data' => $data,
         ]);
     }
 
-    /**
-     * Строим данные для ответа.
-     * Для каждого товара: макс цена покупки + кто/ссылка/дата, мин цена продажи + кто/ссылка/дата.
-     */
-    private function buildMarketData(?string $currency, ?array $productIds, int $days): array
-    {
+    // =========================================================================
+    // Построение данных
+    // =========================================================================
+
+    private function buildMarketData(
+        ?string $currency,
+        ?array  $assetIds,
+        ?array  $itemIds,
+        int     $days
+    ): array {
         $since = now()->subDays($days);
 
-        // Запрос для покупок (максимальная цена)
-        $buyQuery = DB::table('listings as l')
-            ->join('tg_messages as m', 'l.tg_message_id', '=', 'm.id')
-            ->join('products as p', 'l.product_id', '=', 'p.id')
-            ->leftJoin('tg_users as u', 'l.tg_user_id', '=', 'u.id')
-            ->where('l.type', 'buy')
-            ->where('l.status', '!=', 'invalid')
-            ->whereNotNull('l.price')
-            ->where('l.posted_at', '>=', $since)
-            ->select([
-                DB::raw('COALESCE(p.parent_id, p.id) as effective_product_id'),
-                DB::raw('MAX(l.price) as max_buy_price'),
-            ])
-            ->groupBy('effective_product_id');
+        // Агрегируем лучшие цены по asset_id и item_id
+        $buyPricesAsset  = $this->getAggregatePrices('buy',  'asset_id', $currency, $assetIds, $since);
+        $sellPricesAsset = $this->getAggregatePrices('sell', 'asset_id', $currency, $assetIds, $since);
+        $buyPricesItem   = $this->getAggregatePrices('buy',  'item_id',  $currency, $itemIds,  $since);
+        $sellPricesItem  = $this->getAggregatePrices('sell', 'item_id',  $currency, $itemIds,  $since);
 
-        // Запрос для продаж (минимальная цена)
-        $sellQuery = DB::table('listings as l')
-            ->join('tg_messages as m', 'l.tg_message_id', '=', 'm.id')
-            ->join('products as p', 'l.product_id', '=', 'p.id')
-            ->leftJoin('tg_users as u', 'l.tg_user_id', '=', 'u.id')
-            ->where('l.type', 'sell')
-            ->where('l.status', '!=', 'invalid')
-            ->whereNotNull('l.price')
-            ->where('l.posted_at', '>=', $since)
-            ->select([
-                DB::raw('COALESCE(p.parent_id, p.id) as effective_product_id'),
-                DB::raw('MIN(l.price) as min_sell_price'),
-            ])
-            ->groupBy('effective_product_id');
+        // Все задействованные asset IDs
+        $allAssetIds = $buyPricesAsset->keys()
+            ->merge($sellPricesAsset->keys())
+            ->unique()->values();
 
-        if ($currency) {
-            $buyQuery->where('l.currency', $currency);
-            $sellQuery->where('l.currency', $currency);
-        }
-
-        if ($productIds) {
-            $buyQuery->whereIn(DB::raw('COALESCE(p.parent_id, p.id)'), $productIds);
-            $sellQuery->whereIn(DB::raw('COALESCE(p.parent_id, p.id)'), $productIds);
-        }
-
-        $buyPrices  = $buyQuery->pluck('max_buy_price', 'effective_product_id');
-        $sellPrices = $sellQuery->pluck('min_sell_price', 'effective_product_id');
-
-        // Объединяем ID товаров из обоих источников
-        $allProductIds = $buyPrices->keys()
-            ->merge($sellPrices->keys())
-            ->unique()
-            ->values();
-
-        if ($productIds) {
-            $allProductIds = $allProductIds->filter(fn($id) => in_array($id, $productIds))->values();
-        }
+        // Все задействованные item IDs
+        $allItemIds = $buyPricesItem->keys()
+            ->merge($sellPricesItem->keys())
+            ->unique()->values();
 
         $result = [];
 
-        foreach ($allProductIds as $productId) {
-            $product = Product::find($productId);
-            if (!$product) {
-                continue;
-            }
+        // Расходники
+        foreach ($allAssetIds as $assetId) {
+            $asset = Asset::find($assetId);
+            if (!$asset) continue;
 
             $row = [
-                'product_id'   => $product->id,
-                'product_name' => $product->name,
-                'product_icon' => $product->icon,
-                'full_name'    => $product->full_name,
+                'asset_id'     => $asset->id,
+                'item_id'      => null,
+                'product_name' => $asset->title,
+                'product_icon' => null,
+                'grade'        => $asset->grade,
+                'type'         => $asset->type,
                 'currency'     => $currency ?? 'gold',
                 'buy'          => null,
                 'sell'         => null,
             ];
 
-            // Лучшая покупка (максимальная цена)
-            if (isset($buyPrices[$productId])) {
-                $bestBuy = $this->getBestListing(
-                    $productId, 'buy', $currency, $buyPrices[$productId], $since, 'max'
+            if ($buyPricesAsset->has($assetId)) {
+                $row['buy'] = $this->getBestListing(
+                    'asset_id', $assetId, 'buy', $currency, $buyPricesAsset[$assetId], $since
                 );
-                $row['buy'] = $bestBuy;
             }
 
-            // Лучшая продажа (минимальная цена)
-            if (isset($sellPrices[$productId])) {
-                $bestSell = $this->getBestListing(
-                    $productId, 'sell', $currency, $sellPrices[$productId], $since, 'min'
+            if ($sellPricesAsset->has($assetId)) {
+                $row['sell'] = $this->getBestListing(
+                    'asset_id', $assetId, 'sell', $currency, $sellPricesAsset[$assetId], $since
                 );
-                $row['sell'] = $bestSell;
             }
 
             $result[] = $row;
         }
 
-        // Сортируем по имени товара
+        // Экипировка
+        foreach ($allItemIds as $itemId) {
+            $item = Item::find($itemId);
+            if (!$item) continue;
+
+            $row = [
+                'asset_id'     => null,
+                'item_id'      => $item->id,
+                'product_name' => $item->title,
+                'product_icon' => null,
+                'grade'        => $item->grade,
+                'type'         => $item->type,
+                'currency'     => $currency ?? 'gold',
+                'buy'          => null,
+                'sell'         => null,
+            ];
+
+            if ($buyPricesItem->has($itemId)) {
+                $row['buy'] = $this->getBestListing(
+                    'item_id', $itemId, 'buy', $currency, $buyPricesItem[$itemId], $since
+                );
+            }
+
+            if ($sellPricesItem->has($itemId)) {
+                $row['sell'] = $this->getBestListing(
+                    'item_id', $itemId, 'sell', $currency, $sellPricesItem[$itemId], $since
+                );
+            }
+
+            $result[] = $row;
+        }
+
         usort($result, fn($a, $b) => strcmp($a['product_name'], $b['product_name']));
 
         return $result;
     }
 
     /**
+     * Получаем агрегированные цены (max для buy, min для sell).
+     */
+    private function getAggregatePrices(
+        string  $type,       // 'buy' | 'sell'
+        string  $column,     // 'asset_id' | 'item_id'
+        ?string $currency,
+        ?array  $ids,
+        \Carbon\Carbon $since
+    ): \Illuminate\Support\Collection {
+        $aggregate = $type === 'buy' ? 'MAX' : 'MIN';
+
+        $query = DB::table('listings')
+            ->whereNotNull($column)
+            ->where('type', $type)
+            ->where('status', '!=', 'invalid')
+            ->whereNotNull('price')
+            ->where('posted_at', '>=', $since)
+            ->select([
+                $column,
+                DB::raw("{$aggregate}(price) as best_price"),
+            ])
+            ->groupBy($column);
+
+        if ($currency) {
+            $query->where('currency', $currency);
+        }
+
+        if ($ids) {
+            $query->whereIn($column, $ids);
+        }
+
+        return $query->pluck('best_price', $column);
+    }
+
+    /**
      * Получаем детали конкретного листинга (лучшая цена + автор + ссылка + дата).
      */
     private function getBestListing(
-        int $productId,
+        string $column,    // 'asset_id' | 'item_id'
+        int    $id,
         string $type,
         ?string $currency,
-        int $price,
-        \Carbon\Carbon $since,
-        string $direction // 'max' | 'min'
+        int    $price,
+        \Carbon\Carbon $since
     ): ?array {
-        $query = Listing::with(['user', 'message'])
-            ->whereHas('product', function ($q) use ($productId) {
-                $q->where('id', $productId)
-                  ->orWhere('parent_id', $productId);
-            })
+        $query = Listing::with(['tgUser', 'tgMessage'])
+            ->where($column, $id)
             ->where('type', $type)
             ->where('price', $price)
             ->where('status', '!=', 'invalid')
@@ -188,25 +211,26 @@ class MarketController extends Controller
             return null;
         }
 
-        $user      = $listing->user;
-        $message   = $listing->message;
-        $userLink  = $user?->tg_profile_link;
-        $userDisplay = $user?->display ?? 'Неизвестен';
+        $user        = $listing->tgUser;
+        $message     = $listing->tgMessage;
+        $userDisplay = $user?->display_name ?? 'Неизвестен';
+        $userLink    = $user?->tg_link ?? null;
 
         return [
-            'price'       => $price,
-            'currency'    => $listing->currency,
-            'posted_at'   => $listing->posted_at?->toIso8601String(),
-            'tg_link'     => $message?->tg_link,
+            'price'        => $price,
+            'currency'     => $listing->currency,
+            'posted_at'    => $listing->posted_at?->toIso8601String(),
+            'tg_link'      => $message?->tg_link,
             'user_display' => $userDisplay,
             'user_tg_link' => $userLink,
-            'status'      => $listing->status,
+            'status'       => $listing->status,
         ];
     }
 
-    /**
-     * Рендерим HTML-таблицу.
-     */
+    // =========================================================================
+    // HTML рендер
+    // =========================================================================
+
     private function renderHtml(array $data, ?string $currency, int $days): string
     {
         $currencyLabel = match ($currency) {
@@ -217,15 +241,21 @@ class MarketController extends Controller
 
         $rows = '';
         foreach ($data as $item) {
+            $gradeLabel = $item['grade'] ? " [{$item['grade']}]" : '';
+            $typeLabel  = $item['asset_id'] ? '📦' : '⚔️';
+            $fullName   = $typeLabel . ' ' . htmlspecialchars($item['product_name']) . $gradeLabel;
+
             $buyCell  = $this->formatPriceCell($item['buy']);
             $sellCell = $this->formatPriceCell($item['sell']);
 
             $rows .= "<tr>
-                <td>{$item['full_name']}</td>
+                <td>{$fullName}</td>
                 {$buyCell}
                 {$sellCell}
             </tr>";
         }
+
+        $now = now()->format('d.m.Y H:i');
 
         return <<<HTML
 <!DOCTYPE html>
@@ -253,7 +283,7 @@ class MarketController extends Controller
 </head>
 <body>
     <h1>🏪 Рынок Epsilion War</h1>
-    <div class="meta">Данные за последние {$days} дней &nbsp;|&nbsp; {$currencyLabel} &nbsp;|&nbsp; Обновлено: {$this->now()}</div>
+    <div class="meta">Данные за последние {$days} дней &nbsp;|&nbsp; {$currencyLabel} &nbsp;|&nbsp; Обновлено: {$now}</div>
     <table>
         <thead>
             <tr>
@@ -271,40 +301,49 @@ class MarketController extends Controller
 HTML;
     }
 
-    /**
-     * Форматируем ячейку с ценой для HTML.
-     */
     private function formatPriceCell(?array $data): string
     {
         if (!$data) {
-            return '<td colspan="1" class="no-data">—</td>';
+            return '<td class="no-data">—</td>';
         }
 
         $currencySymbol = $data['currency'] === 'cookie' ? '🍪' : '💰';
-        $price  = number_format($data['price'], 0, '.', ' ');
-        $status = $data['status'] === 'suspicious' ? ' class="suspicious" title="Подозрительная цена"' : '';
+        $price          = number_format($data['price'], 0, '.', ' ');
+        $statusAttr     = $data['status'] === 'suspicious'
+            ? ' class="suspicious" title="Подозрительная цена"'
+            : '';
 
         $userHtml = $data['user_tg_link']
-            ? "<a href=\"{$data['user_tg_link']}\" target=\"_blank\">{$data['user_display']}</a>"
-            : htmlspecialchars($data['user_display'] ?? '');
+            ? '<a href="' . e($data['user_tg_link']) . '" target="_blank">' . e($data['user_display']) . '</a>'
+            : e($data['user_display'] ?? '');
 
         $dateFormatted = $data['posted_at']
             ? date('d.m.Y H:i', strtotime($data['posted_at']))
             : '';
 
         $dateHtml = $data['tg_link']
-            ? "<a href=\"{$data['tg_link']}\" target=\"_blank\">{$dateFormatted}</a>"
+            ? '<a href="' . e($data['tg_link']) . '" target="_blank">' . $dateFormatted . '</a>'
             : $dateFormatted;
 
         return "<td>
-            <span class=\"price\"{$status}>{$price} {$currencySymbol}</span><br>
+            <span class=\"price\"{$statusAttr}>{$price} {$currencySymbol}</span><br>
             <span class=\"user\">{$userHtml}</span><br>
             <span class=\"date\">{$dateHtml}</span>
         </td>";
     }
 
-    private function now(): string
+    // =========================================================================
+    // Хелперы
+    // =========================================================================
+
+    private function parseIdList(string $value): ?array
     {
-        return now()->format('d.m.Y H:i');
+        if (blank($value)) {
+            return null;
+        }
+
+        $ids = array_filter(array_map('intval', explode(',', $value)));
+
+        return empty($ids) ? null : array_values($ids);
     }
 }

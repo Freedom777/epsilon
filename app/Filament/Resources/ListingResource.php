@@ -32,13 +32,30 @@ class ListingResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->where('status', 'suspicious')
-                ->with(['product', 'user', 'message']))
+            ->modifyQueryUsing(fn ($query) => $query
+                ->where('status', 'suspicious')
+                ->with(['asset', 'item', 'tgUser', 'tgMessage'])
+            )
             ->columns([
-                Tables\Columns\TextColumn::make('product.full_name')
+                // Название товара — из asset или item
+                Tables\Columns\TextColumn::make('product_title')
                     ->label('Товар')
-                    ->searchable(['products.name'])
+                    ->getStateUsing(fn (Listing $record): string =>
+                        $record->asset?->title ?? $record->item?->title ?? '—'
+                    )
                     ->limit(35),
+
+                Tables\Columns\TextColumn::make('source_type')
+                    ->label('Тип')
+                    ->getStateUsing(fn (Listing $record): string =>
+                        $record->asset_id ? 'Расходник' : ($record->item_id ? 'Экипировка' : '—')
+                    )
+                    ->badge()
+                    ->color(fn (string $state) => match ($state) {
+                        'Расходник'  => 'success',
+                        'Экипировка' => 'info',
+                        default      => 'gray',
+                    }),
 
                 Tables\Columns\TextColumn::make('type')
                     ->label('Тип')
@@ -58,22 +75,21 @@ class ListingResource extends Resource
                     ->limit(40)
                     ->tooltip(fn ($record) => $record->anomaly_reason),
 
-                Tables\Columns\TextColumn::make('user.display_name')
+                Tables\Columns\TextColumn::make('tgUser.display_name')
                     ->label('Автор')
-                    ->url(fn ($record) => $record->user?->tg_link)
+                    ->url(fn ($record) => $record->tgUser?->tg_link)
                     ->openUrlInNewTab()
                     ->default('—'),
 
-                // Полный текст объявления
-                Tables\Columns\TextColumn::make('message.raw_text')
+                Tables\Columns\TextColumn::make('tgMessage.raw_text')
                     ->label('Текст объявления')
                     ->limit(80)
-                    ->tooltip(fn ($record) => $record->message?->raw_text)
+                    ->tooltip(fn ($record) => $record->tgMessage?->raw_text)
                     ->wrap(),
 
-                Tables\Columns\TextColumn::make('message.tg_link')
+                Tables\Columns\TextColumn::make('tgMessage.tg_link')
                     ->label('Ссылка')
-                    ->url(fn ($record) => $record->message?->tg_link)
+                    ->url(fn ($record) => $record->tgMessage?->tg_link)
                     ->openUrlInNewTab()
                     ->default('—'),
 

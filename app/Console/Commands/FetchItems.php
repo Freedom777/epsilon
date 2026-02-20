@@ -163,7 +163,7 @@ class FetchItems extends Command
             'rarity'         => null,
             'extra'          => null,
             'durability_max' => null,
-            'personal'       => false,
+            'is_personal'       => false,
             'price'          => null,
         ];
 
@@ -213,7 +213,7 @@ class FetchItems extends Command
                 if (str_starts_with($line, '☢️') && preg_match('/\[(.+?)]/', $line, $m)) {
                     $data['grade'] = $m[1];
                 } elseif (str_starts_with($line, '📌')) {
-                    $data['personal'] = true;
+                    $data['is_personal'] = true;
                 } else {
                     $extraLines[] = $line;
                 }

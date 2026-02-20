@@ -7,6 +7,7 @@ use App\Enums\ItemRarityEnum;
 use App\Enums\ItemSubtypeEnum;
 use App\Enums\ItemTypeEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Item extends Model
 {
@@ -39,4 +40,9 @@ class Item extends Model
         'is_personal'        => 'boolean',
         'is_event'           => 'boolean',
     ];
+
+    public function listings(): HasMany
+    {
+        return $this->hasMany(Listing::class);
+    }
 }

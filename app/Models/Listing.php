@@ -40,9 +40,14 @@ class Listing extends Model
         return $this->belongsTo(TgUser::class, 'tg_user_id');
     }
 
-    public function product(): BelongsTo
+    public function asset(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Asset::class, 'asset_id');
+    }
+
+    public function item(): BelongsTo
+    {
+        return $this->belongsTo(Item::class, 'item_id');
     }
 
     public function scopeRecentDays($query, int $days = 30)

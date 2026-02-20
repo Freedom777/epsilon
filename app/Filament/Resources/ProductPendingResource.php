@@ -3,7 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductPendingResource\Pages;
-use App\Models\Product;
+use App\Models\Asset;
+use App\Models\Item;
 use App\Models\ProductPending;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -21,10 +22,9 @@ class ProductPendingResource extends Resource
     protected static ?string $navigationGroup = 'Модерация';
     protected static ?int    $navigationSort  = 1;
 
-    // Бейдж с количеством непросмотренных
     public static function getNavigationBadge(): ?string
     {
-        return (string) ProductPending::where('reviewed', false)->count() ?: null;
+        return (string) ProductPending::where('status', 'pending')->count() ?: null;
     }
 
     public static function getNavigationBadgeColor(): string
@@ -32,77 +32,92 @@ class ProductPendingResource extends Resource
         return 'warning';
     }
 
-    // =========================================================================
-    // Таблица
-    // =========================================================================
-
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with(['approvedBy']))
             ->columns([
                 Tables\Columns\TextColumn::make('status')
                     ->label('Статус')
                     ->badge()
                     ->color(fn (string $state) => match ($state) {
-                        'new'            => 'info',
-                        'icon_conflict'  => 'warning',
-                        'grade_conflict' => 'warning',
-                        'missing_icon'   => 'gray',
-                        'missing_grade'  => 'gray',
-                        default          => 'secondary',
+                        'pending'  => 'warning',
+                        'approved' => 'success',
+                        'rejected' => 'danger',
+                        'merged'   => 'info',
+                        default    => 'secondary',
                     })
                     ->formatStateUsing(fn (string $state) => match ($state) {
-                        'new'            => 'Новый',
-                        'icon_conflict'  => 'Конфликт иконки',
-                        'grade_conflict' => 'Конфликт грейда',
-                        'missing_icon'   => 'Нет иконки',
-                        'missing_grade'  => 'Нет грейда',
-                        default          => $state,
+                        'pending'  => 'Ожидает',
+                        'approved' => 'Подтверждено',
+                        'rejected' => 'Отклонено',
+                        'merged'   => 'Объединено',
+                        default    => $state,
                     }),
 
-                Tables\Columns\TextColumn::make('icon')
-                    ->label('Иконка')
-                    ->default('—'),
+                Tables\Columns\TextColumn::make('source_type')
+                    ->label('Тип')
+                    ->badge()
+                    ->color(fn (?string $state) => match ($state) {
+                        'item'  => 'info',
+                        'asset' => 'success',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (?string $state) => match ($state) {
+                        'item'  => 'Экипировка',
+                        'asset' => 'Расходник',
+                        default => 'Неизвестно',
+                    }),
 
-                Tables\Columns\TextColumn::make('name')
-                    ->label('Название')
+                Tables\Columns\TextColumn::make('raw_title')
+                    ->label('Название из чата')
                     ->searchable()
                     ->limit(40),
 
-                Tables\Columns\TextColumn::make('grade')
-                    ->label('Грейд')
+                Tables\Columns\TextColumn::make('normalized_title')
+                    ->label('Нормализовано')
+                    ->limit(40)
+                    ->color('gray'),
+
+                Tables\Columns\TextColumn::make('match_score')
+                    ->label('Совпадение')
+                    ->formatStateUsing(fn (?float $state) => $state ? number_format($state, 1) . '%' : '—')
+                    ->color(fn (?float $state) => match (true) {
+                        $state === null    => 'gray',
+                        $state >= 85       => 'success',
+                        $state >= 70       => 'warning',
+                        default            => 'danger',
+                    }),
+
+                Tables\Columns\TextColumn::make('match_reason')
+                    ->label('Причина')
+                    ->formatStateUsing(fn (?string $state) => match ($state) {
+                        'no_match' => 'Не найдено',
+                        'low_score' => 'Низкое совпадение',
+                        default    => $state ?? '—',
+                    }),
+
+                // Предполагаемый матч
+                Tables\Columns\TextColumn::make('suggested_title')
+                    ->label('Предполагаемый матч')
+                    ->getStateUsing(function (ProductPending $record): string {
+                        if (!$record->suggested_id || !$record->source_type) {
+                            return '—';
+                        }
+                        if ($record->source_type === 'item') {
+                            return Item::find($record->suggested_id)?->title ?? '—';
+                        }
+                        return Asset::find($record->suggested_id)?->title ?? '—';
+                    })
+                    ->limit(40),
+
+                Tables\Columns\TextColumn::make('occurrences')
+                    ->label('Встречается')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('approvedBy.name')
+                    ->label('Обработал')
                     ->default('—'),
-
-                // Текущие данные в БД (для конфликтов)
-                Tables\Columns\TextColumn::make('product.icon')
-                    ->label('Иконка в БД')
-                    ->default('—')
-                    ->visible(fn ($livewire) => in_array(
-                        $livewire->tableFilters['status']['value'] ?? '',
-                        ['icon_conflict', 'grade_conflict']
-                    )),
-
-                Tables\Columns\TextColumn::make('product.grade')
-                    ->label('Грейд в БД')
-                    ->default('—'),
-
-                // Полный текст объявления
-                Tables\Columns\TextColumn::make('message.raw_text')
-                    ->label('Текст объявления')
-                    ->limit(80)
-                    ->tooltip(fn ($record) => $record->message?->raw_text)
-                    ->wrap(),
-
-                // Ссылка на сообщение в TG
-                Tables\Columns\TextColumn::make('message.tg_link')
-                    ->label('Ссылка')
-                    ->url(fn ($record) => $record->message?->tg_link)
-                    ->openUrlInNewTab()
-                    ->default('—'),
-
-                Tables\Columns\IconColumn::make('reviewed')
-                    ->label('Просмотрено')
-                    ->boolean(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Добавлено')
@@ -113,122 +128,110 @@ class ProductPendingResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Статус')
                     ->options([
-                        'new'            => 'Новый',
-                        'icon_conflict'  => 'Конфликт иконки',
-                        'grade_conflict' => 'Конфликт грейда',
-                        'missing_icon'   => 'Нет иконки',
-                        'missing_grade'  => 'Нет грейда',
+                        'pending'  => 'Ожидает',
+                        'approved' => 'Подтверждено',
+                        'rejected' => 'Отклонено',
+                        'merged'   => 'Объединено',
+                    ])
+                    ->default('pending'),
+
+                Tables\Filters\SelectFilter::make('source_type')
+                    ->label('Тип')
+                    ->options([
+                        'item'  => 'Экипировка',
+                        'asset' => 'Расходник',
                     ]),
 
-                Tables\Filters\TernaryFilter::make('reviewed')
-                    ->label('Просмотрено')
-                    ->placeholder('Все')
-                    ->trueLabel('Просмотрено')
-                    ->falseLabel('Не просмотрено')
-                    ->default(false),
+                Tables\Filters\SelectFilter::make('match_reason')
+                    ->label('Причина')
+                    ->options([
+                        'no_match'  => 'Не найдено',
+                        'low_score' => 'Низкое совпадение',
+                    ]),
             ])
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('occurrences', 'desc')
             ->actions([
-                // Подтвердить — переносим в products
+                // Подтвердить предложенный матч
                 Tables\Actions\Action::make('approve')
                     ->label('Подтвердить')
                     ->icon('heroicon-o-check')
                     ->color('success')
-                    ->visible(fn (ProductPending $record) => $record->status === 'new')
+                    ->visible(fn (ProductPending $record) => $record->status === 'pending' && $record->suggested_id)
                     ->action(function (ProductPending $record) {
-                        Product::create([
-                            'icon'            => $record->icon,
-                            'name'            => $record->name,
-                            'normalized_name' => $record->normalized_name,
-                            'grade'           => $record->grade,
-                            'status'          => 'ok',
-                            'is_verified'     => false,
-                        ]);
-                        $record->update(['reviewed' => true]);
-                        Notification::make()->title('Товар добавлен в справочник')->success()->send();
+                        $record->approve(auth()->id());
+                        Notification::make()->title('Запись подтверждена')->success()->send();
                     }),
 
-                // Назначить алиасом
-                Tables\Actions\Action::make('make_alias')
-                    ->label('Алиас')
+                // Привязать вручную к asset или item
+                Tables\Actions\Action::make('link_asset')
+                    ->label('Привязать к расходнику')
                     ->icon('heroicon-o-link')
                     ->color('info')
-                    ->visible(fn (ProductPending $record) => $record->status === 'new')
+                    ->visible(fn (ProductPending $record) => $record->status === 'pending')
                     ->form([
-                        Forms\Components\Select::make('parent_id')
-                            ->label('Основной товар')
+                        Forms\Components\Select::make('asset_id')
+                            ->label('Расходник')
                             ->searchable()
                             ->getSearchResultsUsing(fn (string $search) =>
-                                Product::where('name', 'like', "%{$search}%")
-                                    ->whereNull('parent_id')
+                                Asset::where('title', 'like', "%{$search}%")
+                                    ->where('status', 'ok')
                                     ->limit(20)
-                                    ->pluck('name', 'id')
+                                    ->pluck('title', 'id')
                             )
                             ->required(),
                     ])
                     ->action(function (ProductPending $record, array $data) {
-                        Product::create([
-                            'parent_id'       => $data['parent_id'],
-                            'icon'            => $record->icon,
-                            'name'            => $record->name,
-                            'normalized_name' => $record->normalized_name,
-                            'grade'           => $record->grade,
-                            'status'          => 'ok',
-                            'is_verified'     => false,
+                        $record->update([
+                            'source_type'  => 'asset',
+                            'suggested_id' => $data['asset_id'],
                         ]);
-                        $record->update(['reviewed' => true]);
-                        Notification::make()->title('Алиас создан')->success()->send();
+                        $record->approve(auth()->id());
+                        Notification::make()->title('Привязано к расходнику')->success()->send();
                     }),
 
-                // Применить иконку из объявления
-                Tables\Actions\Action::make('use_new_icon')
-                    ->label('Применить иконку')
-                    ->icon('heroicon-o-photo')
-                    ->color('warning')
-                    ->visible(fn (ProductPending $record) => $record->status === 'icon_conflict')
-                    ->action(function (ProductPending $record) {
-                        $record->product?->update(['icon' => $record->icon]);
-                        $record->update(['reviewed' => true]);
-                        Notification::make()->title('Иконка обновлена')->success()->send();
-                    }),
-
-                // Вручную ввести иконку (для missing_icon)
-                Tables\Actions\Action::make('set_icon')
-                    ->label('Задать иконку')
-                    ->icon('heroicon-o-pencil')
-                    ->color('warning')
-                    ->visible(fn (ProductPending $record) => $record->status === 'missing_icon')
+                Tables\Actions\Action::make('link_item')
+                    ->label('Привязать к экипировке')
+                    ->icon('heroicon-o-link')
+                    ->color('info')
+                    ->visible(fn (ProductPending $record) => $record->status === 'pending')
                     ->form([
-                        Forms\Components\TextInput::make('icon')
-                            ->label('Иконка (эмодзи)')
+                        Forms\Components\Select::make('item_id')
+                            ->label('Экипировка')
+                            ->searchable()
+                            ->getSearchResultsUsing(fn (string $search) =>
+                                Item::where('title', 'like', "%{$search}%")
+                                    ->where('status', 'ok')
+                                    ->limit(20)
+                                    ->pluck('title', 'id')
+                            )
                             ->required(),
                     ])
                     ->action(function (ProductPending $record, array $data) {
-                        $record->product?->update(['icon' => $data['icon']]);
-                        $record->update(['reviewed' => true]);
-                        Notification::make()->title('Иконка задана')->success()->send();
+                        $record->update([
+                            'source_type'  => 'item',
+                            'suggested_id' => $data['item_id'],
+                        ]);
+                        $record->approve(auth()->id());
+                        Notification::make()->title('Привязано к экипировке')->success()->send();
                     }),
 
-                // Задать грейд (для missing_grade и grade_conflict)
-                Tables\Actions\Action::make('set_grade')
-                    ->label('Задать грейд')
-                    ->icon('heroicon-o-pencil')
-                    ->color('warning')
-                    ->visible(fn (ProductPending $record) => in_array($record->status, ['missing_grade', 'grade_conflict']))
+                // Отклонить (мусор/нераспознаваемое)
+                Tables\Actions\Action::make('reject')
+                    ->label('Отклонить')
+                    ->icon('heroicon-o-x-mark')
+                    ->color('danger')
+                    ->requiresConfirmation()
                     ->form([
-                        Forms\Components\Select::make('grade')
-                            ->label('Грейд')
-                            ->options(['I' => 'I', 'II' => 'II', 'III' => 'III', 'III+' => 'III+', 'IV' => 'IV', 'V' => 'V'])
-                            ->required(),
+                        Forms\Components\Textarea::make('admin_comment')
+                            ->label('Комментарий')
+                            ->placeholder('Причина отклонения...'),
                     ])
                     ->action(function (ProductPending $record, array $data) {
-                        $record->product?->update(['grade' => $data['grade']]);
-                        $record->update(['reviewed' => true]);
-                        Notification::make()->title('Грейд задан')->success()->send();
+                        $record->reject(auth()->id(), $data['admin_comment'] ?? null);
+                        Notification::make()->title('Запись отклонена')->danger()->send();
                     }),
 
-                // Пропустить / удалить мусор
-                Tables\Actions\Action::make('dismiss')
+                Tables\Actions\Action::make('delete')
                     ->label('Удалить')
                     ->icon('heroicon-o-trash')
                     ->color('danger')
@@ -239,10 +242,12 @@ class ProductPendingResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkAction::make('mark_reviewed')
-                    ->label('Пометить просмотренными')
-                    ->icon('heroicon-o-check')
-                    ->action(fn ($records) => $records->each->update(['reviewed' => true])),
+                Tables\Actions\BulkAction::make('bulk_reject')
+                    ->label('Отклонить')
+                    ->icon('heroicon-o-x-mark')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->action(fn ($records) => $records->each->reject(auth()->id())),
 
                 Tables\Actions\DeleteBulkAction::make(),
             ]);

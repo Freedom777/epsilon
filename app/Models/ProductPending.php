@@ -8,27 +8,58 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProductPending extends Model
 {
     protected $fillable = [
-        'product_id',
-        'icon',
-        'name',
-        'normalized_name',
-        'grade',
+        'raw_response',
+        'raw_title',
+        'normalized_title',
+        'source_type',
+        'suggested_id',
+        'match_score',
+        'match_reason',
+        'occurrences',
         'status',
-        'tg_message_id',
-        'reviewed',
+        'approved_by',
+        'approved_at',
+        'admin_comment',
     ];
 
     protected $casts = [
-        'reviewed' => 'boolean',
+        'match_score'  => 'decimal:2',
+        'occurrences'  => 'integer',
+        'approved_at'  => 'datetime',
     ];
 
-    public function product(): BelongsTo
+    public function approvedBy(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
-    public function message(): BelongsTo
+    public function scopePending($query)
     {
-        return $this->belongsTo(TgMessage::class, 'tg_message_id');
+        return $query->where('status', 'pending');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'approved');
+    }
+
+    public function approve(int $userId, ?string $comment = null): void
+    {
+        $this->update([
+            'status'        => 'approved',
+            'approved_by'   => $userId,
+            'approved_at'   => now(),
+            'admin_comment' => $comment,
+        ]);
+    }
+
+    public function reject(int $userId, ?string $comment = null): void
+    {
+        $this->update([
+            'status'        => 'rejected',
+            'approved_by'   => $userId,
+            'approved_at'   => now(),
+            'admin_comment' => $comment,
+        ]);
     }
 }

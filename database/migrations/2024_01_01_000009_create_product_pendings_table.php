@@ -13,7 +13,7 @@ return new class extends Migration
             $table->text('raw_response')->nullable();
             $table->string('raw_title');
             $table->string('normalized_title');
-            $table->enum('source_type', ['asset', 'item']); // к какой таблице относится
+            $table->enum('source_type', ['asset', 'item'])->nullable(); // к какой таблице относится
             $table->unsignedBigInteger('suggested_id')->nullable(); // id в assets или items
             $table->decimal('match_score', 5, 2)->nullable();
             $table->string('match_reason')->nullable();

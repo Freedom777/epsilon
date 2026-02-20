@@ -37,13 +37,23 @@ class Exchange extends Model
         return $this->belongsTo(TgUser::class, 'tg_user_id');
     }
 
-    public function product(): BelongsTo
+    public function asset(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Asset::class, 'asset_id');
     }
 
-    public function exchangeProduct(): BelongsTo
+    public function item(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'exchange_product_id');
+        return $this->belongsTo(Item::class, 'item_id');
+    }
+
+    public function exchangeAsset(): BelongsTo
+    {
+        return $this->belongsTo(Asset::class, 'exchange_asset_id');
+    }
+
+    public function exchangeItem(): BelongsTo
+    {
+        return $this->belongsTo(Item::class, 'exchange_item_id');
     }
 }
