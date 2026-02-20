@@ -221,17 +221,21 @@ class MatchingService
     // Вспомогательные методы
     // =========================================================================
 
-    public function normalize(string $title): string
+    public function normalize(?string $title): string
     {
         if (blank($title)) {
             return '';
         }
 
-        // Убираем всё кроме кириллицы, цифр, латиницы и спецсимволов %+-
-        $title = preg_replace('/[^\x{0400}-\x{04FF}0-9a-zA-Z%+\- ]/u', '', $title);
-        // Убираем грейд в конце: [I], [II], [III+] и т.д.
-        $title = preg_replace('/\s*\[[IVX+]+\]\s*$/u', '', $title);
-        return mb_strtolower(trim(preg_replace('/\s+/', ' ', $title)));
+        // Убираем невалидные UTF-8 последовательности
+        $title = mb_convert_encoding($title, 'UTF-8', 'UTF-8');
+
+        // Убираем символ замены U+FFFD и прочий мусор
+        $title = preg_replace('/[\x{FFFD}]/u', '', $title) ?? $title;
+        $title = preg_replace('/[^\x{0400}-\x{04FF}0-9a-zA-Z%+\- ]/u', '', $title) ?? $title;
+        $title = preg_replace('/\s*\[[IVX+]+\]\s*$/u', '', $title) ?? $title;
+
+        return mb_strtolower(trim(preg_replace('/\s+/', ' ', $title) ?? $title));
     }
 
     private function loadIndexes(): void
