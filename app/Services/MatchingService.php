@@ -194,20 +194,24 @@ class MatchingService
 
     private function queuePending(string $rawTitle, string $normalized): void
     {
-        ProductPending::updateOrCreate(
-            [
+        $existing = ProductPending::where('normalized_title', $normalized)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($existing) {
+            $existing->increment('occurrences');
+        } else {
+            ProductPending::create([
+                'raw_title'        => $rawTitle,
                 'normalized_title' => $normalized,
+                'source_type'      => null,
+                'suggested_id'     => null,
+                'match_score'      => null,
+                'match_reason'     => 'no_match',
+                'occurrences'      => 1,
                 'status'           => 'pending',
-            ],
-            [
-                'raw_title'    => $rawTitle,
-                'source_type'  => null,
-                'suggested_id' => null,
-                'match_score'  => null,
-                'match_reason' => 'no_match',
-                'occurrences'  => DB::raw('occurrences + 1'),
-            ]
-        );
+            ]);
+        }
     }
 
     // =========================================================================
