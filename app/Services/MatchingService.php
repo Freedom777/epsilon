@@ -5,7 +5,8 @@ namespace App\Services;
 use App\Models\Asset;
 use App\Models\Item;
 use App\Models\ProductPending;
-use DB;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class MatchResult
 {
@@ -30,10 +31,13 @@ class MatchResult
 
 class MatchingService
 {
-    private const FUZZY_THRESHOLD = 85.0;
-
     private ?Collection $itemsIndex  = null;
     private ?Collection $assetsIndex = null;
+
+    private function threshold(): float
+    {
+        return (float) config('parser.matching.fuzzy_threshold', 85);
+    }
 
     // =========================================================================
     // Публичный API
@@ -64,7 +68,7 @@ class MatchingService
         if ($result) return $result;
 
         // 6. Не нашли — отправляем в product_pendings
-        $this->queuePending($rawTitle, $normalized, $grade);
+        $this->queuePending($rawTitle, $normalized);
 
         return null;
     }
@@ -82,13 +86,7 @@ class MatchingService
 
         if (!$item) return null;
 
-        return new MatchResult(
-            sourceType: 'item',
-            id:         $item->id,
-            model:      $item,
-            matchType:  'exact',
-            score:      100.0,
-        );
+        return new MatchResult('item', $item->id, $item, 'exact', 100.0);
     }
 
     private function exactMatchAsset(string $normalized, ?string $grade): ?MatchResult
@@ -96,7 +94,6 @@ class MatchingService
         $query = Asset::where('normalized_title', $normalized)
             ->where('status', 'ok');
 
-        // У assets грейд есть не всегда
         if ($grade) {
             $query->where('grade', $grade);
         }
@@ -105,13 +102,7 @@ class MatchingService
 
         if (!$asset) return null;
 
-        return new MatchResult(
-            sourceType: 'asset',
-            id:         $asset->id,
-            model:      $asset,
-            matchType:  'exact',
-            score:      100.0,
-        );
+        return new MatchResult('asset', $asset->id, $asset, 'exact', 100.0);
     }
 
     // =========================================================================
@@ -123,6 +114,7 @@ class MatchingService
         $pending = ProductPending::where('normalized_title', $normalized)
             ->where('status', 'approved')
             ->whereNotNull('suggested_id')
+            ->whereNotNull('source_type')
             ->first();
 
         if (!$pending) return null;
@@ -162,7 +154,7 @@ class MatchingService
             }
         }
 
-        if ($bestScore < self::FUZZY_THRESHOLD || !$best) {
+        if ($bestScore < $this->threshold() || !$best) {
             return null;
         }
 
@@ -189,7 +181,7 @@ class MatchingService
             }
         }
 
-        if ($bestScore < self::FUZZY_THRESHOLD || !$best) {
+        if ($bestScore < $this->threshold() || !$best) {
             return null;
         }
 
@@ -200,7 +192,7 @@ class MatchingService
     // Очередь на модерацию
     // =========================================================================
 
-    private function queuePending(string $rawTitle, string $normalized, ?string $grade): void
+    private function queuePending(string $rawTitle, string $normalized): void
     {
         ProductPending::updateOrCreate(
             [
@@ -224,9 +216,9 @@ class MatchingService
 
     public function normalize(string $title): string
     {
-        // Убираем эмодзи
+        // Убираем всё кроме кириллицы, цифр, латиницы и спецсимволов %+-
         $title = preg_replace('/[^\x{0400}-\x{04FF}0-9a-zA-Z%+\- ]/u', '', $title);
-        // Убираем грейд в конце: [I], [II], [III+]
+        // Убираем грейд в конце: [I], [II], [III+] и т.д.
         $title = preg_replace('/\s*\[[IVX+]+\]\s*$/u', '', $title);
         return mb_strtolower(trim(preg_replace('/\s+/', ' ', $title)));
     }
