@@ -172,6 +172,10 @@ class MessageSaver
     private function saveServiceListing(TgMessage $message, array $item): void
     {
         try {
+            if (blank($item['name'])) {
+                return;
+            }
+
             $service = Service::findOrCreateByName($item['name'], $item['icon'] ?? null);
 
             ServiceListing::create([

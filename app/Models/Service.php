@@ -33,6 +33,10 @@ class Service extends Model
 
     public static function normalizeName(string $name): string
     {
+        if (blank($name)) {
+            return '';
+        }
+
         $name = preg_replace('/[\x{1F000}-\x{1FFFF}]|[\x{2600}-\x{27FF}]|[\x{2300}-\x{23FF}]/u', '', $name);
         $name = trim(preg_replace('/\s+/', ' ', $name));
         return mb_strtolower($name);
