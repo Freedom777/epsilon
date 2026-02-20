@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Exchange;
 use App\Models\Listing;
-use App\Models\Product;
 use App\Models\Service;
 use App\Models\ServiceListing;
 use App\Models\TgMessage;
@@ -15,17 +14,11 @@ use Illuminate\Support\Facades\Log;
 class MessageSaver
 {
     public function __construct(
-        private readonly MessageParser $parser,
-        private readonly PriceAnomalyDetector $anomalyDetector
+        private readonly MessageParser        $parser,
+        private readonly MatchingService      $matchingService,
+        private readonly PriceAnomalyDetector $anomalyDetector,
     ) {}
 
-    // =========================================================================
-    // Публичный API
-    // =========================================================================
-
-    /**
-     * Сохранить сырое сообщение в tg_messages.
-     */
     public function saveRawMessage(array $msgData): TgMessage
     {
         $user = null;
@@ -56,9 +49,6 @@ class MessageSaver
         );
     }
 
-    /**
-     * Распарсить и сохранить объявления из сообщения.
-     */
     public function parseAndSave(TgMessage $message): void
     {
         if (empty(trim($message->raw_text))) {
@@ -85,33 +75,26 @@ class MessageSaver
         });
     }
 
-    // =========================================================================
-    // Приватные методы
-    // =========================================================================
-
     private function saveListing(TgMessage $message, array $item): void
     {
         try {
-            // Ищем товар через findOrQueue (с поддержкой grade)
-            $product = Product::findOrQueue(
-                rawName:      $item['name'],
-                grade:        $item['grade']  ?? null,
-                icon:         $item['icon']   ?? null,
-                tgMessageId:  $message->id,
-            );
+            $match = $this->matchingService->match($item['name'], $item['grade'] ?? null);
 
-            // Если товар не найден — он ушёл в products_pending на модерацию
-            // Листинг сохраняем с needs_review
-            $status        = $product ? 'ok' : 'needs_review';
+            // Товар не найден — ушёл в product_pendings, листинг не создаём
+            if (!$match) {
+                return;
+            }
+
+            $status        = 'ok';
             $anomalyReason = null;
 
-            // Проверка аномалии цены (только если товар найден и цена есть)
-            if ($product && !empty($item['price'])) {
+            if (!empty($item['price'])) {
                 $anomaly       = $this->anomalyDetector->check(
-                    $product->effective_id,
+                    $match->id,
+                    $match->sourceType,
                     $item['type'],
                     $item['currency'],
-                    $item['price']
+                    $item['price'],
                 );
                 $status        = $anomaly['status'];
                 $anomalyReason = $anomaly['reason'];
@@ -120,7 +103,8 @@ class MessageSaver
             Listing::create([
                 'tg_message_id'      => $message->id,
                 'tg_user_id'         => $message->tg_user_id,
-                'product_id'         => $product?->id,
+                'asset_id'           => $match->isAsset() ? $match->id : null,
+                'item_id'            => $match->isItem()  ? $match->id : null,
                 'type'               => $item['type'],
                 'price'              => $item['price']              ?? null,
                 'currency'           => $item['currency']           ?? 'gold',
@@ -147,34 +131,32 @@ class MessageSaver
                 return;
             }
 
-            $giveProduct = Product::findOrQueue(
-                rawName:     $exchange['give_name'],
-                grade:       $exchange['give_grade'] ?? null,
-                icon:        $exchange['give_icon']  ?? null,
-                tgMessageId: $message->id,
+            $giveMatch = $this->matchingService->match(
+                $exchange['give_name'],
+                $exchange['give_grade'] ?? null,
             );
 
-            $wantProduct = Product::findOrQueue(
-                rawName:     $exchange['want_name'],
-                grade:       $exchange['want_grade'] ?? null,
-                icon:        $exchange['want_icon']  ?? null,
-                tgMessageId: $message->id,
+            $wantMatch = $this->matchingService->match(
+                $exchange['want_name'],
+                $exchange['want_grade'] ?? null,
             );
 
             // Сохраняем только если оба товара найдены
-            if (!$giveProduct || !$wantProduct) {
+            if (!$giveMatch || !$wantMatch) {
                 return;
             }
 
             Exchange::create([
                 'tg_message_id'             => $message->id,
                 'tg_user_id'                => $message->tg_user_id,
-                'product_id'                => $giveProduct->id,
-                'product_quantity'          => $exchange['give_qty']           ?? 1,
-                'exchange_product_id'       => $wantProduct->id,
-                'exchange_product_quantity' => $exchange['want_qty']           ?? 1,
-                'surcharge_amount'          => $exchange['surcharge']          ?? null,
-                'surcharge_currency'        => $exchange['surcharge_currency'] ?? null,
+                'asset_id'                  => $giveMatch->isAsset() ? $giveMatch->id : null,
+                'item_id'                   => $giveMatch->isItem()  ? $giveMatch->id : null,
+                'product_quantity'          => $exchange['give_qty']            ?? 1,
+                'exchange_asset_id'         => $wantMatch->isAsset() ? $wantMatch->id : null,
+                'exchange_item_id'          => $wantMatch->isItem()  ? $wantMatch->id : null,
+                'exchange_product_quantity' => $exchange['want_qty']            ?? 1,
+                'surcharge_amount'          => $exchange['surcharge']           ?? null,
+                'surcharge_currency'        => $exchange['surcharge_currency']  ?? null,
                 'surcharge_direction'       => $exchange['surcharge_direction'] ?? null,
                 'posted_at'                 => $message->sent_at,
             ]);

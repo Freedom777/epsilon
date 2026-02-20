@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\ItemGradeEnum;
+use App\Enums\ItemRarityEnum;
+use App\Enums\ItemSubtypeEnum;
+use App\Enums\ItemTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
@@ -20,13 +24,19 @@ class Item extends Model
         'rarity',
         'extra',
         'durability_max',
-        'personal',
+        'is_personal',
+        'is_event',
         'price',
         'status',
     ];
 
     protected $casts = [
-        'id'       => 'integer',
-        'personal' => 'boolean',
+        'id'                 => 'integer',
+        'type_normalized'    => ItemTypeEnum::class,
+        'subtype_normalized' => ItemSubtypeEnum::class,
+        'rarity_normalized'  => ItemRarityEnum::class,
+        'grade_normalized'   => ItemGradeEnum::class,
+        'is_personal'        => 'boolean',
+        'is_event'           => 'boolean',
     ];
 }

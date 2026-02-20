@@ -13,7 +13,11 @@ class Asset extends Model
         'id',
         'raw_response',
         'title',
+        'normalized_title',
+        'type',
+        'subtype',
         'description',
+        'drop_monster',
         'status',
     ];
 

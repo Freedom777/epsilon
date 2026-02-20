@@ -1,5 +1,9 @@
 <?php
 
+use App\Enums\ItemGradeEnum;
+use App\Enums\ItemRarityEnum;
+use App\Enums\ItemSubtypeEnum;
+use App\Enums\ItemTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,15 +16,17 @@ return new class extends Migration
             $table->unsignedBigInteger('id')->primary();
             $table->text('raw_response')->nullable();
             $table->string('title')->nullable();
+            $table->string('normalized_title')->nullable();
             $table->text('description')->nullable();
-            $table->string('type')->nullable();
-            $table->string('subtype')->nullable();
-            $table->string('grade')->nullable();
-            $table->string('rarity')->nullable();
+            $table->enum('type', array_column(ItemTypeEnum::cases(), 'value'))->nullable();
+            $table->enum('subtype', array_column(ItemSubtypeEnum::cases(), 'value'))->nullable();
+            $table->enum('grade', array_column(ItemGradeEnum::cases(), 'value'))->nullable();
+            $table->enum('rarity', array_column(ItemRarityEnum::cases(), 'value'))->nullable();
             $table->text('extra')->nullable();
             $table->unsignedInteger('durability_max')->nullable();
-            $table->boolean('personal')->default(false);
             $table->unsignedInteger('price')->nullable();
+            $table->boolean('is_personal')->default(false);
+            $table->boolean('is_event')->default(false);
             $table->enum('status', ['process', 'ok', 'empty', 'error'])->default('process');
             $table->timestamps();
         });

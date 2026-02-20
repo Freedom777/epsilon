@@ -18,21 +18,17 @@ class PriceAnomalyDetector
     }
 
     /**
-     * Проверить цену листинга на аномальность.
-     * Возвращает массив ['status' => ..., 'reason' => ...] или null если нет данных.
-     *
-     * @param  int     $productId  ID товара (основного, с учётом parent_id)
-     * @param  string  $type       'buy' | 'sell'
-     * @param  string  $currency   'gold' | 'cookie'
-     * @param  int     $price      Цена для проверки
-     * @return array
+     * @param  int     $id          asset_id или item_id
+     * @param  string  $sourceType  'asset' | 'item'
+     * @param  string  $type        'buy' | 'sell'
+     * @param  string  $currency    'gold' | 'cookie'
+     * @param  int     $price       Цена для проверки
      */
-    public function check(int $productId, string $type, string $currency, int $price): array
+    public function check(int $id, string $sourceType, string $type, string $currency, int $price): array
     {
-        $average = $this->getAveragePrice($productId, $type, $currency);
+        $average = $this->getAveragePrice($id, $sourceType, $type, $currency);
 
         if ($average === null) {
-            // Недостаточно данных — не можем определить аномалию
             return ['status' => 'ok', 'reason' => null];
         }
 
@@ -56,17 +52,12 @@ class PriceAnomalyDetector
         return ['status' => 'ok', 'reason' => null];
     }
 
-    /**
-     * Получить среднюю цену товара за последние N дней.
-     * Возвращает null если записей меньше minSamples.
-     */
-    private function getAveragePrice(int $productId, string $type, string $currency): ?float
+    private function getAveragePrice(int $id, string $sourceType, string $type, string $currency): ?float
     {
+        $column = $sourceType === 'asset' ? 'asset_id' : 'item_id';
+
         $rows = Listing::query()
-            ->where(function ($q) use ($productId) {
-                $q->where('product_id', $productId)
-                  ->orWhereHas('product', fn($pq) => $pq->where('parent_id', $productId));
-            })
+            ->where($column, $id)
             ->where('type', $type)
             ->where('currency', $currency)
             ->where('status', '!=', 'invalid')

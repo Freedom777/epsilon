@@ -11,12 +11,12 @@ return new class extends Migration
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
 
-            // nullable: seeded-записи (базовая линия цен) не имеют реального сообщения
             $table->foreignId('tg_message_id')->nullable()->constrained('tg_messages')->nullOnDelete();
             $table->foreignId('tg_user_id')->nullable()->constrained('tg_users')->nullOnDelete();
 
-            // nullable: товар может быть на модерации в products_pending
-            $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete();
+            // Либо asset_id, либо item_id — никогда оба
+            $table->foreignId('asset_id')->nullable()->constrained('assets')->nullOnDelete();
+            $table->foreignId('item_id')->nullable()->constrained('items')->nullOnDelete();
 
             $table->enum('type', ['buy', 'sell'])
                 ->comment('buy = куплю, sell = продам');
@@ -24,12 +24,9 @@ return new class extends Migration
             $table->unsignedBigInteger('price')->nullable();
             $table->enum('currency', ['gold', 'cookie'])->default('gold');
 
-
-            // Заточка (+1..+10)
             $table->unsignedTinyInteger('enhancement')->nullable()
                 ->comment('Заточка предмета: 1-10');
 
-            // Прочность
             $table->unsignedSmallInteger('durability_current')->nullable();
             $table->unsignedSmallInteger('durability_max')->nullable();
 
@@ -42,7 +39,8 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index(['product_id', 'type', 'currency', 'posted_at']);
+            $table->index(['asset_id', 'type', 'currency', 'posted_at']);
+            $table->index(['item_id', 'type', 'currency', 'posted_at']);
             $table->index('posted_at');
             $table->index('status');
         });

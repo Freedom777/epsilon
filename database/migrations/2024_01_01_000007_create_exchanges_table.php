@@ -14,29 +14,30 @@ return new class extends Migration
             $table->foreignId('tg_message_id')->constrained('tg_messages')->cascadeOnDelete();
             $table->foreignId('tg_user_id')->nullable()->constrained('tg_users')->nullOnDelete();
 
-            // Что отдаю
-            $table->foreignId('product_id')->constrained('products');
+            // Что отдаю — либо asset, либо item
+            $table->foreignId('asset_id')->nullable()->constrained('assets')->cascadeOnDelete();
+            $table->foreignId('item_id')->nullable()->constrained('items')->cascadeOnDelete();
             $table->unsignedInteger('product_quantity')->default(1);
 
-            // Что хочу получить
-            $table->foreignId('exchange_product_id')->constrained('products');
+            // Что хочу получить — либо asset, либо item
+            $table->foreignId('exchange_asset_id')->nullable()->constrained('assets')->cascadeOnDelete();
+            $table->foreignId('exchange_item_id')->nullable()->constrained('items')->cascadeOnDelete();
             $table->unsignedInteger('exchange_product_quantity')->default(1);
 
-            // Доплата (если есть)
+            // Доплата
             $table->unsignedBigInteger('surcharge_amount')->nullable()
                 ->comment('Сумма доплаты (null если чистый обмен)');
             $table->enum('surcharge_currency', ['gold', 'cookie'])->nullable()
                 ->comment('Валюта доплаты');
-
-            // Кто доплачивает: me = я доплачиваю, them = они доплачивают
             $table->enum('surcharge_direction', ['me', 'them'])->nullable();
 
             $table->timestamp('posted_at');
-
             $table->timestamps();
 
-            $table->index(['product_id', 'posted_at']);
-            $table->index(['exchange_product_id', 'posted_at']);
+            $table->index(['asset_id', 'posted_at']);
+            $table->index(['item_id', 'posted_at']);
+            $table->index(['exchange_asset_id', 'posted_at']);
+            $table->index(['exchange_item_id', 'posted_at']);
             $table->index('posted_at');
         });
     }
