@@ -303,6 +303,8 @@ class TelegramFetcher
      */
     private function extractChatId(array $chats, string|int $original): int
     {
+        Log::debug('extractChatId', ['chats' => $chats, 'original' => $original]);
+
         foreach ($chats as $chat) {
             if (isset($chat['id'])) {
                 return (int) ('-100' . $chat['id']);
