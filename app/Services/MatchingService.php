@@ -232,11 +232,12 @@ class MatchingService
 
     public function normalize(?string $title): string
     {
+        $title = iconv('UTF-8', 'UTF-8//IGNORE', $title);
         if (blank($title)) {
             return '';
         }
         // Убираем невалидные UTF-8 последовательности
-        $title = mb_convert_encoding($title, 'UTF-8', 'UTF-8');
+        // $title = mb_convert_encoding($title, 'UTF-8', 'UTF-8');
 
         // Убираем символ замены U+FFFD и прочий мусор
         $title = preg_replace('/[\x{FFFD}]/u', '', $title) ?? $title;

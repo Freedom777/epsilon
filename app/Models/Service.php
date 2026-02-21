@@ -37,7 +37,13 @@ class Service extends Model
             return '';
         }
 
-        $name = mb_convert_encoding($name, 'UTF-8', 'UTF-8');
+        if ($name === false || blank($name)) {
+            return '';
+        }
+
+        // Самый надёжный способ убрать невалидный UTF-8
+        $name = iconv('UTF-8', 'UTF-8//IGNORE', $name);
+        // $name = mb_convert_encoding($name, 'UTF-8', 'UTF-8');
         $name = preg_replace('/[\x{FFFD}]/u', '', $name) ?? $name;
         $name = preg_replace('/[\x{1F000}-\x{1FFFF}]|[\x{2600}-\x{27FF}]|[\x{2300}-\x{23FF}]/u', '', $name) ?? $name;
         $name = trim(preg_replace('/\s+/', ' ', $name) ?? $name);

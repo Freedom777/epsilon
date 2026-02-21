@@ -116,14 +116,11 @@ class MessageSaver
                 'anomaly_reason'     => $anomalyReason,
             ]);
 
-            Log::debug('Listing created', ['listing_id' => $listing->id, 'match' => $match->id]);
-
         } catch (\Throwable $e) {
             Log::error('Error saving listing', [
                 'message_id' => $message->id,
                 'item'       => $item,
                 'error'      => $e->getMessage(),
-                'trace'      => $e->getTraceAsString(),
             ]);
         }
     }
