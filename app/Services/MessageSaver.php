@@ -52,6 +52,7 @@ class MessageSaver
     public function parseAndSave(TgMessage $message): void
     {
         if (empty(trim($message->raw_text))) {
+            Log::warning('Empty message', ['message_id' => $message->id]);
             $message->update(['is_parsed' => true]);
             return;
         }
