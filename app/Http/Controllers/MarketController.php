@@ -264,7 +264,7 @@ class MarketController extends Controller
             if (!in_array($type, $availableTabs)) continue;
 
             $count    = count($grouped[$type]);
-            $tabId    = 'tab-' . preg_replace('/[^a-z0-9]/u', '-', mb_strtolower($type));
+            $tabId = 'tab-' . md5($type);
             $tabsHtml .= "<button class=\"tab\" data-tab=\"{$tabId}\" onclick=\"switchTab('{$tabId}')\">"
                 . "{$config['icon']} {$config['label']}"
                 . " <span class=\"count\">{$count}</span>"
@@ -276,7 +276,7 @@ class MarketController extends Controller
         foreach (self::TAB_CONFIG as $type => $config) {
             if (!in_array($type, $availableTabs)) continue;
 
-            $tabId = 'tab-' . preg_replace('/[^a-z0-9]/u', '-', mb_strtolower($type));
+            $tabId = 'tab-' . md5($type);
             $rows  = '';
 
             foreach ($grouped[$type] as $item) {
@@ -296,7 +296,7 @@ class MarketController extends Controller
                 . "</div>";
         }
 
-        $defaultTabId   = 'tab-' . preg_replace('/[^a-z0-9]/u', '-', mb_strtolower($defaultTab));
+        $defaultTabId   = 'tab-' . md5($defaultTab);
         $currencyLabel  = match ($currency) {
             'gold'   => '💰 Золото',
             'cookie' => '🍪 Печеньки',
