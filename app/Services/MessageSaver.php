@@ -76,51 +76,70 @@ class MessageSaver
 
     private function saveListing(TgMessage $message, array $item): void
     {
-        try {
-            $match = $this->matchingService->match($item['name'], $item['grade'] ?? null);
+        $attempts = 3;
 
-            // Товар не найден — ушёл в product_pendings, листинг не создаём
-            if (!$match) {
-                return;
-            }
+        while ($attempts-- > 0) {
+            try {
+                $match = $this->matchingService->match($item['name'], $item['grade'] ?? null);
 
-            $status        = 'ok';
-            $anomalyReason = null;
+                // Товар не найден — ушёл в product_pendings, листинг не создаём
+                if (!$match) {
+                    return;
+                }
 
-            if (!empty($item['price'])) {
-                $anomaly       = $this->anomalyDetector->check(
-                    $match->id,
-                    $match->sourceType,
-                    $item['type'],
-                    $item['currency'],
-                    $item['price'],
+                $assetId = $match->sourceType === 'asset' ? $match->id : null;
+                $itemId  = $match->sourceType === 'item'  ? $match->id : null;
+
+                $status = 'ok';
+                $anomalyReason = null;
+
+                if (!empty($item['price'])) {
+                    $anomaly = $this->anomalyDetector->check(
+                        $match->id,
+                        $match->sourceType,
+                        $item['type'],
+                        $item['currency'],
+                        $item['price'],
+                    );
+                    $status = $anomaly['status'];
+                    $anomalyReason = $anomaly['reason'];
+                }
+
+                Listing::firstOrCreate(
+                    [
+                        'tg_message_id' => $message->id,
+                        'asset_id' => $assetId ?? null,
+                        'item_id' => $itemId ?? null,
+                    ],
+                    [
+                        'tg_user_id' => $message->tg_user_id,
+                        'type' => $item['type'],
+                        'price' => $item['price'] ?? null,
+                        'currency' => $item['currency'] ?? 'gold',
+                        'enhancement' => $item['enhancement'] ?? null,
+                        'durability_current' => $item['durability_current'] ?? null,
+                        'durability_max' => $item['durability_max'] ?? null,
+                        'posted_at' => $message->sent_at,
+                        'status' => $status,
+                        'anomaly_reason' => $anomalyReason,
+                    ]
                 );
-                $status        = $anomaly['status'];
-                $anomalyReason = $anomaly['reason'];
+
+                return;
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() === '40001' && $attempts > 0) {
+                    // Deadlock — ждём и повторяем
+                    usleep(rand(100000, 500000)); // 100-500ms
+                    continue;
+                }
+                throw $e;
+            } catch (\Throwable $e) {
+                Log::error('Error saving listing', [
+                    'message_id' => $message->id,
+                    'item' => $item,
+                    'error' => $e->getMessage(),
+                ]);
             }
-
-            Listing::create([
-                'tg_message_id'      => $message->id,
-                'tg_user_id'         => $message->tg_user_id,
-                'asset_id'           => $match->isAsset() ? $match->id : null,
-                'item_id'            => $match->isItem()  ? $match->id : null,
-                'type'               => $item['type'],
-                'price'              => $item['price']              ?? null,
-                'currency'           => $item['currency']           ?? 'gold',
-                'enhancement'        => $item['enhancement']        ?? null,
-                'durability_current' => $item['durability_current'] ?? null,
-                'durability_max'     => $item['durability_max']     ?? null,
-                'posted_at'          => $message->sent_at,
-                'status'             => $status,
-                'anomaly_reason'     => $anomalyReason,
-            ]);
-
-        } catch (\Throwable $e) {
-            Log::error('Error saving listing', [
-                'message_id' => $message->id,
-                'item'       => $item,
-                'error'      => $e->getMessage(),
-            ]);
         }
     }
 

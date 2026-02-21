@@ -43,6 +43,8 @@ return new class extends Migration
             $table->index(['item_id', 'type', 'currency', 'posted_at']);
             $table->index('posted_at');
             $table->index('status');
+
+            $table->unique(['tg_message_id', 'asset_id', 'item_id'], 'listings_unique');
         });
     }
 
