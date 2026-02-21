@@ -236,7 +236,6 @@ class MarketController extends Controller
 
     private function renderHtml(array $data, ?string $currency, int $days, ?string $activeTab): string
     {
-        // Группируем по типу
         $grouped = [];
         foreach ($data as $row) {
             $type = $row['type'] ?? 'прочее';
@@ -247,58 +246,63 @@ class MarketController extends Controller
             return $this->renderEmpty($days);
         }
 
-        // Определяем активную вкладку
         $availableTabs = array_keys($grouped);
-        if (!$activeTab || !in_array($activeTab, $availableTabs)) {
-            // Первая вкладка в порядке TAB_CONFIG
-            foreach (self::TAB_CONFIG as $type => $_) {
-                if (in_array($type, $availableTabs)) {
-                    $activeTab = $type;
-                    break;
-                }
-            }
-            $activeTab ??= $availableTabs[0];
-        }
 
-        // Строим HTML вкладок
+        // Первая вкладка по порядку TAB_CONFIG
+        $defaultTab = null;
+        foreach (self::TAB_CONFIG as $type => $_) {
+            if (in_array($type, $availableTabs)) {
+                $defaultTab = $type;
+                break;
+            }
+        }
+        $defaultTab ??= $availableTabs[0];
+
+        // Строим кнопки вкладок
         $tabsHtml = '';
         foreach (self::TAB_CONFIG as $type => $config) {
             if (!in_array($type, $availableTabs)) continue;
 
             $count    = count($grouped[$type]);
-            $isActive = $type === $activeTab;
-            $class    = $isActive ? 'tab active' : 'tab';
-            $params   = http_build_query(array_filter([
-                'format'   => 'html',
-                'tab'      => $type,
-                'currency' => $currency,
-                'days'     => $days !== 30 ? $days : null,
-            ]));
-
-            $tabsHtml .= "<a href=\"?{$params}\" class=\"{$class}\">"
+            $tabId    = 'tab-' . preg_replace('/[^a-z0-9]/u', '-', mb_strtolower($type));
+            $tabsHtml .= "<button class=\"tab\" data-tab=\"{$tabId}\" onclick=\"switchTab('{$tabId}')\">"
                 . "{$config['icon']} {$config['label']}"
                 . " <span class=\"count\">{$count}</span>"
-                . "</a>";
+                . "</button>";
         }
 
-        // Строим строки таблицы
-        $rows = '';
-        foreach ($grouped[$activeTab] as $item) {
-            $description = $item['description'] ? e(strip_tags($item['description'])) : '';
-            $titleAttr   = $description ? " title=\"{$description}\"" : '';
-            $name        = "<span{$titleAttr}>" . e($item['product_name']) . "</span>";
-            $buyCell    = $this->formatPriceCell($item['buy']);
-            $sellCell   = $this->formatPriceCell($item['sell']);
-            $rows      .= "<tr><td>{$name}</td>{$buyCell}{$sellCell}</tr>\n";
+        // Строим таблицы для каждой вкладки
+        $tablesHtml = '';
+        foreach (self::TAB_CONFIG as $type => $config) {
+            if (!in_array($type, $availableTabs)) continue;
+
+            $tabId = 'tab-' . preg_replace('/[^a-z0-9]/u', '-', mb_strtolower($type));
+            $rows  = '';
+
+            foreach ($grouped[$type] as $item) {
+                $desc     = !empty($item['description']) ? ' title="' . e(strip_tags($item['description'])) . '"' : '';
+                $name     = "<span{$desc}>" . e($item['product_name']) . "</span>";
+                $buyCell  = $this->formatPriceCell($item['buy']);
+                $sellCell = $this->formatPriceCell($item['sell']);
+                $rows    .= "<tr><td>{$name}</td>{$buyCell}{$sellCell}</tr>\n";
+            }
+
+            $tablesHtml .= "<div class=\"tab-content\" id=\"{$tabId}\">"
+                . "<table><thead><tr>"
+                . "<th>{$config['icon']} {$config['label']}</th>"
+                . "<th>📈 Макс. цена покупки</th>"
+                . "<th>📉 Мин. цена продажи</th>"
+                . "</tr></thead><tbody>{$rows}</tbody></table>"
+                . "</div>";
         }
 
+        $defaultTabId   = 'tab-' . preg_replace('/[^a-z0-9]/u', '-', mb_strtolower($defaultTab));
         $currencyLabel  = match ($currency) {
             'gold'   => '💰 Золото',
             'cookie' => '🍪 Печеньки',
             default  => 'Все валюты',
         };
-        $activeConfig = self::TAB_CONFIG[$activeTab] ?? ['label' => $activeTab, 'icon' => '🔹'];
-        $now          = now()->format('d.m.Y H:i');
+        $now = now()->format('d.m.Y H:i');
 
         return <<<HTML
 <!DOCTYPE html>
@@ -318,26 +322,23 @@ class MarketController extends Controller
             display: inline-flex; align-items: center; gap: 5px;
             padding: 5px 11px; border-radius: 4px;
             background: #16213e; color: #aaa;
-            text-decoration: none; font-size: 0.82em;
-            border: 1px solid #2a2a3e; transition: background 0.15s;
+            border: 1px solid #2a2a3e; font-size: 0.82em;
+            cursor: pointer; transition: background 0.15s;
             white-space: nowrap;
         }
         .tab:hover { background: #1a2a50; color: #ddd; }
         .tab.active { background: #0f3460; color: #f0c040; border-color: #f0c040; }
-        .count {
-            background: #2a2a3e; border-radius: 10px;
-            padding: 1px 6px; font-size: 0.78em; color: #888;
-        }
+        .count { background: #2a2a3e; border-radius: 10px; padding: 1px 6px; font-size: 0.78em; color: #888; }
         .tab.active .count { background: #1a3a70; color: #f0c040; }
 
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
         table { width: 100%; border-collapse: collapse; }
-        th {
-            background: #0f3460; color: #f0c040;
-            padding: 9px 10px; text-align: left; font-size: 0.9em;
-        }
+        th { background: #0f3460; color: #f0c040; padding: 9px 10px; text-align: left; font-size: 0.9em; }
         td { padding: 7px 10px; border-bottom: 1px solid #222; vertical-align: top; font-size: 0.88em; }
         tr:hover td { background: #1a2a50; }
-        .grade { color: #888; font-size: 0.85em; }
+        td span[title] { cursor: help; border-bottom: 1px dotted #555; }
         .price { font-weight: bold; color: #f0c040; }
         .user a { color: #7ec8e3; text-decoration: none; }
         .user a:hover { text-decoration: underline; }
@@ -345,7 +346,6 @@ class MarketController extends Controller
         .date a:hover { text-decoration: underline; }
         .suspicious { color: #ff9900; }
         .no-data { color: #444; font-style: italic; text-align: center; }
-        td span[title] { cursor: help; border-bottom: 1px dotted #555; }
     </style>
 </head>
 <body>
@@ -356,18 +356,22 @@ class MarketController extends Controller
 
     <div class="tabs">{$tabsHtml}</div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>{$activeConfig['icon']} {$activeConfig['label']}</th>
-                <th>📈 Макс. цена покупки</th>
-                <th>📉 Мин. цена продажи</th>
-            </tr>
-        </thead>
-        <tbody>
-            {$rows}
-        </tbody>
-    </table>
+    {$tablesHtml}
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
+            localStorage.setItem('market_tab', tabId);
+        }
+
+        // Восстанавливаем последнюю вкладку или открываем дефолтную
+        const saved = localStorage.getItem('market_tab');
+        const target = saved && document.getElementById(saved) ? saved : '{$defaultTabId}';
+        switchTab(target);
+    </script>
 </body>
 </html>
 HTML;
