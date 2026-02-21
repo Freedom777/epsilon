@@ -282,8 +282,7 @@ class MarketController extends Controller
         // Строим строки таблицы
         $rows = '';
         foreach ($grouped[$activeTab] as $item) {
-            $gradeLabel = $item['grade'] ? " <span class=\"grade\">[{$item['grade']}]</span>" : '';
-            $name       = e($item['product_name']) . $gradeLabel;
+            $name       = e($item['product_name']);
             $buyCell    = $this->formatPriceCell($item['buy']);
             $sellCell   = $this->formatPriceCell($item['sell']);
             $rows      .= "<tr><td>{$name}</td>{$buyCell}{$sellCell}</tr>\n";
