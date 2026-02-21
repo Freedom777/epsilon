@@ -454,6 +454,7 @@ class MessageParser
         }
 
         $text      = str_replace("\r\n", "\n", $text);
+        $text      = preg_replace('/^[ \t]+/mu', '', $text);
         $textLower = mb_strtolower($text);
         $found     = [];
 
