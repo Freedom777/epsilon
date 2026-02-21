@@ -13,7 +13,7 @@ class FetchTelegramMessages extends Command
     protected $signature = 'telegram:fetch
                             {--login        : Выполнить первичную авторизацию}
                             {--parse-only   : Только парсить уже загруженные сообщения (без обращения к Telegram)}
-                            {--days=        : Загрузить сообщения за последние N дней (переопределяет FETCH_DAYS из .env)}
+                            {--days=        : Загрузить сообщения за последние N дней (переопределяет PARSER_FETCH_DAYS из .env)}
                             {--from=        : Загрузить с даты (формат: Y-m-d или Y-m-d H:i:s)}
                             {--to=          : Загрузить по дату включительно (формат: Y-m-d, по умолчанию: сейчас)}';
 

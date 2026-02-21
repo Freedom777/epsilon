@@ -62,7 +62,7 @@ class MarketController extends Controller
     {
         $format     = $request->string('format', 'json')->value();
         $currency   = $request->string('currency')->value() ?: null;
-        $days       = $request->integer('days', config('parser.fetch.days', 30));
+        $days       = $request->integer('days', config('parser.output.days', 3));
         $typeFilter = $request->string('type')->value() ?: null;
 
         $assetIds = $this->parseIdList($request->string('asset_id')->value());
