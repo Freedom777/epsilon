@@ -121,6 +121,7 @@ class MarketController extends Controller
                 'asset_id'     => $asset->id,
                 'item_id'      => null,
                 'product_name' => $asset->title,
+                'description'  => $asset->description,
                 'grade'        => $asset->grade,
                 'type'         => $asset->type,
                 'currency'     => $currency ?? 'gold',
@@ -146,6 +147,7 @@ class MarketController extends Controller
                 'asset_id'     => null,
                 'item_id'      => $item->id,
                 'product_name' => $item->title,
+                'description'  => $item->description,
                 'grade'        => $item->grade,
                 'type'         => $item->type,
                 'currency'     => $currency ?? 'gold',
@@ -282,7 +284,9 @@ class MarketController extends Controller
         // Строим строки таблицы
         $rows = '';
         foreach ($grouped[$activeTab] as $item) {
-            $name       = e($item['product_name']);
+            $description = $item['description'] ? e(strip_tags($item['description'])) : '';
+            $titleAttr   = $description ? " title=\"{$description}\"" : '';
+            $name        = "<span{$titleAttr}>" . e($item['product_name']) . "</span>";
             $buyCell    = $this->formatPriceCell($item['buy']);
             $sellCell   = $this->formatPriceCell($item['sell']);
             $rows      .= "<tr><td>{$name}</td>{$buyCell}{$sellCell}</tr>\n";
@@ -341,6 +345,7 @@ class MarketController extends Controller
         .date a:hover { text-decoration: underline; }
         .suspicious { color: #ff9900; }
         .no-data { color: #444; font-style: italic; text-align: center; }
+        td span[title] { cursor: help; border-bottom: 1px dotted #555; }
     </style>
 </head>
 <body>
