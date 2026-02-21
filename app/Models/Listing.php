@@ -31,14 +31,14 @@ class Listing extends Model
         'durability_max'     => 'integer',
     ];
 
-    public function message(): BelongsTo
-    {
-        return $this->belongsTo(TgMessage::class, 'tg_message_id');
-    }
-
-    public function user(): BelongsTo
+    public function tgUser(): BelongsTo
     {
         return $this->belongsTo(TgUser::class, 'tg_user_id');
+    }
+
+    public function tgMessage(): BelongsTo
+    {
+        return $this->belongsTo(TgMessage::class, 'tg_message_id');
     }
 
     public function asset(): BelongsTo
