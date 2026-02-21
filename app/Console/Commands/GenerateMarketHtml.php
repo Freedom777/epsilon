@@ -12,7 +12,8 @@ class GenerateMarketHtml extends Command
 {
     protected $signature   = 'market:generate
                                 {--currency= : Фильтр по валюте (gold|cookie)}
-                                {--days=30   : За сколько дней}';
+                                {--days=30   : За сколько дней}
+                                {--force}    : Если установлен - генерация будет вне зависимости, есть новые данные или нет';
 
     protected $description = 'Генерирует статический HTML файл рынка';
 
@@ -24,7 +25,7 @@ class GenerateMarketHtml extends Command
         $lastPending = ProductPending::max('updated_at');
         $lastChange  = max($lastListing, $lastPending);
 
-        if ($lastGenerated && $lastChange <= $lastGenerated) {
+        if (!$this->option('force') && $lastGenerated && $lastChange <= $lastGenerated) {
             $this->info('Нет новых данных, генерация пропущена.');
             return self::SUCCESS;
         }
@@ -37,7 +38,7 @@ class GenerateMarketHtml extends Command
             $request = Request::create('/api/market', 'GET', array_filter([
                 'format'   => 'html',
                 'currency' => $currency !== 'all' ? $currency : null,
-                'days'     => $this->option('days'),
+                'days'     => $this->option('days')
             ]));
 
             $response = $controller->index($request);
