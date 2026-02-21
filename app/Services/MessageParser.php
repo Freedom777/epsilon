@@ -420,6 +420,13 @@ class MessageParser
      */
     private function normalizeFakeRomanGrade(string $line): string
     {
+        // Заменяем | на I внутри скобок грейда
+        $line = preg_replace_callback('/\[([IVXliv|+\s]+)\]/ui', function ($m) {
+            $grade = str_replace('|', 'I', $m[1]);
+            return '[' . $grade . ']';
+        }, $line);
+
+        // Затем нормализуем латинские l → I
         return preg_replace_callback('/\[\s*(l{1,3}\+?)\s*\]/ui', function ($m) {
             $key = mb_strtolower($m[1]);
             return '[' . (self::GRADE_NORMALIZE[$key] ?? mb_strtoupper($m[1])) . ']';
@@ -461,7 +468,7 @@ class MessageParser
         // Поиск keyword-заголовков в начале строки
         foreach ($this->keywordMap as $type => $keywords) {
             foreach ($keywords as $keyword) {
-                if (preg_match_all('/^' . preg_quote(mb_strtolower($keyword), '/') . '\s*$/mu', $textLower, $matches, PREG_OFFSET_CAPTURE)) {
+                if (preg_match_all('/^' . preg_quote(mb_strtolower($keyword), '/') . '/mu', $textLower, $matches, PREG_OFFSET_CAPTURE)) {
                     foreach ($matches[0] as $match) {
                         $byteOffset = $match[1];
                         $charOffset = mb_strlen(substr($text, 0, $byteOffset));
@@ -509,21 +516,6 @@ class MessageParser
 
     private function cleanName(string $name): string
     {
-        /*
-        // /шт и \шт в конце
-        $name = preg_replace('/\s*[\/\\\\]?\s*шт\s*$/ui', '', $name);
-
-        // Хвостовой мусор: +, =, /, -, :, –, —
-        $name = rtrim($name, " \t+-=/:–—\\|,.");
-
-        // Ведущий мусор
-        $name = ltrim($name, " \t-–—:.,");
-
-        // Множественные пробелы
-        $name = preg_replace('/\s{2,}/', ' ', $name);
-
-        return trim($name);
-        */
         // Убираем количество: 30шт, 30 шт, /шт, \шт
         $name = preg_replace('/\s*\d+\s*шт\.?\s*|[\/\\\\]\s*шт\.?\s*/ui', '', $name);
 
@@ -533,9 +525,6 @@ class MessageParser
         // Хвостовой мусор: +, =, /, -, :, –, —
         $name = preg_replace('/[\s\t+\-=\/:–—\\\\|,.]+$/u', '', $name);
         $name = preg_replace('/^[\s\t\-–—:.,]+/u', '', $name);
-
-        // Ведущий мусор
-        $name = ltrim($name, " \t-–—:.,");
 
         // Множественные пробелы
         $name = preg_replace('/\s{2,}/', ' ', $name);
