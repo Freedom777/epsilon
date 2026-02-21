@@ -484,8 +484,6 @@ class MessageParser
         }
 
         usort($found, fn($a, $b) => $a['pos'] <=> $b['pos']);
-        logger()->debug('Found sections: ' . json_encode($found, JSON_UNESCAPED_UNICODE));
-
         for ($i = 0; $i < count($found); $i++) {
             $start       = $found[$i]['pos'];
             $end         = $found[$i + 1]['pos'] ?? mb_strlen($text);
@@ -496,6 +494,11 @@ class MessageParser
                 ? $sections[$type] . "\n" . $sectionText
                 : $sectionText;
         }
+
+        logger()->debug('Sections result: ' . json_encode(
+                array_map(fn($s) => mb_substr($s, 0, 80) . '...', $sections),
+                JSON_UNESCAPED_UNICODE
+            ));
 
         return $sections;
     }
