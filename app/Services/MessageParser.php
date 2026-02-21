@@ -112,11 +112,6 @@ class MessageParser
             }
         }
 
-        logger()->debug('Listings: ' . json_encode(
-                array_map(fn($l) => ['type' => $l['type'], 'name' => $l['name'] ?? 'unknown'], $result['listings']),
-                JSON_UNESCAPED_UNICODE
-            ));
-
         return $result;
     }
 
