@@ -509,7 +509,8 @@ class MessageParser
         $name = preg_replace('/\s+(по|от|за)(\s+.*)?$/ui', '', $name);
 
         // Хвостовой мусор: +, =, /, -, :, –, —
-        $name = rtrim($name, " \t+-=/:–—\\|,.");
+        $name = preg_replace('/[\s\t+\-=\/:–—\\\\|,.]+$/u', '', $name);
+        $name = preg_replace('/^[\s\t\-–—:.,]+/u', '', $name);
 
         // Ведущий мусор
         $name = ltrim($name, " \t-–—:.,");
