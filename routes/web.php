@@ -30,3 +30,20 @@ Route::get('/test-session', function() {
         'is_https'      => request()->isSecure(),
     ]);
 });
+
+Route::get('/test-session-auth', function() {
+    $sessionData = session()->all();
+
+    return response()->json([
+        'session_id'     => session()->getId(),
+        'all_keys'       => array_keys($sessionData),
+        'has_login_key'  => !empty(
+        collect($sessionData)->filter(fn($v, $k) => str_starts_with($k, 'login_'))->toArray()
+        ),
+        'login_keys'     => collect($sessionData)->filter(
+            fn($v, $k) => str_starts_with($k, 'login_')
+        )->toArray(),
+        'password_hash'  => $sessionData['password_hash_web'] ?? 'NOT SET',
+        'auth_check'     => auth()->check(),
+    ]);
+});
