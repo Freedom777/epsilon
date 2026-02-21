@@ -33,7 +33,7 @@ class GenerateMarketHtml extends Command
         $this->info('Генерация market.html...');
 
         $currencies = ['all', 'gold', 'cookie'];
-
+        dd($this->option('days'));
         foreach ($currencies as $currency) {
             $request = Request::create('/api/market', 'GET', array_filter([
                 'format'   => 'html',
