@@ -80,17 +80,6 @@ class MessageSaver
         try {
             $match = $this->matchingService->match($item['name'], $item['grade'] ?? null);
 
-            Log::debug('Matching result', [
-                'name'  => $item['name'],
-                'grade' => $item['grade'] ?? null,
-                'match' => $match ? [
-                    'source_type' => $match->sourceType,
-                    'id'          => $match->id,
-                    'match_type'  => $match->matchType,
-                    'score'       => $match->score,
-                ] : null,
-            ]);
-
             // Товар не найден — ушёл в product_pendings, листинг не создаём
             if (!$match) {
                 return;
@@ -111,7 +100,7 @@ class MessageSaver
                 $anomalyReason = $anomaly['reason'];
             }
 
-            Listing::create([
+            $listing = Listing::create([
                 'tg_message_id'      => $message->id,
                 'tg_user_id'         => $message->tg_user_id,
                 'asset_id'           => $match->isAsset() ? $match->id : null,
@@ -126,11 +115,15 @@ class MessageSaver
                 'status'             => $status,
                 'anomaly_reason'     => $anomalyReason,
             ]);
+
+            Log::debug('Listing created', ['listing_id' => $listing->id, 'match' => $match->id]);
+
         } catch (\Throwable $e) {
             Log::error('Error saving listing', [
                 'message_id' => $message->id,
                 'item'       => $item,
                 'error'      => $e->getMessage(),
+                'trace'      => $e->getTraceAsString(),
             ]);
         }
     }
