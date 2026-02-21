@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\MarketController;
+use App\Models\Listing;
+use App\Models\ProductPending;
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
 
@@ -16,6 +18,17 @@ class GenerateMarketHtml extends Command
 
     public function handle(MarketController $controller): int
     {
+        $lastGenerated = cache('market_html_generated_at');
+
+        $lastListing = Listing::max('updated_at');
+        $lastPending = ProductPending::max('updated_at');
+        $lastChange  = max($lastListing, $lastPending);
+
+        if ($lastGenerated && $lastChange <= $lastGenerated) {
+            $this->info('Нет новых данных, генерация пропущена.');
+            return self::SUCCESS;
+        }
+
         $this->info('Генерация market.html...');
 
         $currencies = ['all', 'gold', 'cookie'];
@@ -37,6 +50,8 @@ class GenerateMarketHtml extends Command
         }
 
         $this->info('Готово.');
+
+        cache(['market_html_generated_at' => now()], 60 * 60 * 24);
 
         return self::SUCCESS;
     }
