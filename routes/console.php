@@ -1,3 +1,5 @@
 <?php
 
-Schedule::command('market:generate')->everyThirtyMinutes();
+Schedule::command('telegram:fetch')
+    ->everyThirtyMinutes()
+    ->then(fn() => Artisan::call('market:generate'));
