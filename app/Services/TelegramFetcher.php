@@ -217,8 +217,8 @@ class TelegramFetcher
     {
         $chatId = config('parser.telegram.trade_chat_id');
 
-        TgMessage::where('tg_chat_id', $chatId)
-            ->where('is_parsed', false)
+        TgMessage::/*where('tg_chat_id', $chatId)
+            ->*/where('is_parsed', false)
             ->chunkById(100, function ($messages) {
                 foreach ($messages as $message) {
                     $this->saver->parseAndSave($message);
