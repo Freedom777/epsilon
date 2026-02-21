@@ -99,7 +99,7 @@ class MessageSaver
                 $anomalyReason = $anomaly['reason'];
             }
 
-            $listing = Listing::create([
+            Listing::create([
                 'tg_message_id'      => $message->id,
                 'tg_user_id'         => $message->tg_user_id,
                 'asset_id'           => $match->isAsset() ? $match->id : null,
