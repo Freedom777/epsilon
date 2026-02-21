@@ -52,6 +52,8 @@ class TelegramFetcher
         }
 
         $this->madelineProto = new API($sessionPath, $settings);
+        // Восстанавливаем обработчик ошибок Laravel после MadelineProto
+        restore_error_handler();
     }
 
     /**
