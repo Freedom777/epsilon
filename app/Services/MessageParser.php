@@ -112,6 +112,11 @@ class MessageParser
             }
         }
 
+        logger()->debug('Listings: ' . json_encode(
+                array_map(fn($l) => ['type' => $l['type'], 'name' => $l['name'] ?? 'unknown'], $result['listings']),
+                JSON_UNESCAPED_UNICODE
+            ));
+
         return $result;
     }
 
@@ -494,11 +499,6 @@ class MessageParser
                 ? $sections[$type] . "\n" . $sectionText
                 : $sectionText;
         }
-
-        logger()->debug('Sections result: ' . json_encode(
-                array_map(fn($s) => mb_substr($s, 0, 80) . '...', $sections),
-                JSON_UNESCAPED_UNICODE
-            ));
 
         return $sections;
     }
