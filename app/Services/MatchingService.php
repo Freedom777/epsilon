@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Asset;
 use App\Models\Item;
 use App\Models\ProductPending;
+use App\Support\Utf8Helper;
 use Illuminate\Support\Collection;
 
 class MatchResult
@@ -198,9 +199,7 @@ class MatchingService
     private function queuePending(string $rawTitle, string $normalized): void
     {
         // Убираем невалидные UTF-8 последовательности из raw_title
-        $cleanRawTitle = mb_convert_encoding($rawTitle, 'UTF-8', 'UTF-8');
-        $cleanRawTitle = preg_replace('/[\x{FFFD}]/u', '', $cleanRawTitle) ?? $cleanRawTitle;
-        $cleanRawTitle = trim($cleanRawTitle);
+        $cleanRawTitle = Utf8Helper::clean($rawTitle);
 
         if (blank($cleanRawTitle)) {
             return;
@@ -233,13 +232,11 @@ class MatchingService
     public function normalize(?string $title): string
     {
         // Убираем невалидные UTF-8 последовательности
-        $title = mb_convert_encoding($title, 'UTF-8', 'UTF-8');
+        $title = Utf8Helper::clean($title);
         if (blank($title)) {
             return '';
         }
 
-        // Убираем символ замены U+FFFD и прочий мусор
-        $title = preg_replace('/[\x{FFFD}]/u', '', $title) ?? $title;
         $title = preg_replace('/\s*\[Ивент]\s*|\s*\[[IVX+]+]\s*/u', '', $title) ?? $title;
         $title = preg_replace('/[^\x{0400}-\x{04FF}0-9a-zA-Z%+\- ]/u', '', $title) ?? $title;
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Utf8Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,15 +32,13 @@ class Service extends Model
         return $this->hasMany(ServiceListing::class);
     }
 
-    public static function normalizeName(string $name): string
+    public static function normalizeName(?string $name): string
     {
+        $name = Utf8Helper::clean($name);
+
         if (blank($name)) {
             return '';
         }
-
-        $name = mb_convert_encoding($name, 'UTF-8', 'UTF-8');
-        $name = preg_replace('/[\x{FFFD}]/u', '', $name) ?? $name;
-        $name = preg_replace('/[\x{1F000}-\x{1FFFF}]|[\x{2600}-\x{27FF}]|[\x{2300}-\x{23FF}]/u', '', $name) ?? $name;
         $name = trim(preg_replace('/\s+/', ' ', $name) ?? $name);
 
         return mb_strtolower($name);
@@ -47,7 +46,7 @@ class Service extends Model
 
     public static function findOrCreateByName(string $rawName, ?string $icon = null): self
     {
-        $cleanName  = iconv('UTF-8', 'UTF-8//IGNORE', $rawName) ?: '';
+        $cleanName = Utf8Helper::clean($rawName);
         if (blank($cleanName)) {
             // Возвращаем заглушку вместо падения
             return static::firstOrCreate(
