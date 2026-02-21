@@ -156,9 +156,20 @@ class MessageParser
                 continue;
             }
 
-            $item = $this->parseProductLine($line);
-            if ($item !== null) {
-                $items[] = $item;
+            // Разбиваем строку по запятой перед иконкой или перед 📄/📒/📗 и т.д.
+            $sublines = preg_split(
+                '/,\s*(?=[\p{So}\p{Sk}\p{Sm}\x{1F000}-\x{1FFFF}\x{2600}-\x{27FF}\x{2300}-\x{23FF}])/u',
+                $line
+            );
+
+            foreach ($sublines as $subline) {
+                $subline = trim($subline);
+                if (empty($subline)) continue;
+
+                $item = $this->parseProductLine($subline);
+                if ($item !== null) {
+                    $items[] = $item;
+                }
             }
         }
 
