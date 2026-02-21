@@ -10,7 +10,8 @@ class Listing extends Model
     protected $fillable = [
         'tg_message_id',
         'tg_user_id',
-        'product_id',
+        'asset_id',
+        'item_id',
         'type',
         'price',
         'currency',
