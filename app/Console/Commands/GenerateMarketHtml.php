@@ -12,7 +12,7 @@ class GenerateMarketHtml extends Command
 {
     protected $signature   = 'market:generate
                                 {--currency= : Фильтр по валюте (gold|cookie)}
-                                {--days=30   : За сколько дней}
+                                {--days=     : За сколько дней}
                                 {--force}    : Если установлен - генерация будет вне зависимости, есть новые данные или нет';
 
     protected $description = 'Генерирует статический HTML файл рынка';
