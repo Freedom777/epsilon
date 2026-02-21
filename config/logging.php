@@ -127,6 +127,12 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'market' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/market.log'),
+            'days'   => 30,
+        ],
+
     ],
 
 ];

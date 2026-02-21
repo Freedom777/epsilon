@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MarketController;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,3 +27,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/market', [MarketController::class, 'index']);
+
+Route::withoutMiddleware(ValidateCsrfToken::class)
+    ->post('/market/ping', function () {
+        Log::channel('market')->info('view', [
+            'ip'    => request()->ip(),
+            'agent' => request()->userAgent(),
+        ]);
+        return response()->noContent();
+    });

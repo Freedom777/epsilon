@@ -371,6 +371,7 @@ class MarketController extends Controller
         const saved = localStorage.getItem('market_tab');
         const target = saved && document.getElementById(saved) ? saved : '{$defaultTabId}';
         switchTab(target);
+        fetch('/api/market/ping', { method: 'POST', headers: { 'X-CSRF-TOKEN': '' } });
     </script>
 </body>
 </html>
