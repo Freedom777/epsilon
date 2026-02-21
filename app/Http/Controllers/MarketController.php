@@ -213,8 +213,8 @@ class MarketController extends Controller
 
         $user        = $listing->tgUser;
         $message     = $listing->tgMessage;
-        $userDisplay = $user?->display_name ?? 'Неизвестен';
-        $userLink    = $user?->tg_link ?? null;
+        $userDisplay = $user?->display_name ?? $user?->username ?? 'Неизвестен';
+        $userLink    = $user?->username ? 'https://t.me/' . $user->username : null;
 
         return [
             'price'        => $price,

@@ -122,7 +122,7 @@ class TelegramFetcher
         $batchSize  = (int) config('parser.fetch.batch_size', 100);
         $offsetId   = 0;
         $totalSaved = 0;
-        $chatName   = $this->getChatUsername($chatId);
+        $chatName = is_numeric($chatId) ? $this->getChatUsername($chatId) : ltrim($chatId, '@');
 
         do {
             $result = $this->madelineProto->messages->getHistory([
