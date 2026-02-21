@@ -114,8 +114,11 @@ class FetchTelegramMessages extends Command
     private function parseUnparsed(MessageSaver $saver): int
     {
         $count = 0;
+        $days  = (int) $this->option('days') ?: (int) config('parser.fetch.days', 30);
+        $since = now()->subDays($days);
 
         TgMessage::where('is_parsed', false)
+            ->where('sent_at', '>=', $since)
             ->chunkById(100, function ($messages) use ($saver, &$count) {
                 foreach ($messages as $message) {
                     $saver->parseAndSave($message);
