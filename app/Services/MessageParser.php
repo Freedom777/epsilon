@@ -487,8 +487,26 @@ class MessageParser
 
     private function cleanName(string $name): string
     {
+        /*
         // /шт и \шт в конце
         $name = preg_replace('/\s*[\/\\\\]?\s*шт\s*$/ui', '', $name);
+
+        // Хвостовой мусор: +, =, /, -, :, –, —
+        $name = rtrim($name, " \t+-=/:–—\\|,.");
+
+        // Ведущий мусор
+        $name = ltrim($name, " \t-–—:.,");
+
+        // Множественные пробелы
+        $name = preg_replace('/\s{2,}/', ' ', $name);
+
+        return trim($name);
+        */
+        // Убираем количество: 30шт, 30 шт, /шт, \шт
+        $name = preg_replace('/\s*\d+\s*шт\.?\s*|[\/\\\\]\s*шт\.?\s*/ui', '', $name);
+
+        // Убираем хвостовые предлоги-мусор: "по", "от", "за"
+        $name = preg_replace('/\s+(по|от|за)(\s+.*)?$/ui', '', $name);
 
         // Хвостовой мусор: +, =, /, -, :, –, —
         $name = rtrim($name, " \t+-=/:–—\\|,.");
