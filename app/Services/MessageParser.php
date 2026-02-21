@@ -446,6 +446,7 @@ class MessageParser
             }
         }
 
+        $text      = str_replace("\r\n", "\n", $text);
         $textLower = mb_strtolower($text);
         $found     = [];
 
