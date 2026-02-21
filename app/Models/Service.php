@@ -47,7 +47,16 @@ class Service extends Model
 
     public static function findOrCreateByName(string $rawName, ?string $icon = null): self
     {
-        $normalized = static::normalizeName($rawName);
+        $cleanName  = iconv('UTF-8', 'UTF-8//IGNORE', $rawName) ?: '';
+        if (blank($cleanName)) {
+            // Возвращаем заглушку вместо падения
+            return static::firstOrCreate(
+                ['normalized_name' => '_unknown'],
+                ['name' => '_unknown', 'status' => 'ok']
+            );
+        }
+
+        $normalized = static::normalizeName($cleanName);
 
         $service = static::where('normalized_name', $normalized)->first();
 
@@ -60,7 +69,7 @@ class Service extends Model
 
         return static::create([
             'icon'            => $icon,
-            'name'            => $rawName,
+            'name'            => $cleanName,  // чистое имя, без мусорных байтов
             'normalized_name' => $normalized,
             'status'          => 'ok',
         ]);

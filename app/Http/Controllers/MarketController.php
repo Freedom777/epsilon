@@ -12,6 +12,40 @@ use Illuminate\Support\Facades\DB;
 
 class MarketController extends Controller
 {
+    // Порядок и иконки вкладок
+    private const TAB_CONFIG = [
+        // Экипировка
+        'оружие'      => ['label' => 'Оружие',      'icon' => '⚔️'],
+        'доспех'      => ['label' => 'Доспехи',     'icon' => '🛡'],
+        'шлем'        => ['label' => 'Шлемы',       'icon' => '⛑'],
+        'перчатки'    => ['label' => 'Перчатки',    'icon' => '🥊'],
+        'сапоги'      => ['label' => 'Сапоги',      'icon' => '🥾'],
+        'кольцо'      => ['label' => 'Кольца',      'icon' => '💍'],
+        'колье'       => ['label' => 'Колье',       'icon' => '📿'],
+        'аксессуар'   => ['label' => 'Аксессуары',  'icon' => '🌂'],
+        'талисман'    => ['label' => 'Талисманы',   'icon' => '🔮'],
+        'реликвия'    => ['label' => 'Реликвии',    'icon' => '🏺'],
+        'инструмент'  => ['label' => 'Инструменты', 'icon' => '🔧'],
+        'щит'         => ['label' => 'Щиты',        'icon' => '🛡'],
+        // Расходники
+        'зелье'       => ['label' => 'Зелья',       'icon' => '🧪'],
+        'свиток'      => ['label' => 'Свитки',      'icon' => '📜'],
+        'еда'         => ['label' => 'Еда',         'icon' => '🍖'],
+        'талант'      => ['label' => 'Таланты',     'icon' => '✨'],
+        'книга'       => ['label' => 'Книги',       'icon' => '📗'],
+        'рецепт'      => ['label' => 'Рецепты',     'icon' => '📄'],
+        'чертеж'      => ['label' => 'Чертежи',     'icon' => '📐'],
+        'материал'    => ['label' => 'Материалы',   'icon' => '🪨'],
+        'контейнер'   => ['label' => 'Контейнеры',  'icon' => '📦'],
+        'внешний вид' => ['label' => 'Внешний вид', 'icon' => '🎨'],
+        'валюта'      => ['label' => 'Валюта',      'icon' => '💰'],
+        'премиум'     => ['label' => 'Премиум',     'icon' => '👑'],
+        'документ'    => ['label' => 'Документы',   'icon' => '📋'],
+        'ивент'       => ['label' => 'Ивент',       'icon' => '🎉'],
+        'квест'       => ['label' => 'Квест',       'icon' => '📍'],
+        'прочее'      => ['label' => 'Прочее',      'icon' => '🔹'],
+    ];
+
     /**
      * GET /api/market
      *
@@ -20,13 +54,16 @@ class MarketController extends Controller
      *   ?currency=gold|cookie      — фильтр по валюте (default: все)
      *   ?asset_id=1,2,3            — фильтр по ID расходников
      *   ?item_id=1,2,3             — фильтр по ID экипировки
+     *   ?type=зелье                — фильтр по типу (для json)
+     *   ?tab=зелье                 — активная вкладка (для html)
      *   ?days=30                   — за сколько дней (default: 30)
      */
     public function index(Request $request): JsonResponse|Response
     {
-        $format   = $request->string('format', 'json')->value();
-        $currency = $request->string('currency')->value() ?: null;
-        $days     = $request->integer('days', config('parser.fetch.days', 30));
+        $format     = $request->string('format', 'json')->value();
+        $currency   = $request->string('currency')->value() ?: null;
+        $days       = $request->integer('days', config('parser.fetch.days', 30));
+        $typeFilter = $request->string('type')->value() ?: null;
 
         $assetIds = $this->parseIdList($request->string('asset_id')->value());
         $itemIds  = $this->parseIdList($request->string('item_id')->value());
@@ -34,8 +71,13 @@ class MarketController extends Controller
         $data = $this->buildMarketData($currency, $assetIds, $itemIds, $days);
 
         if ($format === 'html') {
-            return response($this->renderHtml($data, $currency, $days))
+            $activeTab = $request->string('tab')->value() ?: null;
+            return response($this->renderHtml($data, $currency, $days, $activeTab))
                 ->header('Content-Type', 'text/html; charset=utf-8');
+        }
+
+        if ($typeFilter) {
+            $data = array_values(array_filter($data, fn($row) => $row['type'] === $typeFilter));
         }
 
         return response()->json([
@@ -61,25 +103,16 @@ class MarketController extends Controller
     ): array {
         $since = now()->subDays($days);
 
-        // Агрегируем лучшие цены по asset_id и item_id
         $buyPricesAsset  = $this->getAggregatePrices('buy',  'asset_id', $currency, $assetIds, $since);
         $sellPricesAsset = $this->getAggregatePrices('sell', 'asset_id', $currency, $assetIds, $since);
         $buyPricesItem   = $this->getAggregatePrices('buy',  'item_id',  $currency, $itemIds,  $since);
         $sellPricesItem  = $this->getAggregatePrices('sell', 'item_id',  $currency, $itemIds,  $since);
 
-        // Все задействованные asset IDs
-        $allAssetIds = $buyPricesAsset->keys()
-            ->merge($sellPricesAsset->keys())
-            ->unique()->values();
-
-        // Все задействованные item IDs
-        $allItemIds = $buyPricesItem->keys()
-            ->merge($sellPricesItem->keys())
-            ->unique()->values();
+        $allAssetIds = $buyPricesAsset->keys()->merge($sellPricesAsset->keys())->unique()->values();
+        $allItemIds  = $buyPricesItem->keys()->merge($sellPricesItem->keys())->unique()->values();
 
         $result = [];
 
-        // Расходники
         foreach ($allAssetIds as $assetId) {
             $asset = Asset::find($assetId);
             if (!$asset) continue;
@@ -88,7 +121,6 @@ class MarketController extends Controller
                 'asset_id'     => $asset->id,
                 'item_id'      => null,
                 'product_name' => $asset->title,
-                'product_icon' => null,
                 'grade'        => $asset->grade,
                 'type'         => $asset->type,
                 'currency'     => $currency ?? 'gold',
@@ -97,21 +129,15 @@ class MarketController extends Controller
             ];
 
             if ($buyPricesAsset->has($assetId)) {
-                $row['buy'] = $this->getBestListing(
-                    'asset_id', $assetId, 'buy', $currency, $buyPricesAsset[$assetId], $since
-                );
+                $row['buy'] = $this->getBestListing('asset_id', $assetId, 'buy', $currency, $buyPricesAsset[$assetId], $since);
             }
-
             if ($sellPricesAsset->has($assetId)) {
-                $row['sell'] = $this->getBestListing(
-                    'asset_id', $assetId, 'sell', $currency, $sellPricesAsset[$assetId], $since
-                );
+                $row['sell'] = $this->getBestListing('asset_id', $assetId, 'sell', $currency, $sellPricesAsset[$assetId], $since);
             }
 
             $result[] = $row;
         }
 
-        // Экипировка
         foreach ($allItemIds as $itemId) {
             $item = Item::find($itemId);
             if (!$item) continue;
@@ -120,7 +146,6 @@ class MarketController extends Controller
                 'asset_id'     => null,
                 'item_id'      => $item->id,
                 'product_name' => $item->title,
-                'product_icon' => null,
                 'grade'        => $item->grade,
                 'type'         => $item->type,
                 'currency'     => $currency ?? 'gold',
@@ -129,31 +154,23 @@ class MarketController extends Controller
             ];
 
             if ($buyPricesItem->has($itemId)) {
-                $row['buy'] = $this->getBestListing(
-                    'item_id', $itemId, 'buy', $currency, $buyPricesItem[$itemId], $since
-                );
+                $row['buy'] = $this->getBestListing('item_id', $itemId, 'buy', $currency, $buyPricesItem[$itemId], $since);
             }
-
             if ($sellPricesItem->has($itemId)) {
-                $row['sell'] = $this->getBestListing(
-                    'item_id', $itemId, 'sell', $currency, $sellPricesItem[$itemId], $since
-                );
+                $row['sell'] = $this->getBestListing('item_id', $itemId, 'sell', $currency, $sellPricesItem[$itemId], $since);
             }
 
             $result[] = $row;
         }
 
-        usort($result, fn($a, $b) => strcmp($a['product_name'], $b['product_name']));
+        usort($result, fn($a, $b) => strcmp($a['product_name'] ?? '', $b['product_name'] ?? ''));
 
         return $result;
     }
 
-    /**
-     * Получаем агрегированные цены (max для buy, min для sell).
-     */
     private function getAggregatePrices(
-        string  $type,       // 'buy' | 'sell'
-        string  $column,     // 'asset_id' | 'item_id'
+        string  $type,
+        string  $column,
         ?string $currency,
         ?array  $ids,
         \Carbon\Carbon $since
@@ -166,32 +183,21 @@ class MarketController extends Controller
             ->where('status', '!=', 'invalid')
             ->whereNotNull('price')
             ->where('posted_at', '>=', $since)
-            ->select([
-                $column,
-                DB::raw("{$aggregate}(price) as best_price"),
-            ])
+            ->select([$column, DB::raw("{$aggregate}(price) as best_price")])
             ->groupBy($column);
 
-        if ($currency) {
-            $query->where('currency', $currency);
-        }
-
-        if ($ids) {
-            $query->whereIn($column, $ids);
-        }
+        if ($currency) $query->where('currency', $currency);
+        if ($ids)      $query->whereIn($column, $ids);
 
         return $query->pluck('best_price', $column);
     }
 
-    /**
-     * Получаем детали конкретного листинга (лучшая цена + автор + ссылка + дата).
-     */
     private function getBestListing(
-        string $column,    // 'asset_id' | 'item_id'
-        int    $id,
-        string $type,
+        string  $column,
+        int     $id,
+        string  $type,
         ?string $currency,
-        int    $price,
+        int     $price,
         \Carbon\Carbon $since
     ): ?array {
         $query = Listing::with(['tgUser', 'tgMessage'])
@@ -201,15 +207,10 @@ class MarketController extends Controller
             ->where('status', '!=', 'invalid')
             ->where('posted_at', '>=', $since);
 
-        if ($currency) {
-            $query->where('currency', $currency);
-        }
+        if ($currency) $query->where('currency', $currency);
 
         $listing = $query->orderByDesc('posted_at')->first();
-
-        if (!$listing) {
-            return null;
-        }
+        if (!$listing) return null;
 
         $user        = $listing->tgUser;
         $message     = $listing->tgMessage;
@@ -228,34 +229,73 @@ class MarketController extends Controller
     }
 
     // =========================================================================
-    // HTML рендер
+    // HTML рендер с вкладками
     // =========================================================================
 
-    private function renderHtml(array $data, ?string $currency, int $days): string
+    private function renderHtml(array $data, ?string $currency, int $days, ?string $activeTab): string
     {
-        $currencyLabel = match ($currency) {
+        // Группируем по типу
+        $grouped = [];
+        foreach ($data as $row) {
+            $type = $row['type'] ?? 'прочее';
+            $grouped[$type][] = $row;
+        }
+
+        if (empty($grouped)) {
+            return $this->renderEmpty($days);
+        }
+
+        // Определяем активную вкладку
+        $availableTabs = array_keys($grouped);
+        if (!$activeTab || !in_array($activeTab, $availableTabs)) {
+            // Первая вкладка в порядке TAB_CONFIG
+            foreach (self::TAB_CONFIG as $type => $_) {
+                if (in_array($type, $availableTabs)) {
+                    $activeTab = $type;
+                    break;
+                }
+            }
+            $activeTab ??= $availableTabs[0];
+        }
+
+        // Строим HTML вкладок
+        $tabsHtml = '';
+        foreach (self::TAB_CONFIG as $type => $config) {
+            if (!in_array($type, $availableTabs)) continue;
+
+            $count    = count($grouped[$type]);
+            $isActive = $type === $activeTab;
+            $class    = $isActive ? 'tab active' : 'tab';
+            $params   = http_build_query(array_filter([
+                'format'   => 'html',
+                'tab'      => $type,
+                'currency' => $currency,
+                'days'     => $days !== 30 ? $days : null,
+            ]));
+
+            $tabsHtml .= "<a href=\"?{$params}\" class=\"{$class}\">"
+                . "{$config['icon']} {$config['label']}"
+                . " <span class=\"count\">{$count}</span>"
+                . "</a>";
+        }
+
+        // Строим строки таблицы
+        $rows = '';
+        foreach ($grouped[$activeTab] as $item) {
+            $gradeLabel = $item['grade'] ? " <span class=\"grade\">[{$item['grade']}]</span>" : '';
+            $name       = e($item['product_name']) . $gradeLabel;
+            $buyCell    = $this->formatPriceCell($item['buy']);
+            $sellCell   = $this->formatPriceCell($item['sell']);
+            $rows      .= "<tr><td>{$name}</td>{$buyCell}{$sellCell}</tr>\n";
+        }
+
+        $currencyLabel  = match ($currency) {
             'gold'   => '💰 Золото',
             'cookie' => '🍪 Печеньки',
             default  => 'Все валюты',
         };
-
-        $rows = '';
-        foreach ($data as $item) {
-            $gradeLabel = $item['grade'] ? " [{$item['grade']}]" : '';
-            $typeLabel  = $item['asset_id'] ? '📦' : '⚔️';
-            $fullName   = $typeLabel . ' ' . htmlspecialchars($item['product_name']) . $gradeLabel;
-
-            $buyCell  = $this->formatPriceCell($item['buy']);
-            $sellCell = $this->formatPriceCell($item['sell']);
-
-            $rows .= "<tr>
-                <td>{$fullName}</td>
-                {$buyCell}
-                {$sellCell}
-            </tr>";
-        }
-
-        $now = now()->format('d.m.Y H:i');
+        $activeConfig = self::TAB_CONFIG[$activeTab] ?? ['label' => $activeTab, 'icon' => '🔹'];
+        $now          = now()->format('d.m.Y H:i');
 
         return <<<HTML
 <!DOCTYPE html>
@@ -265,37 +305,79 @@ class MarketController extends Controller
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Рынок Epsilion War</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a2e; color: #eee; }
-        h1 { color: #f0c040; }
-        .meta { color: #aaa; margin-bottom: 20px; font-size: 0.9em; }
-        table { width: 100%; border-collapse: collapse; background: #16213e; }
-        th { background: #0f3460; color: #f0c040; padding: 10px; text-align: left; }
-        td { padding: 8px 10px; border-bottom: 1px solid #333; }
-        tr:hover { background: #1a2a50; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; padding: 16px; background: #1a1a2e; color: #eee; }
+        h1 { color: #f0c040; margin-bottom: 8px; font-size: 1.4em; }
+        .meta { color: #aaa; margin-bottom: 14px; font-size: 0.82em; }
+
+        .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 14px; }
+        .tab {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 5px 11px; border-radius: 4px;
+            background: #16213e; color: #aaa;
+            text-decoration: none; font-size: 0.82em;
+            border: 1px solid #2a2a3e; transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .tab:hover { background: #1a2a50; color: #ddd; }
+        .tab.active { background: #0f3460; color: #f0c040; border-color: #f0c040; }
+        .count {
+            background: #2a2a3e; border-radius: 10px;
+            padding: 1px 6px; font-size: 0.78em; color: #888;
+        }
+        .tab.active .count { background: #1a3a70; color: #f0c040; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background: #0f3460; color: #f0c040;
+            padding: 9px 10px; text-align: left; font-size: 0.9em;
+        }
+        td { padding: 7px 10px; border-bottom: 1px solid #222; vertical-align: top; font-size: 0.88em; }
+        tr:hover td { background: #1a2a50; }
+        .grade { color: #888; font-size: 0.85em; }
         .price { font-weight: bold; color: #f0c040; }
         .user a { color: #7ec8e3; text-decoration: none; }
         .user a:hover { text-decoration: underline; }
-        .date a { color: #aaa; font-size: 0.85em; text-decoration: none; }
+        .date a, .date span { color: #777; font-size: 0.85em; text-decoration: none; }
         .date a:hover { text-decoration: underline; }
         .suspicious { color: #ff9900; }
-        .no-data { color: #555; font-style: italic; }
+        .no-data { color: #444; font-style: italic; text-align: center; }
     </style>
 </head>
 <body>
     <h1>🏪 Рынок Epsilion War</h1>
-    <div class="meta">Данные за последние {$days} дней &nbsp;|&nbsp; {$currencyLabel} &nbsp;|&nbsp; Обновлено: {$now}</div>
+    <div class="meta">
+        Данные за последние {$days} дней &nbsp;|&nbsp; {$currencyLabel} &nbsp;|&nbsp; Обновлено: {$now}
+    </div>
+
+    <div class="tabs">{$tabsHtml}</div>
+
     <table>
         <thead>
             <tr>
-                <th>Товар</th>
-                <th>💰 Макс. цена покупки</th>
-                <th>💰 Мин. цена продажи</th>
+                <th>{$activeConfig['icon']} {$activeConfig['label']}</th>
+                <th>📈 Макс. цена покупки</th>
+                <th>📉 Мин. цена продажи</th>
             </tr>
         </thead>
         <tbody>
             {$rows}
         </tbody>
     </table>
+</body>
+</html>
+HTML;
+    }
+
+    private function renderEmpty(int $days): string
+    {
+        return <<<HTML
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><title>Рынок Epsilion War</title></head>
+<body style="background:#1a1a2e;color:#eee;padding:20px;font-family:Arial">
+    <h1 style="color:#f0c040">🏪 Рынок Epsilion War</h1>
+    <p style="color:#aaa;margin-top:16px">Нет данных за последние {$days} дней.</p>
 </body>
 </html>
 HTML;
@@ -315,7 +397,7 @@ HTML;
 
         $userHtml = $data['user_tg_link']
             ? '<a href="' . e($data['user_tg_link']) . '" target="_blank">' . e($data['user_display']) . '</a>'
-            : e($data['user_display'] ?? '');
+            : '<span>' . e($data['user_display'] ?? '') . '</span>';
 
         $dateFormatted = $data['posted_at']
             ? date('d.m.Y H:i', strtotime($data['posted_at']))
@@ -323,7 +405,7 @@ HTML;
 
         $dateHtml = $data['tg_link']
             ? '<a href="' . e($data['tg_link']) . '" target="_blank">' . $dateFormatted . '</a>'
-            : $dateFormatted;
+            : '<span>' . $dateFormatted . '</span>';
 
         return "<td>
             <span class=\"price\"{$statusAttr}>{$price} {$currencySymbol}</span><br>
@@ -338,9 +420,7 @@ HTML;
 
     private function parseIdList(string $value): ?array
     {
-        if (blank($value)) {
-            return null;
-        }
+        if (blank($value)) return null;
 
         $ids = array_filter(array_map('intval', explode(',', $value)));
 
