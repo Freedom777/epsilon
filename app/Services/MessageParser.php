@@ -449,6 +449,7 @@ class MessageParser
         $textLower = mb_strtolower($text);
         $found     = [];
 
+        // Поиск хэш-тегов
         foreach ($allTags as $tagInfo) {
             $pos = mb_strpos($textLower, mb_strtolower($tagInfo['tag']));
             if ($pos !== false) {
@@ -456,11 +457,20 @@ class MessageParser
             }
         }
 
-        if (empty($found)) {
-            $types = $this->detectTypes($text);
-            if (!empty($types)) {
-                $sections[$types[0]] = $text;
+        // Поиск keyword-заголовков в начале строки
+        foreach ($this->keywordMap as $type => $keywords) {
+            foreach ($keywords as $keyword) {
+                if (preg_match_all('/^' . preg_quote(mb_strtolower($keyword), '/') . '\s*$/mu', $textLower, $matches, PREG_OFFSET_CAPTURE)) {
+                    foreach ($matches[0] as $match) {
+                        $byteOffset = $match[1];
+                        $charOffset = mb_strlen(substr($text, 0, $byteOffset));
+                        $found[]    = ['pos' => $charOffset, 'type' => $type];
+                    }
+                }
             }
+        }
+
+        if (empty($found)) {
             return $sections;
         }
 
