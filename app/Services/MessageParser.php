@@ -454,26 +454,7 @@ class MessageParser
         }
 
         $text      = str_replace("\r\n", "\n", $text);
-
-        // --- DEBUG START ---
-        $debugPos = mb_strpos($text, 'Куплю');
-        if ($debugPos !== false) {
-            $bytePos = strlen(mb_substr($text, 0, $debugPos));
-            $before  = substr($text, max(0, $bytePos - 20), 20);
-            logger()->debug('BEFORE strip | before "Куплю": ' . bin2hex($before));
-        }
-        // --- DEBUG END ---
-
         $text      = preg_replace('/^[ \t]+/mu', '', $text);
-        // --- DEBUG START ---
-        $debugPos2 = mb_strpos($text, 'Куплю');
-        if ($debugPos2 !== false) {
-            $bytePos2 = strlen(mb_substr($text, 0, $debugPos2));
-            $before2  = substr($text, max(0, $bytePos2 - 20), 20);
-            logger()->debug('AFTER strip | before "Куплю": ' . bin2hex($before2));
-        }
-// --- DEBUG END ---
-
         $textLower = mb_strtolower($text);
         $found     = [];
 
@@ -503,6 +484,7 @@ class MessageParser
         }
 
         usort($found, fn($a, $b) => $a['pos'] <=> $b['pos']);
+        logger()->debug('Found sections: ' . json_encode($found, JSON_UNESCAPED_UNICODE));
 
         for ($i = 0; $i < count($found); $i++) {
             $start       = $found[$i]['pos'];
