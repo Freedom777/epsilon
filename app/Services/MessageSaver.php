@@ -58,21 +58,19 @@ class MessageSaver
 
         $parsed = $this->parser->parse($message->raw_text);
 
-        DB::transaction(function () use ($message, $parsed) {
-            foreach ($parsed['listings'] as $item) {
-                $this->saveListing($message, $item);
-            }
+        foreach ($parsed['listings'] as $item) {
+            $this->saveListing($message, $item);
+        }
 
-            foreach ($parsed['exchanges'] as $exchange) {
-                $this->saveExchange($message, $exchange);
-            }
+        foreach ($parsed['exchanges'] as $exchange) {
+            $this->saveExchange($message, $exchange);
+        }
 
-            foreach ($parsed['service_listings'] as $service) {
-                $this->saveServiceListing($message, $service);
-            }
+        foreach ($parsed['service_listings'] as $service) {
+            $this->saveServiceListing($message, $service);
+        }
 
-            $message->update(['is_parsed' => true]);
-        });
+        $message->update(['is_parsed' => true]);
     }
 
     private function saveListing(TgMessage $message, array $item): void
