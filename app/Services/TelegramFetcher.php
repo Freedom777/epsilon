@@ -182,7 +182,7 @@ class TelegramFetcher
                     'display_name'  => $this->extractUserDisplayName($msg),
                     'username'      => $this->extractUsername($msg, $result['users'] ?? []),
                 ];
-
+                Log::info(json_encode($msgData));
                 $this->saver->saveRawMessage($msgData);
                 $batchSaved++;
             }
