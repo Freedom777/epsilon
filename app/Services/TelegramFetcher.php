@@ -12,11 +12,22 @@ use Illuminate\Support\Facades\Log;
 
 class TelegramFetcher
 {
-    private API $madelineProto;
+    private ?API $madelineProto = null;
 
     public function __construct(private readonly MessageSaver $saver)
     {
-        $this->initMadelineProto();
+    }
+
+    /**
+     * Ленивая инициализация MadelineProto — создаём только когда реально нужен.
+     */
+    private function getMadelineProto(): API
+    {
+        if ($this->madelineProto === null) {
+            $this->initMadelineProto();
+        }
+
+        return $this->madelineProto;
     }
 
     /**
@@ -57,12 +68,27 @@ class TelegramFetcher
     }
 
     /**
+     * Остановить MadelineProto event loop и освободить ресурсы.
+     */
+    public function disconnect(): void
+    {
+        if ($this->madelineProto !== null) {
+            try {
+                $this->madelineProto->stop();
+            } catch (\Throwable $e) {
+                Log::warning('MadelineProto stop error: ' . $e->getMessage());
+            }
+            $this->madelineProto = null;
+        }
+    }
+
+    /**
      * Войти в аккаунт (нужно один раз, интерактивно).
      * После первого входа сессия сохраняется в файл + MySQL.
      */
     public function login(): void
     {
-        $this->madelineProto->start();
+        $this->getMadelineProto()->start();
     }
 
     /**
@@ -75,7 +101,7 @@ class TelegramFetcher
 
         Log::info("Fetching messages from {$fetchFrom->toDateTimeString()}");
 
-        $this->madelineProto->start();
+        $this->getMadelineProto()->start();
         $this->fetchMessagesInRange($fetchFrom, now());
     }
 
@@ -87,7 +113,7 @@ class TelegramFetcher
     {
         Log::info("Fetching messages from {$from->toDateTimeString()} to {$to->toDateTimeString()}");
 
-        $this->madelineProto->start();
+        $this->getMadelineProto()->start();
         $this->fetchMessagesInRange($from, $to);
     }
 
@@ -124,10 +150,11 @@ class TelegramFetcher
         $batchSize  = (int) config('parser.fetch.batch_size', 100);
         $offsetId   = 0;
         $totalSaved = 0;
-        $chatName = is_numeric($chatId) ? $this->getChatUsername($chatId) : ltrim($chatId, '@');
+        $mp         = $this->getMadelineProto();
+        $chatName   = is_numeric($chatId) ? $this->getChatUsername($chatId) : ltrim($chatId, '@');
 
         do {
-            $result = $this->madelineProto->messages->getHistory([
+            $result = $mp->messages->getHistory([
                 'peer'        => $chatId,
                 'offset_id'   => $offsetId,
                 'offset_date' => 0,
@@ -291,7 +318,7 @@ class TelegramFetcher
     private function getChatUsername(string|int $chatId): ?string
     {
         try {
-            $info = $this->madelineProto->getInfo($chatId);
+            $info = $this->getMadelineProto()->getInfo($chatId);
             return $info['username'] ?? null;
         } catch (\Throwable) {
             return null;

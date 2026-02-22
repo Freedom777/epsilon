@@ -24,9 +24,12 @@ class FetchTelegramMessages extends Command
         // --- Авторизация ---
         if ($this->option('login')) {
             $this->info('Запуск авторизации в Telegram...');
-            $this->info('Следуйте инструкциям ниже:');
-            $fetcher->login();
-            $this->info('Авторизация успешна!');
+            try {
+                $fetcher->login();
+                $this->info('Авторизация успешна!');
+            } finally {
+                $fetcher->disconnect();
+            }
             return self::SUCCESS;
         }
 
@@ -54,6 +57,8 @@ class FetchTelegramMessages extends Command
             $this->error('Ошибка: ' . $e->getMessage());
             $this->error($e->getTraceAsString());
             return self::FAILURE;
+        } finally {
+            $fetcher->disconnect();
         }
 
         return self::SUCCESS;
