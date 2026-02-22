@@ -146,12 +146,12 @@ class TelegramFetcher
      */
     private function fetchMessagesInRange(Carbon $from, Carbon $to): void
     {
-        $chatId     = $this->getNumericChatId();
         $batchSize  = (int) config('parser.fetch.batch_size', 100);
         $offsetId   = 0;
         $totalSaved = 0;
         $mp         = $this->getMadelineProto();
-        $chatName   = is_numeric($chatId) ? $this->getChatUsername($chatId) : ltrim($chatId, '@');
+        $chatId     = $this->getNumericChatId();
+        $chatName   = $this->getChatName();
 
         do {
             $result = $mp->messages->getHistory([
@@ -340,12 +340,24 @@ class TelegramFetcher
         return (int) $original;
     }
 
-    public function getNumericChatId(): int
+    private function getNumericChatId(): int
     {
         return cache()->rememberForever('trade_chat_numeric_id', function () {
             $chatId = config('parser.telegram.trade_chat_id');
             $info   = $this->getMadelineProto()->getInfo($chatId);
             return (int) ('-100' . $info['Chat']['id']);
+        });
+    }
+
+    private function getChatName(): string
+    {
+        return (string) cache()->rememberForever('trade_chat_name', function () {
+            $chatId = config('parser.telegram.trade_chat_id');
+            if (!is_numeric($chatId)) {
+                return ltrim($chatId, '@'); // 'epsilion_trade'
+            }
+            $info = $this->getMadelineProto()->getInfo($chatId);
+            return $info['username'] ?? '';
         });
     }
 }
