@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\MainStatusEnum;
 use App\Models\Mob;
-use Illuminate\Console\Command;
-use danog\MadelineProto\API;
 
-class FetchMobs extends Command
+class FetchMobs extends BaseFetchCommand
 {
     protected $signature = 'mobs:fetch
                             {--from=1      : ID с которого начинать}
@@ -23,39 +22,23 @@ class FetchMobs extends Command
 
     public function handle(): int
     {
-        $from        = (int) $this->option('from');
-        $to          = (int) $this->option('to');
-        $chatId      = $this->option('chat') ?: config('parser.telegram.epsilon_chat_id');
-        $sessionPath = $this->option('session') ?: config('parser.telegram.session_path');
-        $delayMin    = (int) $this->option('delay-min');
-        $delayMax    = (int) $this->option('delay-max');
-        $skipDone    = (bool) $this->option('skip-done');
+        $opts = $this->resolveOptions();
 
-        if (!$chatId) {
-            $this->error('Укажите --chat или пропишите epsilon_chat_id в config/parser.php');
+        if (!$this->validateOptions($opts)) {
             return self::FAILURE;
         }
 
-        if ($from > $to) {
-            $this->error('--from не может быть больше --to');
-            return self::FAILURE;
-        }
+        $this->info("Запуск: ID {$opts['from']}..{$opts['to']}, чат: {$opts['chatName']}");
 
-        $this->info("Запуск: ID {$from}..{$to}, чат: {$chatId}");
+        $mp  = $this->initMadelineProto($opts['sessionPath']);
+        $bar = $this->createProgressBar($opts['to'] - $opts['from'] + 1);
 
-        $madelineProto = new API($sessionPath);
-        $madelineProto->start();
-
-        $bar = $this->output->createProgressBar($to - $from + 1);
-        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%% | ID: %message%');
-        $bar->start();
-
-        for ($n = $from; $n <= $to; $n++) {
+        for ($n = $opts['from']; $n <= $opts['to']; $n++) {
             $bar->setMessage((string) $n);
 
-            if ($skipDone) {
+            if ($opts['skipDone']) {
                 $existing = Mob::find($n);
-                if ($existing && $existing->status === 'ok') {
+                if ($existing && $existing->status === MainStatusEnum::OK) {
                     $bar->advance();
                     continue;
                 }
@@ -63,37 +46,37 @@ class FetchMobs extends Command
 
             Mob::updateOrCreate(
                 ['id' => $n],
-                ['status' => 'process', 'raw_response' => null]
+                ['status' => MainStatusEnum::PROCESS, 'raw_response' => null]
             );
 
             try {
-                $response = $this->sendCommandAndGetResponse($madelineProto, $chatId, "/getmob {$n}");
+                $response = $this->sendCommandAndGetResponse($mp, $opts['chatName'], "/getmob {$n}");
 
                 if ($response === null) {
-                    Mob::where('id', $n)->update(['status' => 'error']);
+                    Mob::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
                     $this->newLine();
                     $this->warn("ID {$n}: нет ответа за " . self::RESPONSE_TIMEOUT . " сек");
                 } elseif (trim($response) === '' || $response === '❗️ Монстр не найден') {
-                    Mob::where('id', $n)->update(['status' => 'empty']);
+                    Mob::where('id', $n)->update(['status' => MainStatusEnum::EMPTY]);
                 } else {
                     $parsed = $this->parseResponse($response);
 
                     Mob::where('id', $n)->update([
                         'raw_response' => $response,
-                        'status'       => 'ok',
+                        'status'       => MainStatusEnum::OK,
                         ...$parsed,
                     ]);
                 }
             } catch (\Throwable $e) {
-                Mob::where('id', $n)->update(['status' => 'error']);
+                Mob::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
                 $this->newLine();
                 $this->error("ID {$n}: {$e->getMessage()}");
             }
 
             $bar->advance();
 
-            if ($n < $to) {
-                usleep(rand($delayMin * 1000, $delayMax * 1000) * 1000);
+            if ($n < $opts['to']) {
+                $this->randomDelay($opts['delayMin'], $opts['delayMax']);
             }
         }
 
@@ -102,46 +85,6 @@ class FetchMobs extends Command
         $this->info('Готово!');
 
         return self::SUCCESS;
-    }
-
-    private function sendCommandAndGetResponse(API $madelineProto, string|int $chatId, string $command): ?string
-    {
-        $historyBefore = $madelineProto->messages->getHistory(
-            peer: $chatId,
-            limit: 1,
-        );
-
-        $lastIdBefore = $historyBefore['messages'][0]['id'] ?? 0;
-
-        $madelineProto->messages->sendMessage(
-            peer: $chatId,
-            message: $command,
-        );
-
-        $deadline = time() + self::RESPONSE_TIMEOUT;
-
-        while (time() < $deadline) {
-            sleep(1);
-
-            $history = $madelineProto->messages->getHistory(
-                peer: $chatId,
-                limit: 5,
-                min_id: $lastIdBefore,
-            );
-
-            if (empty($history['messages'])) {
-                continue;
-            }
-
-            foreach (array_reverse($history['messages']) as $msg) {
-                if ($msg['id'] <= $lastIdBefore || !empty($msg['out'])) {
-                    continue;
-                }
-                return $msg['message'] ?? '';
-            }
-        }
-
-        return null;
     }
 
     private function parseResponse(string $text): array

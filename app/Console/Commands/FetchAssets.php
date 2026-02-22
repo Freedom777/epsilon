@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\MainStatusEnum;
 use App\Models\Asset;
-use Illuminate\Console\Command;
-use danog\MadelineProto\API;
 
-class FetchAssets extends Command
+class FetchAssets extends BaseFetchCommand
 {
     protected $signature = 'assets:fetch
                             {--from=1      : ID с которого начинать}
@@ -24,42 +23,24 @@ class FetchAssets extends Command
 
     public function handle(): int
     {
-        $from       = (int) $this->option('from');
-        $to         = (int) $this->option('to');
-        $chatId     = $this->option('chat') ?: config('parser.telegram.epsilon_chat_id');
-        $sessionPath = $this->option('session') ?: config('parser.telegram.session_path');
-        $delayMin   = (int) $this->option('delay-min');
-        $delayMax   = (int) $this->option('delay-max');
-        $skipDone   = (bool) $this->option('skip-done');
+        $opts = $this->resolveOptions();
 
-        if (!$chatId) {
-            $this->error('Укажите --chat или пропишите TELEGRAM_EPSILON_CHAT_ID в .env');
+        if (!$this->validateOptions($opts)) {
             return self::FAILURE;
         }
 
-        if ($from > $to) {
-            $this->error('--from не может быть больше --to');
-            return self::FAILURE;
-        }
+        $this->info("Запуск: ID {$opts['from']}..{$opts['to']}, чат: {$opts['chatName']}");
 
-        $this->info("Запуск: ID {$from}..{$to}, чат: {$chatId}");
+        $mp  = $this->initMadelineProto($opts['sessionPath']);
+        $bar = $this->createProgressBar($opts['to'] - $opts['from'] + 1);
 
-        // Инициализация MadelineProto
-        $madelineProto = new API($sessionPath);
-        $madelineProto->start(); // использует существующую сессию
-
-        $total   = $to - $from + 1;
-        $bar     = $this->output->createProgressBar($total);
-        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%% | ID: %message%');
-        $bar->start();
-
-        for ($n = $from; $n <= $to; $n++) {
+        for ($n = $opts['from']; $n <= $opts['to']; $n++) {
             $bar->setMessage((string) $n);
 
             // Пропуск уже готовых
-            if ($skipDone) {
+            if ($opts['skipDone']) {
                 $existing = Asset::find($n);
-                if ($existing && $existing->status === 'ok') {
+                if ($existing && $existing->status === MainStatusEnum::OK) {
                     $bar->advance();
                     continue;
                 }
@@ -68,19 +49,19 @@ class FetchAssets extends Command
             // Создаём/обновляем запись со статусом process
             Asset::updateOrCreate(
                 ['id' => $n],
-                ['status' => 'process', 'raw_response' => null, 'title' => null, 'description' => null]
+                ['status' => MainStatusEnum::PROCESS, 'raw_response' => null, 'title' => null, 'description' => null]
             );
 
             try {
-                $response = $this->sendCommandAndGetResponse($madelineProto, $chatId, "/getasset {$n}");
+                $response = $this->sendCommandAndGetResponse($mp, $opts['chatName'], "/getasset {$n}");
 
                 if ($response === null) {
                     // Бот не ответил в отведённое время
-                    Asset::where('id', $n)->update(['status' => 'error']);
+                    Asset::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
                     $this->newLine();
                     $this->warn("ID {$n}: нет ответа за " . self::RESPONSE_TIMEOUT . " сек");
                 } elseif (trim($response) === '' || $response === '❗️ Ресурс не найден') {
-                    Asset::where('id', $n)->update(['status' => 'empty']);
+                    Asset::where('id', $n)->update(['status' => MainStatusEnum::EMPTY]);
                 } else {
                     [$title, $description] = $this->parseResponse($response);
 
@@ -88,21 +69,19 @@ class FetchAssets extends Command
                         'raw_response' => $response,
                         'title'        => $title,
                         'description'  => $description,
-                        'status'       => 'ok',
+                        'status'       => MainStatusEnum::OK,
                     ]);
                 }
             } catch (\Throwable $e) {
-                Asset::where('id', $n)->update(['status' => 'error']);
+                Asset::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
                 $this->newLine();
                 $this->error("ID {$n}: {$e->getMessage()}");
             }
 
             $bar->advance();
 
-            // Случайная задержка (кроме последнего)
-            if ($n < $to) {
-                $delay = rand($delayMin * 1000, $delayMax * 1000); // в миллисекундах
-                usleep($delay * 1000);
+            if ($n < $opts['to']) {
+                $this->randomDelay($opts['delayMin'], $opts['delayMax']);
             }
         }
 
@@ -111,62 +90,6 @@ class FetchAssets extends Command
         $this->info('Готово!');
 
         return self::SUCCESS;
-    }
-
-    /**
-     * Отправляет команду в чат и ждёт ответа бота.
-     * Возвращает текст первого нового сообщения или null при таймауте.
-     */
-    private function sendCommandAndGetResponse(API $madelineProto, string|int $chatId, string $command): ?string
-    {
-        // Запоминаем ID последнего сообщения ДО отправки
-        $historyBefore = $madelineProto->messages->getHistory(
-            peer: $chatId,
-            limit: 1,
-        );
-
-        $lastIdBefore = 0;
-        if (!empty($historyBefore['messages'])) {
-            $lastIdBefore = $historyBefore['messages'][0]['id'];
-        }
-
-        // Отправляем команду
-        $madelineProto->messages->sendMessage(
-            peer: $chatId,
-            message: $command,
-        );
-
-        // Polling: ждём нового сообщения
-        $deadline = time() + self::RESPONSE_TIMEOUT;
-
-        while (time() < $deadline) {
-            sleep(1);
-
-            $history = $madelineProto->messages->getHistory(
-                peer: $chatId,
-                limit: 5,
-                min_id: $lastIdBefore,
-            );
-
-            if (empty($history['messages'])) {
-                continue;
-            }
-
-            // Берём самое старое новое сообщение (не наше)
-            $messages = array_reverse($history['messages']); // от старых к новым
-            foreach ($messages as $msg) {
-                if ($msg['id'] <= $lastIdBefore) {
-                    continue;
-                }
-                // Пропускаем наши собственные сообщения
-                if (!empty($msg['out'])) {
-                    continue;
-                }
-                return $msg['message'] ?? '';
-            }
-        }
-
-        return null;
     }
 
     /**

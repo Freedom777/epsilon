@@ -8,12 +8,13 @@ return [
     |--------------------------------------------------------------------------
     */
     'telegram' => [
-        'api_id'            => env('TELEGRAM_API_ID'),
-        'api_hash'          => env('TELEGRAM_API_HASH'),
-        'phone'             => env('TELEGRAM_PHONE'),
-        'trade_chat_id'     => env('TELEGRAM_TRADE_CHAT_ID'),
-        'epsilon_chat_id'   => env('TELEGRAM_EPSILON_CHAT_ID'),
-        'session_path'      => env('MADELINE_SESSION_PATH', 'storage/madeline/session.madeline'),
+        'api_id'                    => env('TELEGRAM_API_ID'),
+        'api_hash'                  => env('TELEGRAM_API_HASH'),
+        'phone'                     => env('TELEGRAM_PHONE'),
+        'epsilon_trade_chat_id'     => env('TELEGRAM_TRADE_CHAT_ID'),
+        'epsilon_trade_chat_name'   => env('TELEGRAM_TRADE_CHAT_NAME'),
+        'epsilon_bot_chat_name'     => env('TELEGRAM_BOT_CHAT_NAME'),
+        'session_path'              => env('MADELINE_SESSION_PATH', 'storage/madeline/session.madeline'),
     ],
 
     /*

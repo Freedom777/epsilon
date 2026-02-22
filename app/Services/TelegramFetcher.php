@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\TgMessage;
+use Carbon\CarbonInterface;
 use danog\MadelineProto\API;
 use danog\MadelineProto\Logger;
 use danog\MadelineProto\Settings;
@@ -93,20 +94,6 @@ class TelegramFetcher
     }
 
     /**
-     * Главный метод: определяет период загрузки и загружает сообщения.
-     */
-    public function fetchMessages(): void
-    {
-        $days      = (int) config('parser.fetch.days', 30);
-        $fetchFrom = $this->determineFetchFrom($days);
-
-        Log::info("Fetching messages from {$fetchFrom->toDateTimeString()}");
-
-        $this->getMadelineProto()->start();
-        $this->fetchMessagesInRange($fetchFrom, now());
-    }
-
-    /**
      * Загрузить сообщения за указанный период.
      * Вызывается из Artisan-команды с опциями --from/--to/--days.
      */
@@ -115,44 +102,25 @@ class TelegramFetcher
         Log::info("Fetching messages from {$from->toDateTimeString()} to {$to->toDateTimeString()}");
 
         $this->getMadelineProto()->start();
+        // Резолвим чат чтобы он попал в базу пиров
+        try {
+            $this->getMadelineProto()->getInfo(config('parser.telegram.epsilon_trade_chat_id'));
+        } catch (\Throwable) {}
         $this->fetchMessagesInRange($from, $to);
-    }
-
-    /**
-     * Определяем дату начала загрузки:
-     * - Если сообщений нет — берём последние N дней
-     * - Если есть — берём с даты последнего сообщения
-     */
-    private function determineFetchFrom(int $days): Carbon
-    {
-        $chatId = $this->getNumericChatId();
-
-        $lastMessage = TgMessage::where('tg_chat_id', $chatId)
-            ->orderByDesc('sent_at')
-            ->first();
-
-        if ($lastMessage === null) {
-            // Сообщений нет — загружаем за последние N дней
-            Log::info("No messages in DB, fetching last {$days} days");
-            return now()->subDays($days);
-        }
-
-        Log::info("Last message in DB: {$lastMessage->sent_at}, fetching from there");
-        return $lastMessage->sent_at;
     }
 
     /**
      * Загружаем сообщения из чата начиная с указанной даты.
      * Используем messages.getHistory с пагинацией.
      */
-    private function fetchMessagesInRange(Carbon $from, Carbon $to): void
+    private function fetchMessagesInRange(CarbonInterface $from, CarbonInterface $to): void
     {
         $batchSize  = (int) config('parser.fetch.batch_size', 100);
         $offsetId   = 0;
         $totalSaved = 0;
         $mp         = $this->getMadelineProto();
-        $chatId     = $this->getNumericChatId();
-        $chatName   = $this->getChatName();
+        $chatId     = $this->getTradeChatId();
+        $chatName   = $this->getTradeChatName();
 
         do {
             $result = $mp->messages->getHistory([
@@ -241,9 +209,9 @@ class TelegramFetcher
     /**
      * Парсим все сообщения с is_parsed = false.
      */
-    private function parseUnparsed(Carbon $since): void
+    private function parseUnparsed(CarbonInterface $since): void
     {
-        $chatId = $this->getNumericChatId();
+        $chatId = $this->getTradeChatId();
 
         TgMessage::where('is_parsed', false)
             ->where('tg_chat_id', $chatId)
@@ -315,19 +283,6 @@ class TelegramFetcher
     }
 
     /**
-     * Получить username чата для формирования ссылок.
-     */
-    private function getChatUsername(string|int $chatId): ?string
-    {
-        try {
-            $info = $this->getMadelineProto()->getInfo($chatId);
-            return $info['username'] ?? null;
-        } catch (\Throwable) {
-            return null;
-        }
-    }
-
-    /**
      * Извлечь реальный числовой ID чата.
      */
     private function extractChatId(array $chats, string|int $original): int
@@ -341,24 +296,13 @@ class TelegramFetcher
         return (int) $original;
     }
 
-    private function getNumericChatId(): int
+    private function getTradeChatId(): int
     {
-        return cache()->rememberForever('trade_chat_numeric_id', function () {
-            $chatId = config('parser.telegram.trade_chat_id');
-            $info   = $this->getMadelineProto()->getInfo($chatId);
-            return (int) ('-100' . $info['Chat']['id']);
-        });
+        return (int) config('parser.telegram.epsilon_trade_chat_id');
     }
 
-    private function getChatName(): string
+    private function getTradeChatName(): string
     {
-        return (string) cache()->rememberForever('trade_chat_name', function () {
-            $chatId = config('parser.telegram.trade_chat_id');
-            if (!is_numeric($chatId)) {
-                return ltrim($chatId, '@'); // 'epsilion_trade'
-            }
-            $info = $this->getMadelineProto()->getInfo($chatId);
-            return $info['username'] ?? '';
-        });
+        return config('parser.telegram.epsilon_trade_chat_name');
     }
 }
