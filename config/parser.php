@@ -123,4 +123,7 @@ return [
     'output' => [
         'days' => env('PARSER_OUTPUT_DAYS', 3), // За сколько дней анализировать информацию для выдачи
     ],
+    'cron' => [
+        'enabled' => env('PARSER_CRON_ENABLED', true),
+    ]
 ];
