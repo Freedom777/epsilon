@@ -234,18 +234,18 @@ class TelegramFetcher
         Log::info("Fetch complete. Total saved: {$totalSaved} messages");
 
         // Парсим все сохранённые но не распарсенные сообщения
-        $this->parseUnparsed();
+        $this->parseUnparsed($from);
     }
 
     /**
      * Парсим все сообщения с is_parsed = false.
      */
-    private function parseUnparsed(): void
+    private function parseUnparsed(Carbon $since): void
     {
         $chatId = config('parser.telegram.trade_chat_id');
 
-        TgMessage::/*where('tg_chat_id', $chatId)
-            ->*/where('is_parsed', false)
+        TgMessage::where('is_parsed', false)/*where('tg_chat_id', $chatId)->*/
+            ->where('sent_at', '>=', $since)
             ->chunkById(100, function ($messages) {
                 foreach ($messages as $message) {
                     $this->saver->parseAndSave($message);
