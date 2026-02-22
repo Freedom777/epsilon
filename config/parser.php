@@ -37,7 +37,7 @@ return [
     */
     'fetch' => [
         // Количество дней для загрузки сообщений
-        'days' => env('PARSER_FETCH_DAYS', 30),
+        'days' => env('PARSER_FETCH_DAYS', 3),
 
         // Количество сообщений за один запрос к Telegram API
         'batch_size' => 100,

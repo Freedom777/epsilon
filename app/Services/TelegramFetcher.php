@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\TgMessage;
 use Carbon\CarbonInterface;
 use danog\MadelineProto\API;
 use danog\MadelineProto\Logger;
@@ -201,26 +200,6 @@ class TelegramFetcher
         } while (count($messages) === $batchSize);
 
         Log::info("Fetch complete. Total saved: {$totalSaved} messages");
-
-        // Парсим все сохранённые но не распарсенные сообщения
-        $this->parseUnparsed($from);
-    }
-
-    /**
-     * Парсим все сообщения с is_parsed = false.
-     */
-    private function parseUnparsed(CarbonInterface $since): void
-    {
-        $chatId = $this->getTradeChatId();
-
-        TgMessage::where('is_parsed', false)
-            ->where('tg_chat_id', $chatId)
-            ->where('sent_at', '>=', $since)
-            ->chunkById(100, function ($messages) {
-                foreach ($messages as $message) {
-                    $this->saver->parseAndSave($message);
-                }
-            });
     }
 
     /**

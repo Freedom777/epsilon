@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\TgMessage;
-use App\Services\MessageSaver;
 use App\Services\TelegramFetcher;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -12,14 +11,13 @@ class FetchTelegramMessages extends Command
 {
     protected $signature = 'telegram:fetch
                             {--login        : Выполнить первичную авторизацию}
-                            {--parse-only   : Только парсить уже загруженные сообщения (без обращения к Telegram)}
                             {--days=        : Загрузить сообщения за последние N дней (переопределяет PARSER_FETCH_DAYS из .env)}
                             {--from=        : Загрузить с даты (формат: Y-m-d или Y-m-d H:i:s)}
                             {--to=          : Загрузить по дату включительно (формат: Y-m-d, по умолчанию: сейчас)}';
 
-    protected $description = 'Загружает сообщения из Telegram-чата и парсит объявления';
+    protected $description = 'Загружает сообщения из Telegram-чата';
 
-    public function handle(TelegramFetcher $fetcher, MessageSaver $saver): int
+    public function handle(TelegramFetcher $fetcher): int
     {
         // --- Авторизация ---
         if ($this->option('login')) {
@@ -30,14 +28,6 @@ class FetchTelegramMessages extends Command
             } finally {
                 $fetcher->disconnect();
             }
-            return self::SUCCESS;
-        }
-
-        // --- Только парсинг уже загруженных ---
-        if ($this->option('parse-only')) {
-            $this->info('Парсинг загруженных сообщений...');
-            $count = $this->parseUnparsed($saver);
-            $this->info("Обработано: {$count} сообщений.");
             return self::SUCCESS;
         }
 
@@ -52,7 +42,7 @@ class FetchTelegramMessages extends Command
 
         try {
             $fetcher->fetchMessagesBetween($from, $to);
-            $this->info('Загрузка и парсинг завершены.');
+            $this->info('Загрузка завершена.');
         } catch (\Throwable $e) {
             $this->error('Ошибка: ' . $e->getMessage());
             $this->error($e->getTraceAsString());
@@ -108,30 +98,8 @@ class FetchTelegramMessages extends Command
             return [$lastMessage->sent_at, $to];
         }
 
-        $days = (int) config('parser.fetch.days', 30);
+        $days = (int) config('parser.fetch.days', 3);
         $this->info("Сообщений в БД нет. Загружаем за последние {$days} дней.");
         return [now()->subDays($days)->startOfDay(), $to];
-    }
-
-    /**
-     * Парсим все сообщения с is_parsed = false.
-     */
-    private function parseUnparsed(MessageSaver $saver): int
-    {
-        $count = 0;
-        $days  = (int) $this->option('days') ?: (int) config('parser.fetch.days', 30);
-        $since = now()->subDays($days);
-
-        TgMessage::where('is_parsed', false)
-            ->where('sent_at', '>=', $since)
-            ->chunkById(100, function ($messages) use ($saver, &$count) {
-                foreach ($messages as $message) {
-                    $saver->parseAndSave($message);
-                    $count++;
-                }
-                $this->info("  Обработано: {$count}...");
-            });
-
-        return $count;
     }
 }
