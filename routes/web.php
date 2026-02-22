@@ -47,3 +47,16 @@ Route::get('/test-session-auth', function() {
         'auth_check'     => auth()->check(),
     ]);
 });
+
+Route::get('/test-force-login', function() {
+    $user = \App\Models\User::first();
+
+    auth()->login($user);
+    session()->save();
+
+    return response()->json([
+        'auth_after_login' => auth()->check(),
+        'user'             => auth()->user()?->email,
+        'session_keys'     => array_keys(session()->all()),
+    ]);
+});
