@@ -44,7 +44,7 @@ class MessageSaver
                 'raw_text'   => $msgData['raw_text'],
                 'tg_link'    => $msgData['tg_link'] ?? null,
                 'sent_at'    => $msgData['sent_at'],
-                'is_parsed'  => false,
+                // is_parsed не трогаем — пусть остаётся как есть
             ]
         );
     }
@@ -165,20 +165,24 @@ class MessageSaver
                 return;
             }
 
-            Exchange::create([
-                'tg_message_id'             => $message->id,
-                'tg_user_id'                => $message->tg_user_id,
-                'asset_id'                  => $giveMatch->isAsset() ? $giveMatch->id : null,
-                'item_id'                   => $giveMatch->isItem()  ? $giveMatch->id : null,
-                'product_quantity'          => $exchange['give_qty']            ?? 1,
-                'exchange_asset_id'         => $wantMatch->isAsset() ? $wantMatch->id : null,
-                'exchange_item_id'          => $wantMatch->isItem()  ? $wantMatch->id : null,
-                'exchange_product_quantity' => $exchange['want_qty']            ?? 1,
-                'surcharge_amount'          => $exchange['surcharge']           ?? null,
-                'surcharge_currency'        => $exchange['surcharge_currency']  ?? null,
-                'surcharge_direction'       => $exchange['surcharge_direction'] ?? null,
-                'posted_at'                 => $message->sent_at,
-            ]);
+            Exchange::firstOrCreate(
+                [
+                    'tg_message_id'     => $message->id,
+                    'asset_id'          => $giveMatch->isAsset() ? $giveMatch->id : null,
+                    'item_id'           => $giveMatch->isItem()  ? $giveMatch->id : null,
+                    'exchange_asset_id' => $wantMatch->isAsset() ? $wantMatch->id : null,
+                    'exchange_item_id'  => $wantMatch->isItem()  ? $wantMatch->id : null,
+                ],
+                [
+                    'tg_user_id'                => $message->tg_user_id,
+                    'product_quantity'          => $exchange['give_qty']            ?? 1,
+                    'exchange_product_quantity' => $exchange['want_qty']            ?? 1,
+                    'surcharge_amount'          => $exchange['surcharge']           ?? null,
+                    'surcharge_currency'        => $exchange['surcharge_currency']  ?? null,
+                    'surcharge_direction'       => $exchange['surcharge_direction'] ?? null,
+                    'posted_at'                 => $message->sent_at,
+                ]
+            );
         } catch (\Throwable $e) {
             Log::error('Error saving exchange', [
                 'message_id' => $message->id,
@@ -197,17 +201,21 @@ class MessageSaver
 
             $service = Service::findOrCreateByName($item['name'], $item['icon'] ?? null);
 
-            ServiceListing::create([
-                'tg_message_id' => $message->id,
-                'tg_user_id'    => $message->tg_user_id,
-                'service_id'    => $service->id,
-                'type'          => $item['type']        ?? 'offer',
-                'price'         => $item['price']       ?? null,
-                'currency'      => $item['currency']    ?? 'gold',
-                'description'   => $item['description'] ?? null,
-                'posted_at'     => $message->sent_at,
-                'status'        => 'ok',
-            ]);
+            ServiceListing::firstOrCreate(
+                [
+                    'tg_message_id' => $message->id,
+                    'service_id'    => $service->id,
+                    'type'          => $item['type'] ?? 'offer',
+                ],
+                [
+                    'tg_user_id'  => $message->tg_user_id,
+                    'price'       => $item['price']       ?? null,
+                    'currency'    => $item['currency']    ?? 'gold',
+                    'description' => $item['description'] ?? null,
+                    'posted_at'   => $message->sent_at,
+                    'status'      => 'ok',
+                ]
+            );
         } catch (\Throwable $e) {
             Log::error('Error saving service listing', [
                 'message_id' => $message->id,
