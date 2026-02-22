@@ -132,7 +132,7 @@ class TelegramFetcher
                 'min_id'      => 0,
                 'hash'        => 0,
             ]);
-            Log::info(json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
             if (empty($result['messages'])) {
                 break;
             }
