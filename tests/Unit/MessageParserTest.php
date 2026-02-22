@@ -352,4 +352,232 @@ class MessageParserTest extends TestCase
         $this->assertEmpty($result['types']);
         $this->assertEmpty($result['listings']);
     }
+
+    // =========================================================================
+    // extractPrice — "к" (тысячи)
+    // =========================================================================
+
+    public function test_extract_price_k_bare(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('🎽 T.Rex Crusher Armor [III] 8к');
+        $this->assertEquals(8000, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_k_large(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('🎽 Кожаный доспех света [IV] 110к');
+        $this->assertEquals(110000, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_k_decimal_dot(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('📿 Amulet Waves [III+] +3 6.5к');
+        $this->assertEquals(6500, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_k_decimal_comma(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('🔧Ремкомплект - по 4,5к💰');
+        $this->assertEquals(4500, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_k_gold_emoji(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('📕 Сила воли IV - 10к💰');
+        $this->assertEquals(10000, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_k_gold_emoji_large(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('🎽 Доспех [IV] 150к💰');
+        $this->assertEquals(150000, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_k_with_dot_decimal_and_emoji(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('Amulet waves 5.5к💰');
+        $this->assertEquals(5500, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_parse_product_k_price_name_clean(): void
+    {
+        $result = $this->parser->parseProductLine('🎽 T.Rex Crusher Armor [III] 8к');
+        $this->assertEquals('T.Rex Crusher Armor', $result['name']);
+        $this->assertEquals('III', $result['grade']);
+        $this->assertEquals(8000, $result['price']);
+    }
+
+    // =========================================================================
+    // extractPrice — голое число без валюты
+    // =========================================================================
+
+    public function test_extract_price_bare_number(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('🍞 Корка хлеба [II] 650');
+        $this->assertEquals(650, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_bare_after_colon(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('🎩 Ледяной капюшон жреца [III+] : 4000');
+        $this->assertEquals(4000, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_bare_after_dash(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('🧪 Удача торговца - 200');
+        $this->assertEquals(200, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_extract_price_bare_after_equals(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('🎐 Амулет оракула [IV] = 350');
+        $this->assertEquals(350, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_parse_product_bare_price_name_clean(): void
+    {
+        $result = $this->parser->parseProductLine('🎩 Ледяной капюшон жреца [III+] : 4000');
+        $this->assertEquals('Ледяной капюшон жреца', $result['name']);
+        $this->assertEquals('III+', $result['grade']);
+        $this->assertEquals(4000, $result['price']);
+    }
+
+    // =========================================================================
+    // detectTypes — fallback по ценам
+    // =========================================================================
+
+    public function test_detect_sell_by_price_lines(): void
+    {
+        $text = "🔤🔤🔤🔤🔤🔤\n💍 Кольцо Ареса 🛡 [IV] = 180🍪";
+        $types = $this->parser->detectTypes($text);
+        $this->assertContains('sell', $types);
+    }
+
+    public function test_parse_no_tag_message_with_prices(): void
+    {
+        $text = "🔤🔤🔤🔤🔤🔤\n💍 Кольцо [IV] = 180🍪\n🔖 Свиток [I] = 700💰";
+        $result = $this->parser->parse($text);
+        $this->assertContains('sell', $result['types']);
+        $this->assertNotEmpty($result['listings']);
+    }
+
+    // =========================================================================
+    // parse — товар на строке с хэштегом
+    // =========================================================================
+
+    public function test_parse_product_on_hashtag_line(): void
+    {
+        $text = "#продам биотоковую пластину";
+        $result = $this->parser->parse($text);
+        $this->assertContains('sell', $result['types']);
+        $this->assertNotEmpty($result['listings']);
+        $this->assertStringContainsString('биотоковую пластину', $result['listings'][0]['name']);
+    }
+
+    public function test_parse_hashtag_with_decorative_emoji_ignored(): void
+    {
+        // Декоративные emoji после тега не должны создавать мусорных товаров
+        $text = "#Продам 🔤🔤🔤🔤🔤🔤🔤\n🔖 Свиток [III] - 1350💰";
+        $result = $this->parser->parse($text);
+        // Должен быть только один товар (свиток), а не два
+        $this->assertCount(1, $result['listings']);
+        $this->assertEquals('Свиток', $result['listings'][0]['name']);
+    }
+
+    // =========================================================================
+    // cleanName — ведущие предлоги
+    // =========================================================================
+
+    public function test_cleanup_leading_preposition_po(): void
+    {
+        // "по 400💰 за, только набором" — после извлечения цены мусор
+        $result = $this->parser->parseProductLine('по 400💰 за, только набором, только оптом');
+        $this->assertNull($result);
+    }
+
+    public function test_cleanup_noise_obmen(): void
+    {
+        $result = $this->parser->parseProductLine('обмены на то, что ниже, кселы/талы');
+        $this->assertNull($result);
+    }
+
+    public function test_cleanup_po_bare_price(): void
+    {
+        // "по 150💰" — нет имени товара
+        $result = $this->parser->parseProductLine('по 150💰');
+        $this->assertNull($result);
+    }
+
+    // =========================================================================
+    // Regression — существующие паттерны не сломались
+    // =========================================================================
+
+    public function test_regression_z_currency_still_works(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('Свиток [III] - 1350з');
+        $this->assertEquals(1350, $price);
+        $this->assertEquals('gold', $currency);
+    }
+
+    public function test_regression_emoji_price_still_works(): void
+    {
+        [$price] = $this->parser->extractPrice('Свиток - 1350💰');
+        $this->assertEquals(1350, $price);
+    }
+
+    public function test_regression_cookie_pech_still_works(): void
+    {
+        [$price, $currency] = $this->parser->extractPrice('Амулет оракула [IV] - 350 печ');
+        $this->assertEquals(350, $price);
+        $this->assertEquals('cookie', $currency);
+    }
+
+    public function test_regression_dot_separator_still_works(): void
+    {
+        [$price] = $this->parser->extractPrice('Предмет - 19.999💰');
+        $this->assertEquals(19999, $price);
+    }
+
+    public function test_regression_space_separator_still_works(): void
+    {
+        [$price] = $this->parser->extractPrice('Ремкомплект - 3 300💰');
+        $this->assertEquals(3300, $price);
+    }
+
+    public function test_regression_full_sell_message(): void
+    {
+        $text = "#продам\n🔪 Чекан Маржаны [III+] - 5500💰\n🎩 Ледяной марион провидца [III+] - 6000💰";
+        $result = $this->parser->parse($text);
+        $this->assertCount(2, $result['listings']);
+        $this->assertEquals('Чекан Маржаны', $result['listings'][0]['name']);
+        $this->assertEquals(5500, $result['listings'][0]['price']);
+    }
+
+    public function test_regression_grade_fake_roman(): void
+    {
+        $result = $this->parser->parseProductLine('🔖 Свиток заточки [lll] - 66з');
+        $this->assertEquals('III', $result['grade']);
+    }
+
+    public function test_regression_enhancement_and_durability(): void
+    {
+        $result = $this->parser->parseProductLine('🎽 Crusher Armor [III] +7 (10/41) - 24000💰');
+        $this->assertEquals(7, $result['enhancement']);
+        $this->assertEquals(10, $result['durability_current']);
+        $this->assertEquals(41, $result['durability_max']);
+        $this->assertEquals(24000, $result['price']);
+    }
+
 }

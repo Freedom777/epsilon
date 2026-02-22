@@ -25,6 +25,12 @@ class MessageParser
     private const GOLD_SYMBOL   = '💰';
     private const COOKIE_SYMBOL = '🍪';
 
+    // К = тысячи: 10к💰, 4,5к💰, 5.5к🍪
+    private const PRICE_K_SYMBOL_PATTERN = '/(\d[\d.,]*)\s*к\s*(' . self::GOLD_SYMBOL . '|' . self::COOKIE_SYMBOL . ')/ui';
+
+    // К без валюты: 8к, 6.5к — assumed gold
+    private const PRICE_K_BARE_PATTERN = '/(\d[\d.,]*)\s*к(?:\b|$)/ui';
+
     // Символьные валюты: 💰 или 🍪
     private const PRICE_SYMBOL_PATTERN = '/(\d[\d\s.]{0,12})\s*(' . self::GOLD_SYMBOL . '|' . self::COOKIE_SYMBOL . ')/u';
 
@@ -36,11 +42,17 @@ class MessageParser
     // Поддерживаем как кириллические/латинские I и L
     private const GRADE_PATTERN = '/\[\s*(III\+|III|II|IV|V|I|lll\+|lll|ll|l)\s*\]/ui';
 
+    // Голое число в конце строки: "Товар - 4000", "Товар : 650", "Товар 1800"
+    private const PRICE_BARE_PATTERN = '/[-–—:=]?\s*(\d{2,6})\s*$/u';
+
     // Заточка: +3, +10
     private const ENHANCEMENT_PATTERN = '/(?<![%\d])\+([1-9]|10)(?![\d%])/u';
 
     // Прочность: (47/47), 47/47
     private const DURABILITY_PATTERN = '/\(?\s*(\d{1,5})\s*\/\s*(\d{1,5})\s*\)?/u';
+
+    // Мусорные строки: начинаются со стоп-слов (не могут быть именем товара)
+    private const NOISE_NAME_PATTERN = '/^(?:только|лишь|либо|или|можно|нужно|если|все|всё|обмены?|торг)\b/ui';
 
     // Нормализация латинских l → римские I в грейде
     private const GRADE_NORMALIZE = [
@@ -48,6 +60,16 @@ class MessageParser
         'lll'  => 'III',
         'll'   => 'II',
         'l'    => 'I',
+    ];
+
+    // Нормализация кириллических т1/т2 → римские
+    private const GRADE_CYRILLIC = [
+        'т1'  => 'I',
+        'т2'  => 'II',
+        'т3'  => 'III',
+        'т3+' => 'III+',
+        'т4'  => 'IV',
+        'т5'  => 'V',
     ];
 
     private array $tagMap;
@@ -143,6 +165,18 @@ class MessageParser
             }
         }
 
+        // Fallback: если нет ни тегов ни keywords, но есть строки с ценами — считаем sell
+        if (empty($types)) {
+            foreach (explode("\n", $text) as $line) {
+                $line = trim($line);
+                if (preg_match(self::PRICE_SYMBOL_PATTERN, $line) ||
+                    preg_match(self::PRICE_K_SYMBOL_PATTERN, $line)) {
+                    $types[] = 'sell';
+                    break;
+                }
+            }
+        }
+
         return array_unique($types);
     }
 
@@ -152,8 +186,18 @@ class MessageParser
 
         foreach (explode("\n", $text) as $line) {
             $line = trim($line);
-            if (empty($line) || preg_match('/^#\w/u', $line)) {
+            if (empty($line)) {
                 continue;
+            }
+
+            // Строка с хэштегом — извлекаем текст после тега
+            if (preg_match('/^#\w+\s*(.*)/u', $line, $tagMatch)) {
+                $line = trim($tagMatch[1]);
+                if (empty($line)) continue;
+                // Пропускаем чисто декоративные emoji после тега (🔤🔤🔤, 🔞🚭📵)
+                $stripped = preg_replace('/^[\p{So}\p{Sk}\p{Sm}\x{1F000}-\x{1FFFF}\x{2600}-\x{27FF}\x{2300}-\x{23FF}\s:]+$/u', '', $line);
+                if (empty(trim($stripped ?? ''))) continue;
+                $line = $stripped;
             }
 
             // Разбиваем строку по запятой перед иконкой или перед 📄/📒/📗 и т.д.
@@ -232,6 +276,11 @@ class MessageParser
         $name = $this->cleanName($line);
 
         if (mb_strlen($name) < 2) {
+            return null;
+        }
+
+        // 8. Фильтр мусорных строк (стоп-слова не могут быть именем товара)
+        if (preg_match(self::NOISE_NAME_PATTERN, $name)) {
             return null;
         }
 
@@ -366,7 +415,15 @@ class MessageParser
      */
     public function extractPrice(string $line): array
     {
-        // Символьные: 5000💰 / 100🍪
+        // 1. К + emoji: 10к💰, 4,5к💰, 5.5к🍪
+        if (preg_match(self::PRICE_K_SYMBOL_PATTERN, $line, $m)) {
+            $price    = $this->parseNumberK($m[1]);
+            $currency = $m[2] === self::GOLD_SYMBOL ? 'gold' : 'cookie';
+            $line     = trim(preg_replace(self::PRICE_K_SYMBOL_PATTERN, '', $line, 1));
+            return [$price, $currency, $line];
+        }
+
+        // 2. Символьные: 5000💰 / 100🍪
         if (preg_match(self::PRICE_SYMBOL_PATTERN, $line, $m)) {
             $price    = $this->parseNumber($m[1]);
             $currency = $m[2] === self::GOLD_SYMBOL ? 'gold' : 'cookie';
@@ -374,18 +431,34 @@ class MessageParser
             return [$price, $currency, $line];
         }
 
-        // Текстовые cookie: 100 печ
+        // 3. Текстовые cookie: 100 печ
         if (preg_match(self::PRICE_TEXT_COOKIE_PATTERN, $line, $m)) {
             $price = $this->parseNumber($m[1]);
             $line  = trim(preg_replace(self::PRICE_TEXT_COOKIE_PATTERN, '', $line, 1));
             return [$price, 'cookie', $line];
         }
 
-        // Текстовые gold: 5000з / 5000 злато
+        // 4. Текстовые gold: 5000з / 5000 злато
         if (preg_match(self::PRICE_TEXT_GOLD_PATTERN, $line, $m)) {
             $price = $this->parseNumber($m[1]);
             $line  = trim(preg_replace(self::PRICE_TEXT_GOLD_PATTERN, '', $line, 1));
             return [$price, 'gold', $line];
+        }
+
+        // 5. К без emoji: 8к, 6.5к — assumed gold
+        if (preg_match(self::PRICE_K_BARE_PATTERN, $line, $m)) {
+            $price = $this->parseNumberK($m[1]);
+            $line  = trim(preg_replace(self::PRICE_K_BARE_PATTERN, '', $line, 1));
+            return [$price, 'gold', $line];
+        }
+
+        // 6. Голое число в конце строки: "Товар - 4000", "Товар 650"
+        if (preg_match(self::PRICE_BARE_PATTERN, $line, $m)) {
+            $price = (int) $m[1];
+            if ($price >= 10) {
+                $line = trim(preg_replace(self::PRICE_BARE_PATTERN, '', $line, 1));
+                return [$price, 'gold', $line];
+            }
         }
 
         return [null, 'gold', $line];
@@ -415,19 +488,34 @@ class MessageParser
     }
 
     /**
+     * Парсим число с суффиксом "к" (тысячи): "6.5" → 6500, "4,5" → 4500, "110" → 110000
+     */
+    private function parseNumberK(string $raw): int
+    {
+        $clean = str_replace([' ', ','], ['', '.'], $raw);
+        return (int) round((float) $clean * 1000);
+    }
+
+    /**
      * Нормализуем латинские "l" в квадратных скобках в римские "I".
      * "[lll+]" → "[III+]", "[ll]" → "[II]"
      */
     private function normalizeFakeRomanGrade(string $line): string
     {
+        // Заменяем [т2] → [II]
+        $line = preg_replace_callback('/\[\s*(т\d\+?)\s*]/ui', function ($m) {
+            $key = mb_strtolower($m[1]);
+            return '[' . (self::GRADE_CYRILLIC[$key] ?? mb_strtoupper($m[1])) . ']';
+        }, $line);
+
         // Заменяем | на I внутри скобок грейда
-        $line = preg_replace_callback('/\[([IVXliv|+\s]+)\]/ui', function ($m) {
+        $line = preg_replace_callback('/\[([IVXliv|+\s]+)]/ui', function ($m) {
             $grade = str_replace('|', 'I', $m[1]);
             return '[' . $grade . ']';
         }, $line);
 
         // Затем нормализуем латинские l → I
-        return preg_replace_callback('/\[\s*(l{1,3}\+?)\s*\]/ui', function ($m) {
+        return preg_replace_callback('/\[\s*(l{1,3}\+?)\s*]/ui', function ($m) {
             $key = mb_strtolower($m[1]);
             return '[' . (self::GRADE_NORMALIZE[$key] ?? mb_strtoupper($m[1])) . ']';
         }, $line);
@@ -480,6 +568,11 @@ class MessageParser
         }
 
         if (empty($found)) {
+            // Fallback: если detectTypes нашёл sell по ценам, весь текст = sell
+            $types = $this->detectTypes($text);
+            if (in_array('sell', $types)) {
+                return ['sell' => $text];
+            }
             return $sections;
         }
 
@@ -520,6 +613,12 @@ class MessageParser
         $name = preg_replace('/\s*\d+\s*шт\.?\s*|[\/\\\\]\s*шт\.?\s*/ui', '', $name);
 
         // Убираем хвостовые предлоги-мусор: "по", "от", "за"
+        $name = preg_replace('/\s+(по|от|за)(\s+.*)?$/ui', '', $name);
+
+        // Убираем ведущие предлоги-мусор (может быть цепочка: "по 400💰 за," → "по  за," → "")
+        $name = preg_replace('/^(?:(?:по|от|за)\s*[,.]?\s*)+/ui', '', $name);
+
+        // Повторно убираем хвостовые предлоги (могут обнажиться после удаления ведущих)
         $name = preg_replace('/\s+(по|от|за)(\s+.*)?$/ui', '', $name);
 
         // Хвостовой мусор: +, =, /, -, :, –, —
