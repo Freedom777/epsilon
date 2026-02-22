@@ -51,6 +51,12 @@ class ProductPending extends Model
             'approved_at'   => now(),
             'admin_comment' => $comment,
         ]);
+
+        // Сбрасываем is_parsed для сообщений где встречался этот товар
+        // чтобы при следующем парсинге листинги создались
+        TgMessage::whereRaw('LOWER(raw_text) LIKE ?', ['%' . mb_strtolower($this->raw_title) . '%'])
+            ->where('is_parsed', true)
+            ->update(['is_parsed' => false]);
     }
 
     public function reject(int $userId, ?string $comment = null): void

@@ -242,6 +242,60 @@ class ProductPendingResource extends Resource
                     }),
             ])
             ->bulkActions([
+                Tables\Actions\BulkAction::make('bulk_link_asset')
+                    ->label('Привязать к расходнику')
+                    ->icon('heroicon-o-link')
+                    ->color('info')
+                    ->form([
+                        Forms\Components\Select::make('asset_id')
+                            ->label('Расходник')
+                            ->searchable()
+                            ->getSearchResultsUsing(fn (string $search) =>
+                            Asset::where('title', 'like', "%{$search}%")
+                                ->where('status', 'ok')
+                                ->limit(20)
+                                ->pluck('title', 'id')
+                            )
+                            ->required(),
+                    ])
+                    ->action(function ($records, array $data) {
+                        $records->each(function ($record) use ($data) {
+                            $record->update([
+                                'source_type'  => 'asset',
+                                'suggested_id' => $data['asset_id'],
+                            ]);
+                            $record->approve(auth()->id());
+                        });
+                        Notification::make()->title('Привязано к расходнику')->success()->send();
+                    }),
+
+                Tables\Actions\BulkAction::make('bulk_link_item')
+                    ->label('Привязать к экипировке')
+                    ->icon('heroicon-o-link')
+                    ->color('info')
+                    ->form([
+                        Forms\Components\Select::make('item_id')
+                            ->label('Экипировка')
+                            ->searchable()
+                            ->getSearchResultsUsing(fn (string $search) =>
+                            Item::where('title', 'like', "%{$search}%")
+                                ->where('status', 'ok')
+                                ->limit(20)
+                                ->pluck('title', 'id')
+                            )
+                            ->required(),
+                    ])
+                    ->action(function ($records, array $data) {
+                        $records->each(function ($record) use ($data) {
+                            $record->update([
+                                'source_type'  => 'item',
+                                'suggested_id' => $data['item_id'],
+                            ]);
+                            $record->approve(auth()->id());
+                        });
+                        Notification::make()->title('Привязано к экипировке')->success()->send();
+                    }),
+
                 Tables\Actions\BulkAction::make('bulk_reject')
                     ->label('Отклонить')
                     ->icon('heroicon-o-x-mark')
