@@ -124,7 +124,7 @@ class TelegramFetcher
      */
     private function determineFetchFrom(int $days): Carbon
     {
-        $chatId = config('parser.telegram.trade_chat_id');
+        $chatId = $this->getNumericChatId();
 
         $lastMessage = TgMessage::where('tg_chat_id', $chatId)
             ->orderByDesc('sent_at')
@@ -146,7 +146,7 @@ class TelegramFetcher
      */
     private function fetchMessagesInRange(Carbon $from, Carbon $to): void
     {
-        $chatId     = config('parser.telegram.trade_chat_id');
+        $chatId     = $this->getNumericChatId();
         $batchSize  = (int) config('parser.fetch.batch_size', 100);
         $offsetId   = 0;
         $totalSaved = 0;
@@ -242,9 +242,10 @@ class TelegramFetcher
      */
     private function parseUnparsed(Carbon $since): void
     {
-        $chatId = config('parser.telegram.trade_chat_id');
+        $chatId = $this->getNumericChatId();
 
-        TgMessage::where('is_parsed', false)/*where('tg_chat_id', $chatId)->*/
+        TgMessage::where('is_parsed', false)
+            ->where('tg_chat_id', $chatId)
             ->where('sent_at', '>=', $since)
             ->chunkById(100, function ($messages) {
                 foreach ($messages as $message) {
@@ -337,5 +338,14 @@ class TelegramFetcher
         }
 
         return (int) $original;
+    }
+
+    public function getNumericChatId(): int
+    {
+        return cache()->rememberForever('trade_chat_numeric_id', function () {
+            $chatId = config('parser.telegram.trade_chat_id');
+            $info   = $this->getMadelineProto()->getInfo($chatId);
+            return (int) ('-100' . $info['Chat']['id']);
+        });
     }
 }
