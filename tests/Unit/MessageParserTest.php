@@ -580,4 +580,25 @@ class MessageParserTest extends TestCase
         $this->assertEquals(24000, $result['price']);
     }
 
+    // =========================================================================
+    // PRICE_BARE не ловит заточку +N как цену
+    // =========================================================================
+
+    public function test_enhancement_not_caught_as_bare_price(): void
+    {
+        $result = $this->parser->parseProductLine('🔪 Sledgehammer [III] +10');
+        $this->assertEquals('Sledgehammer', $result['name']);
+        $this->assertEquals('III', $result['grade']);
+        $this->assertEquals(10, $result['enhancement']);
+        $this->assertNull($result['price']);
+    }
+
+    public function test_enhancement_plus_bare_price_coexist(): void
+    {
+        // +1 = enhancement, 5500 = bare price
+        $result = $this->parser->parseProductLine('🛡 Скутум вьюги [III] +1 5500');
+        $this->assertEquals('Скутум вьюги', $result['name']);
+        $this->assertEquals(1, $result['enhancement']);
+        $this->assertEquals(5500, $result['price']);
+    }
 }

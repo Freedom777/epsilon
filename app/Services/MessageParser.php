@@ -43,7 +43,8 @@ class MessageParser
     private const GRADE_PATTERN = '/\[\s*(III\+|III|II|IV|V|I|lll\+|lll|ll|l)\s*\]/ui';
 
     // Голое число в конце строки: "Товар - 4000", "Товар : 650", "Товар 1800"
-    private const PRICE_BARE_PATTERN = '/[-–—:=]?\s*(\d{2,6})\s*$/u';
+    // (?<!\+) — не ловить заточку +10 как цену
+    private const PRICE_BARE_PATTERN = '/[-–—:=]?\s*(?<!\+)(\d{2,6})\s*$/u';
 
     // Заточка: +3, +10
     private const ENHANCEMENT_PATTERN = '/(?<![%\d])\+([1-9]|10)(?![\d%])/u';
