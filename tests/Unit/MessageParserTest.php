@@ -455,22 +455,57 @@ class MessageParserTest extends TestCase
     }
 
     // =========================================================================
-    // detectTypes — fallback по ценам
+    // 🔤-заголовки как разделители секций
     // =========================================================================
 
-    public function test_detect_sell_by_price_lines(): void
+    public function test_emoji_header_splits_into_sell_and_buy(): void
     {
-        $text = "🔤🔤🔤🔤🔤🔤\n💍 Кольцо Ареса 🛡 [IV] = 180🍪";
-        $types = $this->parser->detectTypes($text);
+        $text = "🔤🔤🔤🔤🔤🔤\n💍 Кольцо [IV] = 180🍪\n🔤🔤🔤🔤🔤\n✴️ Медь = 20💰";
+        $result = $this->parser->parse($text);
+
+        $this->assertContains('sell', $result['types']);
+        $this->assertContains('buy', $result['types']);
+
+        $types = array_column($result['listings'], 'type');
         $this->assertContains('sell', $types);
+        $this->assertContains('buy', $types);
     }
 
-    public function test_parse_no_tag_message_with_prices(): void
+    public function test_emoji_header_detects_trade_section(): void
     {
-        $text = "🔤🔤🔤🔤🔤🔤\n💍 Кольцо [IV] = 180🍪\n🔖 Свиток [I] = 700💰";
+        $text = "🔤🔤🔤🔤🔤🔤\n🔖 Свиток = 100💰\n🔤🔤🔤🔤🔤\nРассматриваю любые обмены\nМой бутер на ваш пирог";
         $result = $this->parser->parse($text);
+
         $this->assertContains('sell', $result['types']);
-        $this->assertNotEmpty($result['listings']);
+        $this->assertContains('trade', $result['types']);
+    }
+
+    public function test_emoji_header_detects_service_section(): void
+    {
+        $text = "🔤🔤🔤🔤🔤🔤\n🔖 Свиток = 100💰\n🔤🔤🔤🔤🔤🔤\nКрафт ГМ4 | Алхим ГМ4";
+        $result = $this->parser->parse($text);
+
+        $this->assertContains('service', $result['types']);
+    }
+
+    public function test_emoji_header_buy_section_items_have_buy_type(): void
+    {
+        $text = "🔤🔤🔤🔤🔤🔤\n💍 Кольцо [IV] = 180🍪\n🔤🔤🔤🔤🔤\nⓂ️ Материя [II] = 250💰";
+        $result = $this->parser->parse($text);
+
+        // Материя должна быть buy, не sell
+        $buyItems = array_filter($result['listings'], fn($i) => $i['type'] === 'buy');
+        $this->assertNotEmpty($buyItems);
+        $buyItem = array_values($buyItems)[0];
+        $this->assertStringContainsString('Материя', $buyItem['name']);
+    }
+
+    public function test_no_types_no_headers_returns_empty(): void
+    {
+        // Без хэштегов, keywords и 🔤-заголовков — игнорируем
+        $result = $this->parser->parse('Просто текст без ничего');
+        $this->assertEmpty($result['types']);
+        $this->assertEmpty($result['listings']);
     }
 
     // =========================================================================

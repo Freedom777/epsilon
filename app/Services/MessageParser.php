@@ -55,6 +55,9 @@ class MessageParser
     // Мусорные строки: начинаются со стоп-слов (не могут быть именем товара)
     private const NOISE_NAME_PATTERN = '/^(?:только|лишь|либо|или|можно|нужно|если|все|всё|обмены?|торг)\b/ui';
 
+    // 🔤-заголовки секций (картинка-текст: ПРОДАМ, КУПЛЮ, ОБМЕН, УСЛУГИ)
+    private const EMOJI_HEADER_PATTERN = '/^\s*🔤{4,}\s*$/u';
+
     // Нормализация латинских l → римские I в грейде
     private const GRADE_NORMALIZE = [
         'lll+' => 'III+',
@@ -110,14 +113,19 @@ class MessageParser
             return $result;
         }
 
-        $types = $this->detectTypes($text);
-        $result['types'] = $types;
+        $types    = $this->detectTypes($text);
+        $sections = $this->splitIntoSections($text);
 
-        if (empty($types)) {
-            return $result;
+        // 🔤-секции могут добавить типы, не найденные через теги/keywords
+        if (!empty($sections)) {
+            $types = array_unique(array_merge($types, array_keys($sections)));
         }
 
-        $sections = $this->splitIntoSections($text);
+        $result['types'] = $types;
+
+        if (empty($sections)) {
+            return $result;
+        }
 
         foreach ($sections as $sectionType => $sectionText) {
             if ($sectionType === 'sell' || $sectionType === 'buy') {
@@ -162,18 +170,6 @@ class MessageParser
                             break 2;
                         }
                     }
-                }
-            }
-        }
-
-        // Fallback: если нет ни тегов ни keywords, но есть строки с ценами — считаем sell
-        if (empty($types)) {
-            foreach (explode("\n", $text) as $line) {
-                $line = trim($line);
-                if (preg_match(self::PRICE_SYMBOL_PATTERN, $line) ||
-                    preg_match(self::PRICE_K_SYMBOL_PATTERN, $line)) {
-                    $types[] = 'sell';
-                    break;
                 }
             }
         }
@@ -569,12 +565,8 @@ class MessageParser
         }
 
         if (empty($found)) {
-            // Fallback: если detectTypes нашёл sell по ценам, весь текст = sell
-            $types = $this->detectTypes($text);
-            if (in_array('sell', $types)) {
-                return ['sell' => $text];
-            }
-            return $sections;
+            // Попробуем 🔤-заголовки как разделители секций
+            return $this->splitByEmojiHeaders($text);
         }
 
         usort($found, fn($a, $b) => $a['pos'] <=> $b['pos']);
@@ -590,6 +582,88 @@ class MessageParser
         }
 
         return $sections;
+    }
+
+    /**
+     * Разбивает текст по 🔤-заголовкам (картинки-текст: ПРОДАМ, КУПЛЮ, ОБМЕН, УСЛУГИ).
+     * Тип каждой секции определяется по содержимому.
+     */
+    private function splitByEmojiHeaders(string $text): array
+    {
+        $lines           = explode("\n", $text);
+        $headerPositions = [];
+
+        foreach ($lines as $i => $line) {
+            if (preg_match(self::EMOJI_HEADER_PATTERN, $line)) {
+                $headerPositions[] = $i;
+            }
+        }
+
+        if (empty($headerPositions)) {
+            return [];
+        }
+
+        // Нарезаем текст на куски между 🔤-заголовками
+        $chunks = [];
+        for ($i = 0; $i < count($headerPositions); $i++) {
+            $start     = $headerPositions[$i] + 1;
+            $end       = $headerPositions[$i + 1] ?? count($lines);
+            $chunkText = trim(implode("\n", array_slice($lines, $start, $end - $start)));
+
+            if (!empty($chunkText)) {
+                $chunks[] = $chunkText;
+            }
+        }
+
+        if (empty($chunks)) {
+            return [];
+        }
+
+        // Определяем тип каждого куска по содержимому
+        $sections        = [];
+        $priceChunkIndex = 0;
+
+        foreach ($chunks as $chunk) {
+            $type = $this->inferSectionType($chunk, $priceChunkIndex);
+
+            if ($type === 'sell' || $type === 'buy') {
+                $priceChunkIndex++;
+            }
+
+            $sections[$type] = isset($sections[$type])
+                ? $sections[$type] . "\n" . $chunk
+                : $chunk;
+        }
+
+        return $sections;
+    }
+
+    /**
+     * Определяет тип секции по её содержимому (для 🔤-заголовков).
+     *
+     * @param string $text             Текст секции
+     * @param int    $priceChunkIndex  Порядковый номер секции с ценами (0 = sell, 1 = buy)
+     */
+    private function inferSectionType(string $text, int $priceChunkIndex): string
+    {
+        // 1. Обмен: "мой/моя/моё ... на ваш" или явные keywords
+        if (preg_match('/мо[йияёе]\s.+на\s+ваш|рассматриваю.+обмен/ui', $text)) {
+            return 'trade';
+        }
+
+        // 2. Услуги: крафтер, алхим, повар, плавильщик
+        if (preg_match('/крафт|алхим|повар|плавильщ|дубли\s+и\s+эко/ui', $text)) {
+            return 'service';
+        }
+
+        // 3. Секции с ценами: первая = sell, вторая = buy
+        if (preg_match(self::PRICE_SYMBOL_PATTERN, $text) ||
+            preg_match(self::PRICE_K_SYMBOL_PATTERN, $text)) {
+            return $priceChunkIndex === 0 ? 'sell' : 'buy';
+        }
+
+        // 4. Fallback: если нет цен, но есть товарные строки — sell
+        return 'sell';
     }
 
     private function extractIconAndName(string $text): array
