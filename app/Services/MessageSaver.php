@@ -62,7 +62,7 @@ class MessageSaver
         foreach ($parsed['listings'] as $item) {
             $this->saveListing($message, $item);
         }
-
+/*
         foreach ($parsed['exchanges'] as $exchange) {
             $this->saveExchange($message, $exchange);
         }
@@ -70,7 +70,7 @@ class MessageSaver
         foreach ($parsed['service_listings'] as $service) {
             $this->saveServiceListing($message, $service);
         }
-
+*/
         $message->update(['is_parsed' => true]);
     }
 
