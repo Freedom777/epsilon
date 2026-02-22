@@ -76,7 +76,8 @@ class TelegramFetcher
             try {
                 $this->madelineProto->stop();
             } catch (\Throwable $e) {
-                Log::warning('MadelineProto stop error: ' . $e->getMessage());
+                // MadelineProto stop без event handler — ожидаемо, игнорируем
+                // Log::warning('MadelineProto stop error: ' . $e->getMessage());
             }
             $this->madelineProto = null;
         }
