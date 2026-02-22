@@ -190,8 +190,16 @@ class TelegramFetcher
                     'username'      => $this->extractUsername($msg, $result['users'] ?? []),
                 ];
 
-                $this->saver->saveRawMessage($msgData);
-                $batchSaved++;
+                try {
+                    $this->saver->saveRawMessage($msgData);
+                    $batchSaved++;
+                    Log::debug('Saved message', ['id' => $msg['id']]);
+                } catch (\Throwable $e) {
+                    Log::error('saveRawMessage error', [
+                        'id'    => $msg['id'],
+                        'error' => $e->getMessage(),
+                    ]);
+                }
             }
 
             $totalSaved += $batchSaved;
