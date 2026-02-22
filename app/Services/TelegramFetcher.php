@@ -146,6 +146,13 @@ class TelegramFetcher
                 }
 
                 $msgDate = Carbon::createFromTimestamp($msg['date']);
+                Log::debug('Message date check', [
+                    'msgDate' => $msgDate->toDateTimeString(),
+                    'from'    => $from->toDateTimeString(),
+                    'to'      => $to->toDateTimeString(),
+                    'gt_to'   => $msgDate->gt($to),
+                    'lt_from' => $msgDate->lt($from),
+                ]);
 
                 // Пропускаем сообщения новее $to (getHistory идёт от новых к старым)
                 if ($msgDate->gt($to)) {
