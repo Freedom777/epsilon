@@ -29,10 +29,26 @@ class MatchResult
     }
 }
 
+/**
+ * Лучший кандидат fuzzy-матча (может быть ниже порога).
+ */
+class FuzzyCandidate
+{
+    public function __construct(
+        public readonly string     $sourceType, // 'asset' | 'item'
+        public readonly int        $id,
+        public readonly Asset|Item $model,
+        public readonly float      $score,
+    ) {}
+}
+
 class MatchingService
 {
     private ?Collection $itemsIndex  = null;
     private ?Collection $assetsIndex = null;
+
+    /** Минимальный score для показа кандидата в pending (ниже — no_match) */
+    private const LOW_SCORE_FLOOR = 50.0;
 
     private function threshold(): float
     {
@@ -68,16 +84,33 @@ class MatchingService
         $result = $this->approvedMatch($normalized);
         if ($result) return $result;
 
-        // 4. Нечёткий матч в items
-        $result = $this->fuzzyMatchItem($normalized, $grade);
-        if ($result) return $result;
+        // 4. Нечёткий матч — собираем лучших кандидатов из items и assets
+        $candidates = array_filter([
+            $this->fuzzyBestCandidate($normalized, $grade, 'item'),
+            $this->fuzzyBestCandidate($normalized, $grade, 'asset'),
+        ]);
 
-        // 5. Нечёткий матч в assets
-        $result = $this->fuzzyMatchAsset($normalized, $grade);
-        if ($result) return $result;
+        // Берём лучшего по score
+        $best = null;
+        foreach ($candidates as $candidate) {
+            if (!$best || $candidate->score > $best->score) {
+                $best = $candidate;
+            }
+        }
 
-        // 6. Не нашли — отправляем в product_pendings
-        $this->queuePending($rawTitle, $normalized);
+        // 5. Score выше порога — автоматический матч
+        if ($best && $best->score >= $this->threshold()) {
+            return new MatchResult(
+                $best->sourceType,
+                $best->id,
+                $best->model,
+                'fuzzy',
+                $best->score,
+            );
+        }
+
+        // 6. Не нашли или низкий score — в очередь на модерацию
+        $this->queuePending($rawTitle, $normalized, $best);
 
         return null;
     }
@@ -143,65 +176,45 @@ class MatchingService
     // Нечёткий матч
     // =========================================================================
 
-    private function fuzzyMatchItem(string $normalized, ?string $grade): ?MatchResult
+    /**
+     * Возвращает лучшего кандидата по score из items или assets.
+     * Возвращает ВСЕГДА (даже ниже порога), чтобы передать в pending.
+     * null только если коллекция пуста или score < LOW_SCORE_FLOOR.
+     */
+    private function fuzzyBestCandidate(string $normalized, ?string $grade, string $sourceType): ?FuzzyCandidate
     {
         $this->loadIndexes();
+
+        $index = $sourceType === 'item' ? $this->itemsIndex : $this->assetsIndex;
 
         $best      = null;
         $bestScore = 0.0;
 
-        foreach ($this->itemsIndex as $item) {
-            if ($grade && $item->grade && $item->grade !== $grade) {
+        foreach ($index as $record) {
+            if ($grade && $record->grade && $record->grade !== $grade) {
                 continue;
             }
 
-            similar_text($normalized, $item->normalized_title, $percent);
+            similar_text($normalized, $record->normalized_title, $percent);
 
             if ($percent > $bestScore) {
                 $bestScore = $percent;
-                $best      = $item;
+                $best      = $record;
             }
         }
 
-        if ($bestScore < $this->threshold() || !$best) {
+        if (!$best || $bestScore < self::LOW_SCORE_FLOOR) {
             return null;
         }
 
-        return new MatchResult('item', $best->id, $best, 'fuzzy', $bestScore);
-    }
-
-    private function fuzzyMatchAsset(string $normalized, ?string $grade): ?MatchResult
-    {
-        $this->loadIndexes();
-
-        $best      = null;
-        $bestScore = 0.0;
-
-        foreach ($this->assetsIndex as $asset) {
-            if ($grade && $asset->grade && $asset->grade !== $grade) {
-                continue;
-            }
-
-            similar_text($normalized, $asset->normalized_title, $percent);
-
-            if ($percent > $bestScore) {
-                $bestScore = $percent;
-                $best      = $asset;
-            }
-        }
-
-        if ($bestScore < $this->threshold() || !$best) {
-            return null;
-        }
-
-        return new MatchResult('asset', $best->id, $best, 'fuzzy', $bestScore);
+        return new FuzzyCandidate($sourceType, $best->id, $best, $bestScore);
     }
 
     // =========================================================================
     // Очередь на модерацию
     // =========================================================================
 
-    private function queuePending(string $rawTitle, string $normalized): void
+    private function queuePending(string $rawTitle, string $normalized, ?FuzzyCandidate $candidate = null): void
     {
         // Убираем невалидные UTF-8 последовательности из raw_title
         $cleanRawTitle = Utf8Helper::clean($rawTitle);
@@ -210,20 +223,36 @@ class MatchingService
             return;
         }
 
+        // Определяем reason и данные кандидата
+        $suggestedId = $candidate?->id;
+        $sourceType  = $candidate?->sourceType;
+        $matchScore  = $candidate ? round($candidate->score, 1) : null;
+        $matchReason = $candidate ? 'low_score' : 'no_match';
+
         $existing = ProductPending::where('normalized_title', $normalized)
             ->where('status', 'pending')
             ->first();
 
         if ($existing) {
             $existing->increment('occurrences');
+
+            // Обновляем кандидата если новый score лучше
+            if ($matchScore && (!$existing->match_score || $matchScore > $existing->match_score)) {
+                $existing->update([
+                    'source_type'  => $sourceType,
+                    'suggested_id' => $suggestedId,
+                    'match_score'  => $matchScore,
+                    'match_reason' => $matchReason,
+                ]);
+            }
         } else {
             ProductPending::create([
                 'raw_title'        => $cleanRawTitle,
                 'normalized_title' => $normalized,
-                'source_type'      => null,
-                'suggested_id'     => null,
-                'match_score'      => null,
-                'match_reason'     => 'no_match',
+                'source_type'      => $sourceType,
+                'suggested_id'     => $suggestedId,
+                'match_score'      => $matchScore,
+                'match_reason'     => $matchReason,
                 'occurrences'      => 1,
                 'status'           => 'pending',
             ]);
