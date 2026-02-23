@@ -36,3 +36,21 @@ Route::withoutMiddleware(ValidateCsrfToken::class)
         ]);
         return response()->noContent();
     });
+
+
+Route::get('/mobs/search', function () {
+    $q = request()->string('q')->trim()->lower()->toString();
+
+    if (mb_strlen($q) < 4) {
+        return response()->json([]);
+    }
+
+    $results = \App\Models\MobDropIndex::whereRaw('LOWER(normalized) LIKE ?', ["%{$q}%"])
+        ->selectRaw('drop_text, normalized, COUNT(DISTINCT mob_id) as mob_count')
+        ->groupBy('drop_text', 'normalized')
+        ->orderByDesc('mob_count')
+        ->limit(20)
+        ->get();
+
+    return response()->json($results);
+});
