@@ -475,9 +475,9 @@ HTML;
         }
 
         dropdown.innerHTML = items.map(item => `
-            <div class="drop-item" onclick="filterByAsset('${escHtml(item.normalized)}', '${escHtml(item.drop_text)}')">
-                ${escHtml(item.drop_text)}
-                <span class="drop-label">${item.mob_count} мобов</span>
+            <div class="drop-item" onclick="filterByAsset('\${escHtml(item.normalized)}', '\${escHtml(item.drop_text)}')">
+                \${escHtml(item.drop_text)}
+                <span class="drop-label">\${item.mob_count} мобов</span>
             </div>
         `).join('');
 
