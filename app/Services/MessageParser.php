@@ -229,7 +229,22 @@ class MessageParser
                 $line
             );
 
-            foreach ($sublines as $subline) {
+            // Fallback: если кусок > 120 символов — пробуем разбить по простой запятой
+            $expanded = [];
+            foreach ($sublines as $sub) {
+                if (mb_strlen(trim($sub)) > 120) {
+                    foreach (explode(',', $sub) as $part) {
+                        $part = trim($part);
+                        if (!empty($part)) {
+                            $expanded[] = $part;
+                        }
+                    }
+                } else {
+                    $expanded[] = $sub;
+                }
+            }
+
+            foreach ($expanded as $subline) {
                 $subline = trim($subline);
                 if (empty($subline)) continue;
 
