@@ -509,6 +509,39 @@ class MessageParserTest extends TestCase
     }
 
     // =========================================================================
+    // Декоративные заголовки с пробелами: "К У П Л Ю", "П Р О Д А М"
+    // =========================================================================
+
+    public function test_spaced_header_detected_as_type(): void
+    {
+        $text = "П Р О Д А М\n🔖 Свиток [III] - 1350💰";
+        $result = $this->parser->parse($text);
+        $this->assertContains('sell', $result['types']);
+        $this->assertNotEmpty($result['listings']);
+    }
+
+    public function test_spaced_header_not_parsed_as_product(): void
+    {
+        $text = "#продам\nК У П Л Ю\n🔖 Свиток [III] - 1350💰";
+        $result = $this->parser->parse($text);
+        // "К У П Л Ю" не должен быть товаром
+        foreach ($result['listings'] as $item) {
+            $this->assertStringNotContainsString('К У П Л Ю', $item['name']);
+        }
+    }
+
+    public function test_spaced_header_splits_sections(): void
+    {
+        $text = "П Р О Д А М\n🔖 Свиток - 100💰\nК У П Л Ю\n✴️ Медь - 20💰";
+        $result = $this->parser->parse($text);
+        $this->assertContains('sell', $result['types']);
+        $this->assertContains('buy', $result['types']);
+        $types = array_column($result['listings'], 'type');
+        $this->assertContains('sell', $types);
+        $this->assertContains('buy', $types);
+    }
+
+    // =========================================================================
     // parse — товар на строке с хэштегом
     // =========================================================================
 
@@ -553,6 +586,64 @@ class MessageParserTest extends TestCase
         // "по 150💰" — нет имени товара
         $result = $this->parser->parseProductLine('по 150💰');
         $this->assertNull($result);
+    }
+
+    // =========================================================================
+    // Не обрезаем начало слов на по-/от-/за-
+    // =========================================================================
+
+    public function test_cleanup_preserves_potroshitel(): void
+    {
+        $result = $this->parser->parseProductLine('💟 Потрошитель [Ивент] - 5000💰');
+        $this->assertEquals('Потрошитель [Ивент]', $result['name']);
+    }
+
+    public function test_cleanup_preserves_povar(): void
+    {
+        $result = $this->parser->parseProductLine('Повар ГМ4');
+        $this->assertNotNull($result);
+        $this->assertEquals('Повар ГМ4', $result['name']);
+    }
+
+    public function test_cleanup_preserves_podarok(): void
+    {
+        $result = $this->parser->parseProductLine('📿 Подарок судьбы [III] - 1000💰');
+        $this->assertStringContainsString('Подарок судьбы', $result['name']);
+    }
+
+    public function test_cleanup_preserves_otrava(): void
+    {
+        $result = $this->parser->parseProductLine('🧪 Отрава - 500💰');
+        $this->assertEquals('Отрава', $result['name']);
+    }
+
+    public function test_cleanup_preserves_zakalka(): void
+    {
+        $result = $this->parser->parseProductLine('💟 Закалка - 3500💰');
+        $this->assertEquals('Закалка', $result['name']);
+    }
+
+    // =========================================================================
+    // Грейд: микс I/l/| → нормализация
+    // =========================================================================
+
+    public function test_grade_mixed_IIl_becomes_III(): void
+    {
+        $result = $this->parser->parseProductLine('🌡 Зелье очищения камня [IIl] 7000 з');
+        $this->assertEquals('III', $result['grade']);
+        $this->assertEquals('Зелье очищения камня', $result['name']);
+    }
+
+    public function test_grade_pipe_becomes_I(): void
+    {
+        $result = $this->parser->parseProductLine('🔪 Меч [I|l] - 500💰');
+        $this->assertEquals('III', $result['grade']);
+    }
+
+    public function test_grade_single_l_becomes_I(): void
+    {
+        $result = $this->parser->parseProductLine('🔖 Свиток [l] - 100💰');
+        $this->assertEquals('I', $result['grade']);
     }
 
     // =========================================================================
