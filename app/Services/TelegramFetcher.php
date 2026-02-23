@@ -146,14 +146,6 @@ class TelegramFetcher
                 }
 
                 $msgDate = Carbon::createFromTimestamp($msg['date']);
-                Log::debug('Message date check', [
-                    'msgDate' => $msgDate->toDateTimeString(),
-                    'from'    => $from->toDateTimeString(),
-                    'to'      => $to->toDateTimeString(),
-                    'gt_to'   => $msgDate->gt($to),
-                    'lt_from' => $msgDate->lt($from),
-                ]);
-
                 // Пропускаем сообщения новее $to (getHistory идёт от новых к старым)
                 if ($msgDate->gt($to)) {
                     continue;
@@ -161,6 +153,8 @@ class TelegramFetcher
 
                 // Стоп: дошли до даты раньше $from
                 if ($msgDate->lt($from)) {
+                    // Duplicate if early exit
+                    $totalSaved += $batchSaved;
                     Log::info("Reached start date {$from}, stopping fetch");
                     break 2;
                 }
@@ -190,16 +184,8 @@ class TelegramFetcher
                     'username'      => $this->extractUsername($msg, $result['users'] ?? []),
                 ];
 
-                try {
-                    $this->saver->saveRawMessage($msgData);
-                    $batchSaved++;
-                    Log::debug('Saved message', ['id' => $msg['id']]);
-                } catch (\Throwable $e) {
-                    Log::error('saveRawMessage error', [
-                        'id'    => $msg['id'],
-                        'error' => $e->getMessage(),
-                    ]);
-                }
+                $this->saver->saveRawMessage($msgData);
+                $batchSaved++;
             }
 
             $totalSaved += $batchSaved;
