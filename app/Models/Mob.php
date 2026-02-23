@@ -12,11 +12,12 @@ class Mob extends Model
     protected $fillable = [
         'id', 'raw_response', 'title', 'level',
         'city', 'location', 'exp', 'gold',
-        'drop', 'extra', 'status',
+        'drop_asset', 'drop_item', 'extra', 'status',
     ];
 
     protected $casts = [
-        'id'   => 'integer',
-        'drop' => 'array',
+        'id'            => 'integer',
+        'drop_asset'    => 'array',
+        'drop_item'     => 'array',
     ];
 }

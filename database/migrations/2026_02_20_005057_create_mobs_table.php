@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->unsignedInteger('exp')->nullable();
             $table->unsignedInteger('gold')->nullable();
-            $table->json('drop')->nullable();
+            $table->json('drop_asset')->nullable();
+            $table->json('drop_item')->nullable();
             $table->text('extra')->nullable();
             $table->enum('status', ['process', 'ok', 'empty', 'error'])->default('process');
             $table->timestamps();

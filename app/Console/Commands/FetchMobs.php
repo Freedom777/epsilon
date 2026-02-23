@@ -90,14 +90,15 @@ class FetchMobs extends BaseFetchCommand
     private function parseResponse(string $text): array
     {
         $data = [
-            'title'    => null,
-            'level'    => null,
-            'city'     => null,
-            'location' => null,
-            'exp'      => null,
-            'gold'     => null,
-            'drop'     => null,
-            'extra'    => null,
+            'title'         => null,
+            'level'         => null,
+            'city'          => null,
+            'location'      => null,
+            'exp'           => null,
+            'gold'          => null,
+            'drop_asset'    => null,
+            'drop_item'     => null,
+            'extra'         => null,
         ];
 
         $lines = array_values(array_filter(
@@ -115,27 +116,45 @@ class FetchMobs extends BaseFetchCommand
         // Вторая строка — title
         $data['title'] = trim(array_shift($lines));
 
-        $dropLines  = [];
-        $extraLines = [];
-        $parsingDrop = false;
+        $dropAssetLines = [];
+        $dropItemLines  = [];
+        $extraLines     = [];
+
+        $parsingAssetDrop = false;
+        $parsingItemDrop  = false;
 
         foreach ($lines as $line) {
             $line = trim($line);
 
-            // Блок дропа
+            // Начало блока ресурсов
             if ($line === 'Дроп ресурсов:') {
-                $parsingDrop = true;
+                $parsingAssetDrop = true;
+                $parsingItemDrop  = false;
                 continue;
             }
 
-            if ($parsingDrop) {
-                // Новый известный блок заканчивает дроп
-                if ($this->isKnownBlockHeader($line)) {
-                    $parsingDrop = false;
-                } else {
-                    $dropLines[] = $line;
-                    continue;
-                }
+            // Начало блока экипировки
+            if ($line === 'Дроп экипировки:') {
+                $parsingItemDrop  = true;
+                $parsingAssetDrop = false;
+                continue;
+            }
+
+            // Если начался новый заголовок — завершаем дроп
+            if ($this->isKnownBlockHeader($line)) {
+                $parsingAssetDrop = false;
+                $parsingItemDrop  = false;
+                continue;
+            }
+
+            if ($parsingAssetDrop) {
+                $dropAssetLines[] = $line;
+                continue;
+            }
+
+            if ($parsingItemDrop) {
+                $dropItemLines[] = $line;
+                continue;
             }
 
             if (str_starts_with($line, '🔸')) {
@@ -147,14 +166,18 @@ class FetchMobs extends BaseFetchCommand
             } elseif (str_starts_with($line, '💰')) {
                 $data['gold'] = (int) trim(substr($line, strpos($line, ':') + 1));
             } elseif ($line === 'Награда за убийство:') {
-                // служебная строка, пропускаем
+                // пропускаем
             } else {
                 $extraLines[] = $line;
             }
         }
 
-        if (!empty($dropLines)) {
-            $data['drop'] = $dropLines;
+        if (!empty($dropAssetLines)) {
+            $data['drop_asset'] = $dropAssetLines;
+        }
+
+        if (!empty($dropItemLines)) {
+            $data['drop_item'] = $dropItemLines;
         }
 
         if (!empty($extraLines)) {
@@ -164,10 +187,6 @@ class FetchMobs extends BaseFetchCommand
         return $data;
     }
 
-    /**
-     * Разбирает строку зоны вида:
-     * 🗺 Зона охоты: 🏞 Устье реки (🏛 Аквелия)
-     */
     private function parseZone(string $line, array &$data): void
     {
         $value = trim(substr($line, strpos($line, ':') + 1));
@@ -185,6 +204,7 @@ class FetchMobs extends BaseFetchCommand
         return in_array($line, [
             'Награда за убийство:',
             'Дроп ресурсов:',
+            'Дроп экипировки:',
         ], true);
     }
 }
