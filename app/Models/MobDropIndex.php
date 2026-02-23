@@ -9,6 +9,8 @@ class MobDropIndex extends Model
 {
     protected $table = 'mob_drop_index';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'mob_id',
         'asset_id',
