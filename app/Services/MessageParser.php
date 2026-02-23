@@ -53,10 +53,13 @@ class MessageParser
     private const DURABILITY_PATTERN = '/\(?\s*(\d{1,5})\s*\/\s*(\d{1,5})\s*\)?/u';
 
     // Мусорные строки: начинаются со стоп-слов (не могут быть именем товара)
-    private const NOISE_NAME_PATTERN = '/^(?:только|лишь|либо|или|можно|нужно|если|все|всё|обмены?|торг)\b/ui';
+    private const NOISE_NAME_PATTERN = '/^(?:только|лишь|либо|или|можно|нужно|если|все|всё|обмены?|торг|состав|рассмотрю|кланам)\b/ui';
 
     // 🔤-заголовки секций (картинка-текст: ПРОДАМ, КУПЛЮ, ОБМЕН, УСЛУГИ)
     private const EMOJI_HEADER_PATTERN = '/^\s*🔤{4,}\s*$/u';
+
+    // Декоративные заголовки с пробелами: "К У П Л Ю", "П Р О Д А М"
+    private const SPACED_HEADER_PATTERN = '/^([А-ЯЁ]\s+){3,}[А-ЯЁ]\s*$/mu';
 
     // Нормализация латинских l → римские I в грейде
     private const GRADE_NORMALIZE = [
@@ -174,6 +177,24 @@ class MessageParser
             }
         }
 
+        // Декоративные заголовки: "К У П Л Ю" → "куплю"
+        if (empty($types)) {
+            foreach (explode("\n", $text) as $line) {
+                $line = trim($line);
+                if (preg_match(self::SPACED_HEADER_PATTERN, $line)) {
+                    $collapsed = mb_strtolower(preg_replace('/\s+/u', '', $line));
+                    foreach ($this->keywordMap as $type => $keywords) {
+                        foreach ($keywords as $keyword) {
+                            if (mb_strpos($collapsed, $keyword) === 0) {
+                                $types[] = $type;
+                                break 2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return array_unique($types);
     }
 
@@ -184,6 +205,11 @@ class MessageParser
         foreach (explode("\n", $text) as $line) {
             $line = trim($line);
             if (empty($line)) {
+                continue;
+            }
+
+            // Пропускаем декоративные заголовки: "К У П Л Ю", "П Р О Д А М"
+            if (preg_match(self::SPACED_HEADER_PATTERN, $line)) {
                 continue;
             }
 
@@ -273,6 +299,11 @@ class MessageParser
         $name = $this->cleanName($line);
 
         if (mb_strlen($name) < 2) {
+            return null;
+        }
+
+        // Слишком длинное имя — это ошибка парсинга (несколько товаров склеились)
+        if (mb_strlen($name) > 120) {
             return null;
         }
 
@@ -383,7 +414,7 @@ class MessageParser
 
         foreach (explode("\n", $text) as $line) {
             $line = trim($line);
-            if (empty($line) || preg_match('/^#\w/u', $line)) {
+            if (empty($line) || preg_match('/^#\w/u', $line) || preg_match(self::SPACED_HEADER_PATTERN, $line)) {
                 continue;
             }
 
@@ -559,6 +590,23 @@ class MessageParser
                         $byteOffset = $match[1];
                         $charOffset = mb_strlen(substr($text, 0, $byteOffset));
                         $found[]    = ['pos' => $charOffset, 'type' => $type];
+                    }
+                }
+            }
+        }
+
+        // Декоративные заголовки с пробелами: "К У П Л Ю" → "куплю"
+        if (preg_match_all(self::SPACED_HEADER_PATTERN, $text, $spacedMatches, PREG_OFFSET_CAPTURE)) {
+            foreach ($spacedMatches[0] as $match) {
+                $collapsed = mb_strtolower(preg_replace('/\s+/u', '', $match[0]));
+                foreach ($this->keywordMap as $type => $keywords) {
+                    foreach ($keywords as $keyword) {
+                        if (mb_strpos($collapsed, $keyword) === 0) {
+                            $byteOffset = $match[1];
+                            $charOffset = mb_strlen(substr($text, 0, $byteOffset));
+                            $found[]    = ['pos' => $charOffset, 'type' => $type];
+                            break 2;
+                        }
                     }
                 }
             }

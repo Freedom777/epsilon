@@ -49,6 +49,11 @@ class MatchingService
             return null;
         }
 
+        // Защита от склеенных строк парсера — не матчим и не пишем мусор
+        if (mb_strlen($rawTitle) > 120) {
+            return null;
+        }
+
         $normalized = $this->normalize($rawTitle);
 
         // 1. Точный матч в items
