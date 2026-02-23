@@ -540,6 +540,7 @@ HTML;
             dropdown.style.display = 'none';
         }
     });
+    fetch('/api/mobs/ping', { method: 'POST' });
 </script>
 
 </body>

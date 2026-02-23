@@ -133,6 +133,12 @@ return [
             'days'   => 30,
         ],
 
+        'mobs' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/mobs.log'),
+            'days'   => 30,
+        ],
+
     ],
 
 ];

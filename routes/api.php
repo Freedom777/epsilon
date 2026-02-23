@@ -37,6 +37,15 @@ Route::withoutMiddleware(ValidateCsrfToken::class)
         return response()->noContent();
     });
 
+Route::withoutMiddleware(ValidateCsrfToken::class)
+    ->post('/mobs/ping', function () {
+        Log::channel('mobs')->info('view', [
+            'ip'    => request()->ip(),
+            'agent' => request()->userAgent(),
+        ]);
+        return response()->noContent();
+    });
+
 
 Route::get('/mobs/search', function () {
     $q = request()->string('q')->trim()->lower()->toString();
