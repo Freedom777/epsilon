@@ -383,14 +383,19 @@ class MarketController extends Controller
             fetch('/api/market/offers?' + params)
                 .then(r => r.json())
                 .then(json => {
-                    if (dd !== activeDropdown) return; // dropdown уже закрыт
+                    if (dd !== activeDropdown) return;
 
                     const offers = json.data || [];
-                    // Пропускаем первый (он уже в шапке)
                     const rest = offers.slice(1);
 
                     if (!rest.length) {
                         dd.innerHTML = '<div class="offers-empty">Других предложений нет</div>';
+                        setTimeout(() => {
+                            if (dd === activeDropdown) {
+                                dd.remove();
+                                activeDropdown = null;
+                            }
+                        }, 1500);
                         return;
                     }
 
@@ -525,13 +530,24 @@ HTML;
             $query->where('currency', $currency);
         }
 
-        // Группируем по уникальной цене+юзер, берём самые свежие
+        // Берём с запасом, потом дедуплицируем по юзеру
         $listings = $query->orderBy('price', $order)
             ->orderByDesc('posted_at')
-            ->limit($limit)
+            ->limit($limit * 3)
             ->get();
 
-        $data = $listings->map(function (Listing $listing) {
+        // Оставляем лучшее предложение от каждого уникального юзера
+        $seenUsers = [];
+        $unique    = $listings->filter(function (Listing $listing) use (&$seenUsers) {
+            $userId = $listing->tg_user_id ?? spl_object_id($listing);
+            if (in_array($userId, $seenUsers)) {
+                return false;
+            }
+            $seenUsers[] = $userId;
+            return true;
+        })->take($limit);
+
+        $data = $unique->values()->map(function (Listing $listing) {
             $user    = $listing->tgUser;
             $message = $listing->tgMessage;
 
