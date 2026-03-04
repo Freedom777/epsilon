@@ -471,7 +471,7 @@ HTML;
             : '<span>' . e($data['user_display'] ?? '') . '</span>';
 
         $dateFormatted = $data['posted_at']
-            ? date('d.m H:i', strtotime($data['posted_at']))
+            ? date('d.m.Y H:i', strtotime($data['posted_at']))
             : '';
 
         $dateHtml = $data['tg_link']
