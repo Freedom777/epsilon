@@ -163,6 +163,8 @@ td span[title] {
 
 /* Рынок — цены */
 .price { font-weight: bold; color: var(--accent); }
+.price-cell { cursor: pointer; position: relative; }
+.price-cell:hover { background: var(--hover); }
 .user a { color: var(--accent2); text-decoration: none; }
 .user a:hover { text-decoration: underline; }
 .date a, .date span { color: var(--text-muted); font-size: 0.85em; text-decoration: none; }
@@ -170,23 +172,60 @@ td span[title] {
 .suspicious { color: var(--danger); }
 .no-data { color: #444; font-style: italic; text-align: center; }
 
+/* Рынок — dropdown с предложениями */
+.offers-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    min-width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--accent);
+    border-radius: 0 0 4px 4px;
+    z-index: 50;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.offer-row {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85em;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.offer-row:last-child { border-bottom: none; }
+.offer-row:hover { background: var(--hover); }
+.offer-row .price { font-size: 0.9em; }
+.offer-row .user { flex-shrink: 1; overflow: hidden; text-overflow: ellipsis; }
+.offer-row .date { margin-left: auto; }
+
+.offers-loading, .offers-empty {
+    padding: 10px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85em;
+}
+
 /* =========================================================================
    Бестиарий
    ========================================================================= */
 
-/* Бестиарий — фиксируем колонку дропа */
+/* Бестиарий — фиксируем ширину колонок */
 #mobs-table { table-layout: fixed; }
-#mobs-table th:nth-child(1) { width: 45px; }   /* Ур. */
-#mobs-table th:nth-child(2) { width: 18%; }     /* Моб */
-#mobs-table th:nth-child(3) { width: 20%; }     /* Локация */
-#mobs-table th:nth-child(4) { width: 70px; }    /* Опыт */
-#mobs-table th:nth-child(5) { width: 80px; }    /* Золото */
-#mobs-table th:nth-child(6) { width: auto; }    /* Дроп — забирает остаток */
+#mobs-table th:nth-child(1) { width: 45px; }
+#mobs-table th:nth-child(2) { width: 18%; }
+#mobs-table th:nth-child(3) { width: 20%; }
+#mobs-table th:nth-child(4) { width: 70px; }
+#mobs-table th:nth-child(5) { width: 80px; }
+#mobs-table th:nth-child(6) { width: auto; }
 
 .td-drop { overflow-wrap: break-word; }
 .drop-list { max-width: 100%; }
 .drop-list li { white-space: normal; }
-
 
 .table-wrap {
     padding: 0 16px 24px;

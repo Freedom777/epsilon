@@ -282,8 +282,10 @@ class MarketController extends Controller
             foreach ($grouped[$type] as $item) {
                 $desc     = !empty($item['description']) ? ' title="' . e(strip_tags($item['description'])) . '"' : '';
                 $name     = "<span{$desc}>" . e($item['product_name']) . "</span>";
-                $buyCell  = $this->formatPriceCell($item['buy']);
-                $sellCell = $this->formatPriceCell($item['sell']);
+                $idAttr   = $item['asset_id'] ? 'asset_id' : 'item_id';
+                $idVal    = $item['asset_id'] ?: $item['item_id'];
+                $buyCell  = $this->formatPriceCell($item['buy'],  $idAttr, $idVal, 'buy');
+                $sellCell = $this->formatPriceCell($item['sell'], $idAttr, $idVal, 'sell');
                 $rows    .= "<tr><td>{$name}</td>{$buyCell}{$sellCell}</tr>\n";
             }
 
@@ -342,6 +344,84 @@ class MarketController extends Controller
         const saved = localStorage.getItem('market_tab');
         const target = saved && document.getElementById(saved) ? saved : '{$defaultTabId}';
         switchTab(target);
+
+        // --- Offers dropdown ---
+        let activeDropdown = null;
+
+        document.addEventListener('click', function(e) {
+            const cell = e.target.closest('.price-cell');
+
+            // Клик по ссылке внутри — не перехватываем
+            if (e.target.closest('a')) return;
+
+            // Закрываем текущий dropdown
+            if (activeDropdown) {
+                activeDropdown.remove();
+                const wasCell = activeDropdown._parentCell;
+                activeDropdown = null;
+                // Повторный клик на ту же ячейку — просто закрыть
+                if (wasCell === cell) return;
+            }
+
+            if (!cell) return;
+
+            const idAttr = cell.dataset.idAttr;
+            const idVal  = cell.dataset.idVal;
+            const type   = cell.dataset.type;
+            if (!idAttr || !idVal) return;
+
+            // Показываем лоадер
+            const dd = document.createElement('div');
+            dd.className = 'offers-dropdown';
+            dd.innerHTML = '<div class="offers-loading">Загрузка...</div>';
+            dd._parentCell = cell;
+            cell.style.position = 'relative';
+            cell.appendChild(dd);
+            activeDropdown = dd;
+
+            const params = new URLSearchParams({ [idAttr]: idVal, type: type });
+            fetch('/api/market/offers?' + params)
+                .then(r => r.json())
+                .then(json => {
+                    if (dd !== activeDropdown) return; // dropdown уже закрыт
+
+                    const offers = json.data || [];
+                    // Пропускаем первый (он уже в шапке)
+                    const rest = offers.slice(1);
+
+                    if (!rest.length) {
+                        dd.innerHTML = '<div class="offers-empty">Других предложений нет</div>';
+                        return;
+                    }
+
+                    dd.innerHTML = rest.map(o => {
+                        const sym   = o.currency === 'cookie' ? '🍪' : '💰';
+                        const price = Number(o.price).toLocaleString('ru-RU');
+                        const cls   = o.status === 'suspicious' ? ' suspicious' : '';
+                        const user  = o.user_tg_link
+                            ? '<a href="' + esc(o.user_tg_link) + '" target="_blank">' + esc(o.user_display) + '</a>'
+                            : esc(o.user_display);
+                        const date  = o.tg_link
+                            ? '<a href="' + esc(o.tg_link) + '" target="_blank">' + esc(o.posted_at) + '</a>'
+                            : esc(o.posted_at || '');
+                        return '<div class="offer-row">'
+                            + '<span class="price' + cls + '">' + price + ' ' + sym + '</span> '
+                            + '<span class="user">' + user + '</span> '
+                            + '<span class="date">' + date + '</span>'
+                            + '</div>';
+                    }).join('');
+                })
+                .catch(() => {
+                    if (dd === activeDropdown) {
+                        dd.innerHTML = '<div class="offers-empty">Ошибка загрузки</div>';
+                    }
+                });
+        });
+
+        function esc(s) {
+            return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+
         fetch('/api/market/ping', { method: 'POST', headers: { 'X-CSRF-TOKEN': '' } });
     </script>
 </body>
@@ -374,7 +454,7 @@ HTML;
 HTML;
     }
 
-    private function formatPriceCell(?array $data): string
+    private function formatPriceCell(?array $data, string $idAttr = '', int $idVal = 0, string $listingType = ''): string
     {
         if (!$data) {
             return '<td class="no-data">—</td>';
@@ -391,18 +471,82 @@ HTML;
             : '<span>' . e($data['user_display'] ?? '') . '</span>';
 
         $dateFormatted = $data['posted_at']
-            ? date('d.m.Y H:i', strtotime($data['posted_at']))
+            ? date('d.m H:i', strtotime($data['posted_at']))
             : '';
 
         $dateHtml = $data['tg_link']
             ? '<a href="' . e($data['tg_link']) . '" target="_blank">' . $dateFormatted . '</a>'
             : '<span>' . $dateFormatted . '</span>';
 
-        return "<td>
+        $dataAttrs = "data-id-attr=\"{$idAttr}\" data-id-val=\"{$idVal}\" data-type=\"{$listingType}\"";
+
+        return "<td class=\"price-cell\" {$dataAttrs}>
             <span class=\"price\"{$statusAttr}>{$price} {$currencySymbol}</span><br>
             <span class=\"user\">{$userHtml}</span><br>
             <span class=\"date\">{$dateHtml}</span>
         </td>";
+    }
+
+    /**
+     * GET /api/market/offers
+     *
+     * Параметры:
+     *   ?asset_id=5 или ?item_id=5   — ID товара
+     *   ?type=sell|buy                — тип (sell/buy)
+     *   ?currency=gold|cookie         — валюта (опционально)
+     *   ?days=30                      — за сколько дней
+     */
+    public function offers(Request $request): JsonResponse
+    {
+        $assetId  = $request->integer('asset_id') ?: null;
+        $itemId   = $request->integer('item_id') ?: null;
+        $type     = $request->string('type', 'sell')->value();
+        $currency = $request->string('currency')->value() ?: null;
+        $days     = $request->integer('days', config('parser.output.days', 3));
+        $limit    = (int) config('parser.output.offers_limit', 5);
+
+        if (!$assetId && !$itemId) {
+            return response()->json(['data' => []]);
+        }
+
+        $column = $assetId ? 'asset_id' : 'item_id';
+        $id     = $assetId ?: $itemId;
+        $since  = now()->subDays($days);
+        $order  = $type === 'buy' ? 'desc' : 'asc';
+
+        $query = Listing::with(['tgUser', 'tgMessage'])
+            ->where($column, $id)
+            ->where('type', $type)
+            ->where('status', '!=', 'invalid')
+            ->whereNotNull('price')
+            ->where('posted_at', '>=', $since);
+
+        if ($currency) {
+            $query->where('currency', $currency);
+        }
+
+        // Группируем по уникальной цене+юзер, берём самые свежие
+        $listings = $query->orderBy('price', $order)
+            ->orderByDesc('posted_at')
+            ->limit($limit)
+            ->get();
+
+        $data = $listings->map(function (Listing $listing) {
+            $user    = $listing->tgUser;
+            $message = $listing->tgMessage;
+
+            return [
+                'price'        => $listing->price,
+                'currency'     => $listing->currency,
+                'posted_at'    => $listing->posted_at?->format('d.m H:i'),
+                'tg_link'      => $message?->tg_link,
+                'user_display' => $user?->display_name ?? $user?->username ?? '—',
+                'user_tg_link' => $user?->username ? 'https://t.me/' . $user->username : null,
+                'status'       => $listing->status,
+            ];
+        });
+
+        return response()->json(['data' => $data]);
     }
 
     // =========================================================================

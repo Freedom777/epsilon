@@ -63,3 +63,6 @@ Route::get('/mobs/search', function () {
 
     return response()->json($results);
 });
+
+// Выдача N лучших предложений на странице рынка
+Route::get('market/offers', [MarketController::class, 'offers']);
