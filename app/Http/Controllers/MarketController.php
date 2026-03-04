@@ -310,48 +310,20 @@ class MarketController extends Controller
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Рынок Epsilion War</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; padding: 16px; background: #1a1a2e; color: #eee; }
-        h1 { color: #f0c040; margin-bottom: 8px; font-size: 1.4em; }
-        .meta { color: #aaa; margin-bottom: 14px; font-size: 0.82em; }
-
-        .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 14px; }
-        .tab {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 5px 11px; border-radius: 4px;
-            background: #16213e; color: #aaa;
-            border: 1px solid #2a2a3e; font-size: 0.82em;
-            cursor: pointer; transition: background 0.15s;
-            white-space: nowrap;
-        }
-        .tab:hover { background: #1a2a50; color: #ddd; }
-        .tab.active { background: #0f3460; color: #f0c040; border-color: #f0c040; }
-        .count { background: #2a2a3e; border-radius: 10px; padding: 1px 6px; font-size: 0.78em; color: #888; }
-        .tab.active .count { background: #1a3a70; color: #f0c040; }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #0f3460; color: #f0c040; padding: 9px 10px; text-align: left; font-size: 0.9em; }
-        td { padding: 7px 10px; border-bottom: 1px solid #222; vertical-align: top; font-size: 0.88em; }
-        tr:hover td { background: #1a2a50; }
-        td span[title] { cursor: help; border-bottom: 1px dotted #555; }
-        .price { font-weight: bold; color: #f0c040; }
-        .user a { color: #7ec8e3; text-decoration: none; }
-        .user a:hover { text-decoration: underline; }
-        .date a, .date span { color: #777; font-size: 0.85em; text-decoration: none; }
-        .date a:hover { text-decoration: underline; }
-        .suspicious { color: #ff9900; }
-        .no-data { color: #444; font-style: italic; text-align: center; }
-    </style>
+    <title>Рынок — Epsilion War</title>
+    <link rel="stylesheet" href="/css/epsilon.css">
 </head>
 <body>
-    <h1>🏪 Рынок Epsilion War</h1>
-    <div class="meta">
-        Данные за последние {$days} дней &nbsp;|&nbsp; {$currencyLabel} &nbsp;|&nbsp; Обновлено: {$now}
+    <nav class="site-nav">
+        <a href="/market.html" class="active">🏪 Рынок</a>
+        <a href="/mobs.html">⚔ Бестиарий</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>🏪 Рынок Epsilion War</h1>
+        <div class="meta">
+            Данные за последние {$days} дней &nbsp;|&nbsp; {$currencyLabel} &nbsp;|&nbsp; Обновлено: {$now}
+        </div>
     </div>
 
     <div class="tabs">{$tabsHtml}</div>
@@ -367,7 +339,6 @@ class MarketController extends Controller
             localStorage.setItem('market_tab', tabId);
         }
 
-        // Восстанавливаем последнюю вкладку или открываем дефолтную
         const saved = localStorage.getItem('market_tab');
         const target = saved && document.getElementById(saved) ? saved : '{$defaultTabId}';
         switchTab(target);
@@ -383,10 +354,21 @@ HTML;
         return <<<HTML
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="UTF-8"><title>Рынок Epsilion War</title></head>
-<body style="background:#1a1a2e;color:#eee;padding:20px;font-family:Arial">
-    <h1 style="color:#f0c040">🏪 Рынок Epsilion War</h1>
-    <p style="color:#aaa;margin-top:16px">Нет данных за последние {$days} дней.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рынок — Epsilion War</title>
+    <link rel="stylesheet" href="/css/epsilon.css">
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="/market.html" class="active">🏪 Рынок</a>
+        <a href="/mobs.html">⚔ Бестиарий</a>
+    </nav>
+    <div class="page-header">
+        <h1>🏪 Рынок Epsilion War</h1>
+        <p class="meta" style="margin-top:16px">Нет данных за последние {$days} дней.</p>
+    </div>
 </body>
 </html>
 HTML;
