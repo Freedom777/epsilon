@@ -353,7 +353,7 @@ class MessageParserTest extends TestCase
         $this->assertEmpty($result['listings']);
     }
 
-    // =========================================================================
+// =========================================================================
     // extractPrice — "к" (тысячи)
     // =========================================================================
 
@@ -644,6 +644,23 @@ class MessageParserTest extends TestCase
     {
         $result = $this->parser->parseProductLine('🔖 Свиток [l] - 100💰');
         $this->assertEquals('I', $result['grade']);
+    }
+
+    // =========================================================================
+    // Цена с пробелом-разделителем тысяч: "6 900" → 6900
+    // =========================================================================
+
+    public function test_bare_price_space_thousands(): void
+    {
+        $result = $this->parser->parseProductLine('Бонус регенерации 7 дней - 6 900');
+        $this->assertEquals(6900, $result['price']);
+        $this->assertStringContainsString('Бонус регенерации', $result['name']);
+    }
+
+    public function test_bare_price_space_thousands_large(): void
+    {
+        $result = $this->parser->parseProductLine('🌂 Крылья [I] - 18 000');
+        $this->assertEquals(18000, $result['price']);
     }
 
     // =========================================================================
