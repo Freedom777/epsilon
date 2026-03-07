@@ -44,14 +44,14 @@ class Mob extends Model
     protected function dropAsset(): Attribute
     {
         return Attribute::get(fn () =>
-        $this->assetDrops->pluck('title')->toArray() ?: null
+        $this->dropAssets->pluck('title')->toArray() ?: null
         );
     }
 
     protected function dropItem(): Attribute
     {
         return Attribute::get(fn () =>
-        $this->itemDrops->pluck('title')->toArray() ?: null
+        $this->dropItems->pluck('title')->toArray() ?: null
         );
     }
 }
