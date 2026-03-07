@@ -14,28 +14,26 @@ class Mob extends Model
     protected $fillable = [
         'id', 'raw_response', 'title', 'level',
         'city', 'location', 'exp', 'gold',
-        'drop_asset', 'drop_item', 'extra', 'status',
+        'extra', 'status',
     ];
 
     protected $casts = [
         'id'            => 'integer',
-        'drop_asset'    => 'array',
-        'drop_item'     => 'array',
     ];
 
     // =========================================================================
     // Связи
     // =========================================================================
 
-    public function assetDrops(): BelongsToMany
+    public function dropAssets(): BelongsToMany
     {
-        return $this->belongsToMany(Asset::class, 'mob_asset_drops')
+        return $this->belongsToMany(Asset::class, 'mob_drop_assets')
             ->withTimestamps();
     }
 
-    public function itemDrops(): BelongsToMany
+    public function dropItems(): BelongsToMany
     {
-        return $this->belongsToMany(Item::class, 'mob_item_drops')
+        return $this->belongsToMany(Item::class, 'mob_drop_items')
             ->withTimestamps();
     }
 

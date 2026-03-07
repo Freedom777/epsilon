@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MobItemDrop extends Model
+class MobDropAsset extends Model
 {
     protected $fillable = [
         'mob_id',
-        'item_id',
+        'asset_id',
     ];
 }
