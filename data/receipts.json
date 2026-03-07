@@ -1,0 +1,7631 @@
+[
+    {
+        "item_name": "Улучшенный акинак",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Улучшенный акинак",
+                "quantity": 1
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 15
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Медь",
+                "quantity": 10
+            },
+            {
+                "name": "Олово",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Крушитель",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Крушитель",
+                "quantity": 2
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            },
+            {
+                "name": "Сосна",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Походная каска",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Походная каска",
+                "quantity": 2
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 10
+            },
+            {
+                "name": "Олово",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Массивный панцирь",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Массивный панцирь",
+                "quantity": 1
+            },
+            {
+                "name": "Олово",
+                "quantity": 14
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Фехтовальные перчатки",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Фехтовальные перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Кожа",
+                "quantity": 34
+            },
+            {
+                "name": "Хитин",
+                "quantity": 6
+            },
+            {
+                "name": "Кость",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Прошитые ботинки",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Прошитые ботинки",
+                "quantity": 1
+            },
+            {
+                "name": "Кожа",
+                "quantity": 18
+            },
+            {
+                "name": "Сосна",
+                "quantity": 2
+            },
+            {
+                "name": "Кость",
+                "quantity": 4
+            },
+            {
+                "name": "Хитин",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Рубиновая россыпь",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Рубиновая россыпь",
+                "quantity": 1
+            },
+            {
+                "name": "Медь",
+                "quantity": 30
+            },
+            {
+                "name": "Олово",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Колье безрассудства",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Колье безрассудства",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 9
+            },
+            {
+                "name": "Дуб",
+                "quantity": 5
+            },
+            {
+                "name": "Олово",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Кулон наития",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Кулон наития",
+                "quantity": 1
+            },
+            {
+                "name": "Олово",
+                "quantity": 20
+            },
+            {
+                "name": "Медь",
+                "quantity": 30
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Кровавая секира",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Кровавая секира",
+                "quantity": 1
+            },
+            {
+                "name": "Дуб",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 8
+            },
+            {
+                "name": "Олово",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Шапо с пером",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Шапо с пером",
+                "quantity": 1
+            },
+            {
+                "name": "Кожа",
+                "quantity": 23
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Изящный доспех",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Изящный доспех",
+                "quantity": 2
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 9
+            },
+            {
+                "name": "Медь",
+                "quantity": 3
+            },
+            {
+                "name": "Кожа",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Браслеты скорости",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Браслеты скорости",
+                "quantity": 2
+            },
+            {
+                "name": "Медь",
+                "quantity": 10
+            },
+            {
+                "name": "Хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Бук",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Быстрые пальцы",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Быстрые пальцы",
+                "quantity": 1
+            },
+            {
+                "name": "Кожа",
+                "quantity": 68
+            },
+            {
+                "name": "Кость",
+                "quantity": 8
+            },
+            {
+                "name": "Хитин",
+                "quantity": 6
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Сандали полета",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Сандали полета",
+                "quantity": 1
+            },
+            {
+                "name": "Кожа",
+                "quantity": 30
+            },
+            {
+                "name": "Сосна",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 10
+            },
+            {
+                "name": "Хитин",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Малахитовое кольцо",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Малахитовое кольцо",
+                "quantity": 2
+            },
+            {
+                "name": "Медь",
+                "quantity": 27
+            },
+            {
+                "name": "Олово",
+                "quantity": 19
+            }
+        ]
+    },
+    {
+        "item_name": "Печать искушения",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Печать искушения",
+                "quantity": 1
+            },
+            {
+                "name": "Медь",
+                "quantity": 18
+            },
+            {
+                "name": "Олово",
+                "quantity": 28
+            },
+            {
+                "name": "Бук",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кулон стремлений",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Кулон стремлений",
+                "quantity": 1
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            },
+            {
+                "name": "Бук",
+                "quantity": 5
+            },
+            {
+                "name": "Кожа",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Клевец пробоин",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Клевец пробоин",
+                "quantity": 1
+            },
+            {
+                "name": "Дуб",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 8
+            },
+            {
+                "name": "Олово",
+                "quantity": 7
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Тяжелый клинок",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Тяжелый клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 6
+            },
+            {
+                "name": "Олово",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Шлифованное забрало",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Шлифованное забрало",
+                "quantity": 1
+            },
+            {
+                "name": "Олово",
+                "quantity": 5
+            },
+            {
+                "name": "Медь",
+                "quantity": 6
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Тяжелая кольчуга",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Тяжелая кольчуга",
+                "quantity": 1
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 10
+            },
+            {
+                "name": "Медь",
+                "quantity": 32
+            },
+            {
+                "name": "Олово",
+                "quantity": 14
+            }
+        ]
+    },
+    {
+        "item_name": "Тяжелые рукавицы",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Тяжелые рукавицы",
+                "quantity": 1
+            },
+            {
+                "name": "Олово",
+                "quantity": 34
+            },
+            {
+                "name": "Хитин",
+                "quantity": 6
+            },
+            {
+                "name": "Медь",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Ботинки черствости",
+        "grade": "II",
+        "crafter": "Портной Эллиот",
+        "location": "Грейт-Йелдем",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Ботинки черствости",
+                "quantity": 1
+            },
+            {
+                "name": "Кожа",
+                "quantity": 30
+            },
+            {
+                "name": "Сосна",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 8
+            },
+            {
+                "name": "Хитин",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Усиленная тарга",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Усиленная тарга",
+                "quantity": 1
+            },
+            {
+                "name": "Бук",
+                "quantity": 10
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 4
+            },
+            {
+                "name": "Кожа",
+                "quantity": 44
+            },
+            {
+                "name": "Кость",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Печать старца",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Печать старца",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Сосна",
+                "quantity": 10
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье камней",
+        "grade": "II",
+        "crafter": "Кузнец Хэнк",
+        "location": "Цирта",
+        "durability": 35,
+        "resources": [
+            {
+                "name": "Рецепт [II]: Ожерелье камней",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 7
+            },
+            {
+                "name": "Кость",
+                "quantity": 12
+            },
+            {
+                "name": "Сосна",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древняя булава наития",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 85,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древняя булава наития",
+                "quantity": 2
+            },
+            {
+                "name": "Титан",
+                "quantity": 6
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 20
+            },
+            {
+                "name": "Медь",
+                "quantity": 40
+            },
+            {
+                "name": "Олово",
+                "quantity": 38
+            }
+        ]
+    },
+    {
+        "item_name": "Древний шлем наития",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний шлем наития",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 16
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний панцирь наития",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний панцирь наития",
+                "quantity": 2
+            },
+            {
+                "name": "Амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Древние браслеты наития",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние браслеты наития",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Сосна",
+                "quantity": 50
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древние ботинки наития",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние ботинки наития",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Кожа",
+                "quantity": 50
+            },
+            {
+                "name": "Дуб",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древнее кольцо наития",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древнее кольцо наития",
+                "quantity": 1
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            },
+            {
+                "name": "Кожа",
+                "quantity": 25
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            },
+            {
+                "name": "Медь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Древнее ожерелье наития",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древнее ожерелье наития",
+                "quantity": 2
+            },
+            {
+                "name": "Кровь",
+                "quantity": 10
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древняя секира крови",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древняя секира крови",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 3
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 12
+            },
+            {
+                "name": "Медь",
+                "quantity": 30
+            },
+            {
+                "name": "Олово",
+                "quantity": 21
+            }
+        ]
+    },
+    {
+        "item_name": "Древний кровавый шлем",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний кровавый шлем",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 16
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний кровавый нагрудник",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний кровавый нагрудник",
+                "quantity": 2
+            },
+            {
+                "name": "Амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Древние кровавые перчатки",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние кровавые перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Сосна",
+                "quantity": 50
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древние кровавые сапоги",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние кровавые сапоги",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Кожа",
+                "quantity": 50
+            },
+            {
+                "name": "Дуб",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древний щит крови",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний щит крови",
+                "quantity": 1
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 18
+            },
+            {
+                "name": "Бук",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Древнее кольцо крови",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древнее кольцо крови",
+                "quantity": 1
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            },
+            {
+                "name": "Кожа",
+                "quantity": 25
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            },
+            {
+                "name": "Медь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Древнее кровавое ожерелье",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древнее кровавое ожерелье",
+                "quantity": 2
+            },
+            {
+                "name": "Кровь",
+                "quantity": 10
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний метательный нож",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 85,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний метательный нож",
+                "quantity": 2
+            },
+            {
+                "name": "Титан",
+                "quantity": 6
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 20
+            },
+            {
+                "name": "Медь",
+                "quantity": 40
+            },
+            {
+                "name": "Олово",
+                "quantity": 38
+            }
+        ]
+    },
+    {
+        "item_name": "Древний шлем баланса",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний шлем баланса",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 16
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний доспех баланса",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний доспех баланса",
+                "quantity": 2
+            },
+            {
+                "name": "Амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Древние перчатки баланса",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние перчатки баланса",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Сосна",
+                "quantity": 50
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древние сапоги баланса",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние сапоги баланса",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Кожа",
+                "quantity": 50
+            },
+            {
+                "name": "Дуб",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древнее кольцо баланса",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древнее кольцо баланса",
+                "quantity": 1
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            },
+            {
+                "name": "Кожа",
+                "quantity": 25
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            },
+            {
+                "name": "Медь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Древний кулон баланса",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний кулон баланса",
+                "quantity": 2
+            },
+            {
+                "name": "Кровь",
+                "quantity": 10
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний костяной бердыш",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 85,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний костяной бердыш",
+                "quantity": 2
+            },
+            {
+                "name": "Титан",
+                "quantity": 6
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 20
+            },
+            {
+                "name": "Медь",
+                "quantity": 40
+            },
+            {
+                "name": "Олово",
+                "quantity": 38
+            }
+        ]
+    },
+    {
+        "item_name": "Древний костяной шлем",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний костяной шлем",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 16
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний костяной доспех",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний костяной доспех",
+                "quantity": 2
+            },
+            {
+                "name": "Амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Древние костяные наручи",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние костяные наручи",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Сосна",
+                "quantity": 50
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древние костяные сапоги",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние костяные сапоги",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Кожа",
+                "quantity": 50
+            },
+            {
+                "name": "Дуб",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древняя печать костей",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древняя печать костей",
+                "quantity": 1
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            },
+            {
+                "name": "Кожа",
+                "quantity": 25
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            },
+            {
+                "name": "Медь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Древние бусы из костей",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние бусы из костей",
+                "quantity": 2
+            },
+            {
+                "name": "Кровь",
+                "quantity": 10
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний скользящий клинок",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 85,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний скользящий клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Титан",
+                "quantity": 6
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 20
+            },
+            {
+                "name": "Медь",
+                "quantity": 40
+            },
+            {
+                "name": "Олово",
+                "quantity": 38
+            }
+        ]
+    },
+    {
+        "item_name": "Древний скользящий шлем",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний скользящий шлем",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 16
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний скользящий дублет",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний скользящий дублет",
+                "quantity": 2
+            },
+            {
+                "name": "Амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Древние скользящие перчатки",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние скользящие перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Сосна",
+                "quantity": 50
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древние скользящие пулены",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние скользящие пулены",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Кожа",
+                "quantity": 50
+            },
+            {
+                "name": "Дуб",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древнее скользящее кольцо",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древнее скользящее кольцо",
+                "quantity": 1
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            },
+            {
+                "name": "Кожа",
+                "quantity": 25
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            },
+            {
+                "name": "Медь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Древний скользящий оберег",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний скользящий оберег",
+                "quantity": 2
+            },
+            {
+                "name": "Кровь",
+                "quantity": 10
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний молот разлома",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний молот разлома",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 3
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 12
+            },
+            {
+                "name": "Медь",
+                "quantity": 30
+            },
+            {
+                "name": "Олово",
+                "quantity": 21
+            }
+        ]
+    },
+    {
+        "item_name": "Древний стальной шлем",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний стальной шлем",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 16
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древний стальной доспех",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний стальной доспех",
+                "quantity": 2
+            },
+            {
+                "name": "Амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Древние стальные перчатки",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние стальные перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Сосна",
+                "quantity": 50
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древние стальные сапоги",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние стальные сапоги",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Кожа",
+                "quantity": 50
+            },
+            {
+                "name": "Дуб",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древний щит из стали",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древний щит из стали",
+                "quantity": 1
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 18
+            },
+            {
+                "name": "Бук",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Древнее стальное кольцо",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древнее стальное кольцо",
+                "quantity": 1
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            },
+            {
+                "name": "Кожа",
+                "quantity": 25
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            },
+            {
+                "name": "Медь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Древняя стальная цепь",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древняя стальная цепь",
+                "quantity": 2
+            },
+            {
+                "name": "Кровь",
+                "quantity": 10
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древние топоры авангарда",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 85,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние топоры авангарда",
+                "quantity": 2
+            },
+            {
+                "name": "Титан",
+                "quantity": 6
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 20
+            },
+            {
+                "name": "Медь",
+                "quantity": 40
+            },
+            {
+                "name": "Олово",
+                "quantity": 38
+            }
+        ]
+    },
+    {
+        "item_name": "Древняя каска авангарда",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древняя каска авангарда",
+                "quantity": 1
+            },
+            {
+                "name": "Титан",
+                "quantity": 2
+            },
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Медь",
+                "quantity": 16
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Древняя кольчуга авангарда",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древняя кольчуга авангарда",
+                "quantity": 2
+            },
+            {
+                "name": "Амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Дуб",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Древние перчатки авангарда",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние перчатки авангарда",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Сосна",
+                "quantity": 50
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древние ботинки авангарда",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древние ботинки авангарда",
+                "quantity": 1
+            },
+            {
+                "name": "Хитин",
+                "quantity": 14
+            },
+            {
+                "name": "Кожа",
+                "quantity": 50
+            },
+            {
+                "name": "Дуб",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Древнее кольцо авангарда",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древнее кольцо авангарда",
+                "quantity": 1
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            },
+            {
+                "name": "Кожа",
+                "quantity": 25
+            },
+            {
+                "name": "Кость",
+                "quantity": 25
+            },
+            {
+                "name": "Медь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Древняя цепь авангарда",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Древняя цепь авангарда",
+                "quantity": 2
+            },
+            {
+                "name": "Кровь",
+                "quantity": 10
+            },
+            {
+                "name": "Амарант",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Стальные пластины с добавление титана",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Титан",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Стальные пластины запеченные в крови",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ткань из амаранта с сажей из костей",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 3
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Ткань из амаранта с медной вышивкой",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Обожженный амарант",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 2
+            },
+            {
+                "name": "Медь",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаная основа для доспеха с амарантом",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Чистая кожа",
+                "quantity": 4
+            },
+            {
+                "name": "Пропитанная кожа",
+                "quantity": 4
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаная подкладка для доспехов с кровью",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Чистая кожа",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанная кожа",
+                "quantity": 3
+            },
+            {
+                "name": "Кровь",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Кольчужная подкладка из титана и меди",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Закаленный титан",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Грубый металл",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Кольчужная подкладка из титана и стали",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            },
+            {
+                "name": "Титан",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Грубый металл",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Титановый клинок",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Закаленный титан",
+                "quantity": 5
+            },
+            {
+                "name": "Грубый металл",
+                "quantity": 25
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Навершие молота из титана",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Закаленный титан",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Грубый металл",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Навершие топора из титана",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Закаленный титан",
+                "quantity": 5
+            },
+            {
+                "name": "Грубый металл",
+                "quantity": 25
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Древко из сосны и дуба",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Пропитанный дуб",
+                "quantity": 3
+            },
+            {
+                "name": "Вымоченный дуб",
+                "quantity": 3
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанная сосна",
+                "quantity": 3
+            },
+            {
+                "name": "Кровь",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Эфес из бука и сосны",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Вымоченный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанная сосна",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Основа для щита",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Закаленный титан",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченный бук",
+                "quantity": 2
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный дуб",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный дуб",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Секира Пурги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Эссенция Пурги",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие топора из титана",
+                "quantity": 2
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Гладиус Метели",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 50,
+        "resources": [
+            {
+                "name": "Эссенция Метели",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 1
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Чекан Маржаны",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 50,
+        "resources": [
+            {
+                "name": "Эссенция Маржаны",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие молота из титана",
+                "quantity": 1
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Загнал Вьюги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 50,
+        "resources": [
+            {
+                "name": "Эссенция Вьюги",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие молота из титана",
+                "quantity": 2
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяное забрало провидца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяное забрало провидца",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяной марион провидца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяной марион провидца",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная кольчуга провидца",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная кольчуга провидца",
+                "quantity": 2
+            },
+            {
+                "name": "Кольчужная подкладка из титана и стали",
+                "quantity": 1
+            },
+            {
+                "name": "Кожаная основа для доспеха с амарантом",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная кираса провидца",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная кираса провидца",
+                "quantity": 2
+            },
+            {
+                "name": "Стальные пластины с добавление титана",
+                "quantity": 1
+            },
+            {
+                "name": "Кожаная подкладка для доспехов с кровью",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные наручи провидца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные наручи провидца",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 5
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 6
+            },
+            {
+                "name": "Хитин",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные перчатки провидца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные перчатки провидца",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 6
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 6
+            },
+            {
+                "name": "Хитин",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные ботинки провидца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные ботинки провидца",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 5
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные сапоги провидца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные сапоги провидца",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 5
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Каплевидный щит Метели",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 50,
+        "resources": [
+            {
+                "name": "Осколок души Метели",
+                "quantity": 3
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Гоплон Маржаны",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 50,
+        "resources": [
+            {
+                "name": "Осколок души Маржаны",
+                "quantity": 3
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяное кольцо провидца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяное кольцо провидца",
+                "quantity": 1
+            },
+            {
+                "name": "Обожженный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 30
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяной перстень провидца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяной перстень провидца",
+                "quantity": 1
+            },
+            {
+                "name": "Обожженный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 30
+            }
+        ]
+    },
+    {
+        "item_name": "Парные саи Пурги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Осколок души Пурги",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Парные кинжалы Метели",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Кость Метели",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Эспадон Маржаны",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Кость Маржаны",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Кельт Вьюги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Осколок души Вьюги",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие топора из титана",
+                "quantity": 2
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяной капюшон жреца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяной капюшон жреца",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Лядяная маска жреца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Лядяная маска жреца",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная мантия жреца",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная мантия жреца",
+                "quantity": 2
+            },
+            {
+                "name": "Кожаная основа для доспеха с амарантом",
+                "quantity": 1
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная туника жреца",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная туника жреца",
+                "quantity": 2
+            },
+            {
+                "name": "Кожаная подкладка для доспехов с кровью",
+                "quantity": 1
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные браслеты жреца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные браслеты жреца",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 5
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 6
+            },
+            {
+                "name": "Хитин",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные наручи жреца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные наручи жреца",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 5
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 6
+            },
+            {
+                "name": "Хитин",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные ботинки жреца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные ботинки жреца",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 5
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные сапоги жреца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные сапоги жреца",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 5
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная печать жреца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная печать жреца",
+                "quantity": 1
+            },
+            {
+                "name": "Обожженный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 30
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяное кольцо жреца",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяное кольцо жреца",
+                "quantity": 1
+            },
+            {
+                "name": "Обожженный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 30
+            }
+        ]
+    },
+    {
+        "item_name": "Люцернский молот Метели",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Криолит Метели",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие молота из титана",
+                "quantity": 2
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Фламберг Маржаны",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 50,
+        "resources": [
+            {
+                "name": "Криолит Маржаны",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Клевец Пурги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Прах Пурги",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие молота из титана",
+                "quantity": 1
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Шестопёр Вьюги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Прах Вьюги",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие топора из титана",
+                "quantity": 1
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяной топхельм стража",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяной топхельм стража",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяной кабассет стража",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяной кабассет стража",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная бригантина стража",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная бригантина стража",
+                "quantity": 2
+            },
+            {
+                "name": "Стальные пластины с добавление титана",
+                "quantity": 1
+            },
+            {
+                "name": "Кожаная подкладка для доспехов с кровью",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные латы стража",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные латы стража",
+                "quantity": 2
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 1
+            },
+            {
+                "name": "Кольчужная подкладка из титана и меди",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные перчатки стража",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные перчатки стража",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 5
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 6
+            },
+            {
+                "name": "Хитин",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные налокотники стража",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные налокотники стража",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 5
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 6
+            },
+            {
+                "name": "Хитин",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные сапоги стража",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные сапоги стража",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 5
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные ботинки стража",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные ботинки стража",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 5
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Павеза Пурги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Криолит Пурги",
+                "quantity": 3
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Скутум Вьюги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Криолит Вьюги",
+                "quantity": 3
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная печать стража",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная печать стража",
+                "quantity": 1
+            },
+            {
+                "name": "Обожженный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 30
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяное кольцо стража",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяное кольцо стража",
+                "quantity": 1
+            },
+            {
+                "name": "Обожженный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 30
+            }
+        ]
+    },
+    {
+        "item_name": "Баллок и басселард Пурги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Кость Пурги",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Парные рондели Метели",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Прах Метели",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Глефа Маржаны",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Прах Маржаны",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие топора из титана",
+                "quantity": 2
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Эсток Вьюги",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 65,
+        "resources": [
+            {
+                "name": "Кость Вьюги",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 2
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная шапка изменника",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная шапка изменника",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная маска изменника",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная маска изменника",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 3
+            },
+            {
+                "name": "Пропитанный бук",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 5
+            },
+            {
+                "name": "Кость",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная стёганка изменника",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная стёганка изменника",
+                "quantity": 2
+            },
+            {
+                "name": "Кожаная основа для доспеха с амарантом",
+                "quantity": 1
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяная кольчуга изменника",
+        "grade": "III+",
+        "crafter": null,
+        "location": null,
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяная кольчуга изменника",
+                "quantity": 2
+            },
+            {
+                "name": "Кольчужная подкладка из титана и меди",
+                "quantity": 1
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные браслеты изменника",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные браслеты изменника",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 5
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 6
+            },
+            {
+                "name": "Хитин",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные митенки изменника",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные митенки изменника",
+                "quantity": 2
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Вымоченная сосна",
+                "quantity": 5
+            },
+            {
+                "name": "Чистая кость",
+                "quantity": 6
+            },
+            {
+                "name": "Хитин",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные порши изменника",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные порши изменника",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 5
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяные пулены изменника",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяные пулены изменника",
+                "quantity": 2
+            },
+            {
+                "name": "Вымоченный амарант",
+                "quantity": 4
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 5
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяное кольцо изменника",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяное кольцо изменника",
+                "quantity": 1
+            },
+            {
+                "name": "Обожженный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 30
+            }
+        ]
+    },
+    {
+        "item_name": "Ледяной перстень изменника",
+        "grade": "III+",
+        "crafter": "Кузнец Флэт",
+        "location": "Северный порт",
+        "durability": 40,
+        "resources": [
+            {
+                "name": "Рецепт [III]: Ледяной перстень изменника",
+                "quantity": 1
+            },
+            {
+                "name": "Обожженный амарант",
+                "quantity": 5
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 10
+            },
+            {
+                "name": "Кость",
+                "quantity": 30
+            }
+        ]
+    },
+    {
+        "item_name": "Лук подмастерья",
+        "grade": "II",
+        "crafter": null,
+        "location": null,
+        "durability": 60,
+        "resources": [
+            {
+                "name": "Дуб",
+                "quantity": 12
+            },
+            {
+                "name": "Медь",
+                "quantity": 2
+            },
+            {
+                "name": "Запчасть",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Лук мастера",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 80,
+        "resources": [
+            {
+                "name": "Кость",
+                "quantity": 30
+            },
+            {
+                "name": "Бук",
+                "quantity": 15
+            },
+            {
+                "name": "Хитин",
+                "quantity": 15
+            },
+            {
+                "name": "Запчасть",
+                "quantity": 20
+            }
+        ]
+    },
+    {
+        "item_name": "Кирка подмастерья",
+        "grade": "II",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Медь",
+                "quantity": 8
+            },
+            {
+                "name": "Запчасть",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Кирка мастера",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 60,
+        "resources": [
+            {
+                "name": "Кованая сталь",
+                "quantity": 10
+            },
+            {
+                "name": "Дуб",
+                "quantity": 10
+            },
+            {
+                "name": "Олово",
+                "quantity": 6
+            },
+            {
+                "name": "Запчасть",
+                "quantity": 22
+            }
+        ]
+    },
+    {
+        "item_name": "Удочка подмастерья",
+        "grade": "II",
+        "crafter": null,
+        "location": null,
+        "durability": 30,
+        "resources": [
+            {
+                "name": "Дуб",
+                "quantity": 8
+            },
+            {
+                "name": "Запчасть",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Удочка мастера",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 45,
+        "resources": [
+            {
+                "name": "Кожа",
+                "quantity": 20
+            },
+            {
+                "name": "Медь",
+                "quantity": 15
+            },
+            {
+                "name": "Сосна",
+                "quantity": 10
+            },
+            {
+                "name": "Запчасть",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "item_name": "Мотыга подмастерья",
+        "grade": "II",
+        "crafter": null,
+        "location": null,
+        "durability": 34,
+        "resources": [
+            {
+                "name": "Дуб",
+                "quantity": 4
+            },
+            {
+                "name": "Медь",
+                "quantity": 4
+            },
+            {
+                "name": "Запчасть",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Мотыга мастера",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": 42,
+        "resources": [
+            {
+                "name": "Бук",
+                "quantity": 8
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 8
+            },
+            {
+                "name": "Запчасть",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Парные мечи мощи⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Парные мечи мощи⚔️",
+                "quantity": 5
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 10
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 4
+            },
+            {
+                "name": "Биоток",
+                "quantity": 10
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Двуручный топор гиганта⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Двуручный топор гиганта⚔️",
+                "quantity": 5
+            },
+            {
+                "name": "Навершие топора из титана",
+                "quantity": 10
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 10
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 2
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кастеты ярости⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кастеты ярости⚔️",
+                "quantity": 5
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 4
+            },
+            {
+                "name": "Биоток",
+                "quantity": 10
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 10
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирный шлем натиска ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Панцирный шлем натиска ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирь натиска ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Панцирь натиска ⚔️",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирные перчатки натиска ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Панцирные перчатки натиска ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирные сапоги натиска ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Панцирные сапоги натиска ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо натиска ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо натиска ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо жизни бездны ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо жизни бездны ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо точности бездны ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо точности бездны ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье натиска ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье натиска ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье жизни бездны ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье жизни бездны ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье точности бездны ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье точности бездны ⚔️",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Двуручный меч бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Двуручный меч бездны🌟",
+                "quantity": 5
+            },
+            {
+                "name": "Навершие молота из титана",
+                "quantity": 10
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 4
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 4
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 50
+            }
+        ]
+    },
+    {
+        "item_name": "Двуручный молот бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Двуручный молот бездны🌟",
+                "quantity": 5
+            },
+            {
+                "name": "Навершие молота из титана",
+                "quantity": 10
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 2
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 50
+            }
+        ]
+    },
+    {
+        "item_name": "Латный шлем натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Латный шлем натиска 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Латы натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Латы натиска 🌟",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латные рукавицы натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Латные рукавицы натиска 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Латные сапоги натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Латные сапоги натиска 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо  натиска 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо борьбы бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо борьбы бездны 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо сопротивления",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо сопротивления 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье  натиска 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье борьбы бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье борьбы бездны 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье сопротивления",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье сопротивления 🌟",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Длинный лук из вольфрама",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Длинный лук из вольфрама🏹",
+                "quantity": 5
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 4
+            },
+            {
+                "name": "Вольфрам",
+                "quantity": 10
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 20
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Короткий лук из вольфрама",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Короткий лук из вольфрама🏹",
+                "quantity": 5
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 4
+            },
+            {
+                "name": "Вольфрам",
+                "quantity": 10
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 15
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 75
+            }
+        ]
+    },
+    {
+        "item_name": "Парные арбалеты охотника",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Парные арбалеты охотника🏹",
+                "quantity": 5
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 2
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 20
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный шлем натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]:  Кожаный шлем натиска 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный доспех натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кожаный доспех натиска 🏹",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные перчатки натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кожаные перчатки натиска 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные сапоги натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кожаные сапоги натиска 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо натиска 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо взгляда бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо взгляда бездны 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо сопротивления",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо сопротивления 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье натиска 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье взгляда бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье взгляда бездны 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье сопротивления",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье сопротивления 🏹",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Меч защитника",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Меч защитника🛡",
+                "quantity": 3
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 10
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 4
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 10
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Топор мародера",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Топор мародера🛡",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие топора из титана",
+                "quantity": 10
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 4
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 10
+            },
+            {
+                "name": "Пропитанная кожа",
+                "quantity": 25
+            }
+        ]
+    },
+    {
+        "item_name": "Латный шлем натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Латный шлем натиска 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Латы натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Латы натиска 🛡",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латные рукавицы натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Латные рукавицы натиска 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Латные сапоги натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Латные сапоги натиска 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Башенный щит защитника",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Башенный щит защитника🛡",
+                "quantity": 5
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 10
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 2
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Щит мародера",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Щит мародера🛡",
+                "quantity": 3
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 10
+            },
+            {
+                "name": "Закаленная сталь",
+                "quantity": 25
+            },
+            {
+                "name": "Обожженная сосна",
+                "quantity": 50
+            }
+        ]
+    },
+    {
+        "item_name": "Щит натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Щит натиска 🛡",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо натиска 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо мощи бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо мощи бездны 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо удачи бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо удачи бездны 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье натиска 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье мощи бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье мощи бездны 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье удачи бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье удачи бездны 🛡",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кинжал охотника на демонов",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кинжал охотника на демонов🗡",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 4
+            },
+            {
+                "name": "Вольфрам",
+                "quantity": 10
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 15
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 50
+            }
+        ]
+    },
+    {
+        "item_name": "Кинжалы охотника на демонов",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кинжалы охотника на демонов🗡",
+                "quantity": 5
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 4
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 10
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный шлем натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кожаный шлем натиска 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный доспех натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кожаный доспех натиска 🗡",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные перчатки натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кожаные перчатки натиска 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные сапоги натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кожаные сапоги натиска 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо натиска 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо гнева бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо гнева бездны 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо ярости бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо ярости бездны 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье натиска 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье гнева бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье гнева бездны 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье ярости бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье ярости бездны 🗡",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Булава божественной силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Булава божественной силы💓",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие молота из титана",
+                "quantity": 6
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 10
+            },
+            {
+                "name": "Пропитанный амарант",
+                "quantity": 15
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "item_name": "Булава демонической силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Булава демонической силы💓",
+                "quantity": 3
+            },
+            {
+                "name": "Навершие молота из титана",
+                "quantity": 6
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 15
+            },
+            {
+                "name": "Кровь",
+                "quantity": 50
+            },
+            {
+                "name": "Пропитанная кожа",
+                "quantity": 50
+            }
+        ]
+    },
+    {
+        "item_name": "Посох жреца света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Посох жреца света💓",
+                "quantity": 5
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 50
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 25
+            },
+            {
+                "name": "Кровь",
+                "quantity": 15
+            }
+        ]
+    },
+    {
+        "item_name": "Посох жреца тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Посох жреца тьмы💓",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 8
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 50
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 10
+            },
+            {
+                "name": "Вымоченный бук",
+                "quantity": 50
+            }
+        ]
+    },
+    {
+        "item_name": "Диадема натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Диадема натиска 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Мантия натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Мантия натиска 💓",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Перчатки натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Перчатки натиска 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Ботинки натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ботинки натиска 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Баклер натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Баклер натиска 💓",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Щит божественной силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]:  Щит божественной силы💓",
+                "quantity": 3
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 10
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 6
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 25
+            },
+            {
+                "name": "Кованая сталь",
+                "quantity": 50
+            }
+        ]
+    },
+    {
+        "item_name": "Щит демонической силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Щит демонической силы💓",
+                "quantity": 3
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 10
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 50
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо натиска 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо скорости бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо скорости бездны 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кольцо ярости бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Кольцо ярости бездны 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 3
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье натиска",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье натиска 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Кровавый уголь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье скорости бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье скорости бездны 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ожерелье ярости бездны",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт[IV]: Ожерелье ярости бездны 💓",
+                "quantity": 2
+            },
+            {
+                "name": "Сублимированный хитин",
+                "quantity": 5
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Блюдо из мяса",
+        "grade": "I",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Кусок мяса",
+                "quantity": 2
+            },
+            {
+                "name": "Соль",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Блюдо из рыбы",
+        "grade": "I",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Карбарась",
+                "quantity": 2
+            },
+            {
+                "name": "Соль",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Аквельский обед",
+        "grade": "I",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Миледокунь",
+                "quantity": 1
+            },
+            {
+                "name": "Деликатесное мясо",
+                "quantity": 1
+            },
+            {
+                "name": "Соль",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Чесночная похлебка",
+        "grade": "I",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Кавельский чеснок",
+                "quantity": 2
+            },
+            {
+                "name": "Карбарась",
+                "quantity": 8
+            },
+            {
+                "name": "Соль",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Пастуший хлеб",
+        "grade": "I",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Дрангарская морковь",
+                "quantity": 4
+            },
+            {
+                "name": "Карбарась",
+                "quantity": 5
+            },
+            {
+                "name": "Кусок мяса",
+                "quantity": 3
+            },
+            {
+                "name": "Соль",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Острый лечо",
+        "grade": "I",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Южный перец",
+                "quantity": 1
+            },
+            {
+                "name": "Карбарась",
+                "quantity": 3
+            },
+            {
+                "name": "Кусок мяса",
+                "quantity": 5
+            },
+            {
+                "name": "Соль",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Луковый суп",
+        "grade": "I",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Аквельский лук",
+                "quantity": 2
+            },
+            {
+                "name": "Кусок мяса",
+                "quantity": 8
+            },
+            {
+                "name": "Соль",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Блюдо из мяса",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Кусок мяса",
+                "quantity": 5
+            },
+            {
+                "name": "Деликатесное мясо",
+                "quantity": 1
+            },
+            {
+                "name": "Соль",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Блюдо из рыбы",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Карбарась",
+                "quantity": 5
+            },
+            {
+                "name": "Миледокунь",
+                "quantity": 1
+            },
+            {
+                "name": "Соль",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Аквельский обед",
+        "grade": "III",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Морской циртец",
+                "quantity": 1
+            },
+            {
+                "name": "Мраморное мясо",
+                "quantity": 1
+            },
+            {
+                "name": "Карбарась",
+                "quantity": 5
+            },
+            {
+                "name": "Кусок мяса",
+                "quantity": 5
+            },
+            {
+                "name": "Соль",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "item_name": "Питательный салат",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Карбарась",
+                "quantity": 1
+            },
+            {
+                "name": "Кусок мяса",
+                "quantity": 1
+            },
+            {
+                "name": "Соль",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Фруктовая корзина",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Банан",
+                "quantity": 1
+            },
+            {
+                "name": "Кокос",
+                "quantity": 1
+            },
+            {
+                "name": "Лимон",
+                "quantity": 1
+            },
+            {
+                "name": "Манго",
+                "quantity": 1
+            },
+            {
+                "name": "Личи",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Талант - Блестящие латы",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Обожженный философский камень",
+                "quantity": 5
+            },
+            {
+                "name": "Титан",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Талант - Закалка",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Обожженный философский камень",
+                "quantity": 5
+            },
+            {
+                "name": "Кровь",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Обожженный философский камень",
+        "grade": null,
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Философский камень",
+                "quantity": 3
+            },
+            {
+                "name": "Свеча для обжига",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "item_name": "Дайсё ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 5
+            },
+            {
+                "name": "Биоток",
+                "quantity": 13
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 13
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 13
+            }
+        ]
+    },
+    {
+        "item_name": "Фрагарах ⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 13
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 5
+            },
+            {
+                "name": "Биоток",
+                "quantity": 13
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 20
+            }
+        ]
+    },
+    {
+        "item_name": "Дюрандаль",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 13
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 5
+            },
+            {
+                "name": "Биоток",
+                "quantity": 13
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 20
+            }
+        ]
+    },
+    {
+        "item_name": "Наджак",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 3
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 3
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 65
+            }
+        ]
+    },
+    {
+        "item_name": "Длинный лук кошмаров",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 5
+            },
+            {
+                "name": "Вольфрам",
+                "quantity": 13
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 26
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 33
+            }
+        ]
+    },
+    {
+        "item_name": "Парные арбалеты вечности",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 5
+            },
+            {
+                "name": "Вольфрам",
+                "quantity": 13
+            },
+            {
+                "name": "Древко из сосны и дуба",
+                "quantity": 26
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 33
+            }
+        ]
+    },
+    {
+        "item_name": "Дайнслейф",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 13
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 5
+            },
+            {
+                "name": "Биоток",
+                "quantity": 13
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 20
+            }
+        ]
+    },
+    {
+        "item_name": "Нандака",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 13
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 13
+            },
+            {
+                "name": "Закаленная медь",
+                "quantity": 33
+            }
+        ]
+    },
+    {
+        "item_name": "Кинжал Кровавой охоты",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Вольфрам",
+                "quantity": 13
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 20
+            },
+            {
+                "name": "Чистая кожа",
+                "quantity": 65
+            }
+        ]
+    },
+    {
+        "item_name": "Кинжалы Кровавой охоты",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 5
+            },
+            {
+                "name": "Титановый клинок",
+                "quantity": 13
+            },
+            {
+                "name": "Эфес из бука и сосны",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "item_name": "Омела",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 65
+            },
+            {
+                "name": "Обожженный бук",
+                "quantity": 13
+            },
+            {
+                "name": "Вымоченный бук",
+                "quantity": 65
+            }
+        ]
+    },
+    {
+        "item_name": "Тисон",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого оружия",
+                "quantity": 1
+            },
+            {
+                "name": "Слиток из вольфрама",
+                "quantity": 10
+            },
+            {
+                "name": "Закаленное олово",
+                "quantity": 65
+            },
+            {
+                "name": "Закаленный титан",
+                "quantity": 33
+            },
+            {
+                "name": "Кровь",
+                "quantity": 20
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирный шлем Рока⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирь Рока⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирные перчатки Рока⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирные сапоги Рока⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирный шлем Фракийца⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирь Фракийца⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирные перчатки Фракийца⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Панцирные сапоги Фракийца⚔️",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латный шлем гибели",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латы гибели",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Латные рукавицы гибели",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латные сапоги гибели",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латный шлем паладина",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латы паладина",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Латные рукавицы паладина",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латные сапоги паладина",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный шлем света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный доспех света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные перчатки света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные сапоги света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный шлем тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный доспех тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные перчатки тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные сапоги тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латный шлем Венеры",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латы Венеры",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Латные рукавицы Венеры",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латные сапоги Венеры",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Щит Венеры",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого щита",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латный шлем Марса",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латы Марса",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Латные рукавицы Марса",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Латные сапоги Марса",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Щит Марса",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого щита",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный шлем света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный доспех света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные перчатки света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные сапоги света",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный шлем тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаный доспех тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные перчатки тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Кожаные сапоги тьмы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Диадема божественной силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Мантия божественной силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Перчатки божественной силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ботинки божественной силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Диадема демонической силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого шлема",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с сажей из костей",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Мантия демонической силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого доспеха",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 10
+            },
+            {
+                "name": "Стальные пластины с добавлением титана",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "item_name": "Перчатки демонической силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особой перчатки",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Стальные пластины запеченные в крови",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Ботинки демонической силы",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особых сапог",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 5
+            },
+            {
+                "name": "Ткань из амаранта с медной вышивкой",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Щит Азраила",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого щита",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "item_name": "Щит Левиафана",
+        "grade": "IV",
+        "crafter": null,
+        "location": null,
+        "durability": null,
+        "resources": [
+            {
+                "name": "Рецепт особого щита",
+                "quantity": 1
+            },
+            {
+                "name": "Биотоковая пластина",
+                "quantity": 7
+            },
+            {
+                "name": "Основа для щита",
+                "quantity": 3
+            }
+        ]
+    }
+]

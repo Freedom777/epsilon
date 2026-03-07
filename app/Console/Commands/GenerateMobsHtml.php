@@ -45,7 +45,7 @@ class GenerateMobsHtml extends Command
         MobDropIndex::truncate();
 
         $mobs = Mob::where('status', 'ok')
-            ->whereNotNull('drop_asset')
+            ->whereHas('assetDrops')
             ->get();
 
         $bar = $this->output->createProgressBar($mobs->count());
@@ -91,6 +91,7 @@ class GenerateMobsHtml extends Command
     private function renderHtml(): string
     {
         $mobs = Mob::where('status', 'ok')
+            ->with(['assetDrops', 'itemDrops'])
             ->orderBy('level')
             ->get();
 

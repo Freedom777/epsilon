@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Mob extends Model
 {
@@ -20,4 +22,38 @@ class Mob extends Model
         'drop_asset'    => 'array',
         'drop_item'     => 'array',
     ];
+
+    // =========================================================================
+    // Связи
+    // =========================================================================
+
+    public function assetDrops(): BelongsToMany
+    {
+        return $this->belongsToMany(Asset::class, 'mob_asset_drops')
+            ->withTimestamps();
+    }
+
+    public function itemDrops(): BelongsToMany
+    {
+        return $this->belongsToMany(Item::class, 'mob_item_drops')
+            ->withTimestamps();
+    }
+
+// =========================================================================
+// Аксессоры — совместимость с фронтом (возвращают массив строк)
+// =========================================================================
+
+    protected function dropAsset(): Attribute
+    {
+        return Attribute::get(fn () =>
+        $this->assetDrops->pluck('title')->toArray() ?: null
+        );
+    }
+
+    protected function dropItem(): Attribute
+    {
+        return Attribute::get(fn () =>
+        $this->itemDrops->pluck('title')->toArray() ?: null
+        );
+    }
 }

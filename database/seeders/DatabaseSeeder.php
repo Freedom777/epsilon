@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      * (listings ссылаются на products и tg_users).
      *
      * CSV-файлы должны лежать в database/seeders/data/:
+     *   - cities.csv
+     *   - locations.csv
      *   - users.csv
      *   - products_final.csv
      *   - products_aliases.csv
@@ -32,6 +34,8 @@ class DatabaseSeeder extends Seeder
             TgUsersSeeder::class,       // 706 пользователей
             ProductsSeeder::class,      // 498 товаров + 16 алиасов зелий
             InitialPricesSeeder::class, // базовая линия цен для детектора аномалий
+            CitiesSeeder::class,        // города
+            LocationsSeeder::class,     // локации
         ]);
     }
 }

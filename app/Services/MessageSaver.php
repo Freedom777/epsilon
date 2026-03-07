@@ -19,7 +19,7 @@ class MessageSaver
         private readonly PriceAnomalyDetector $anomalyDetector,
     ) {}
 
-    public function saveRawMessage(array $msgData): TgMessage
+    public function saveRawMessage(array $msgData): \Illuminate\Database\Eloquent\Model
     {
         $user = null;
         if (!empty($msgData['tg_user_id'])) {
