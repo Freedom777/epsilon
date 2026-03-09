@@ -744,4 +744,17 @@ class MessageParserTest extends TestCase
         $this->assertEquals(1, $result['enhancement']);
         $this->assertEquals(5500, $result['price']);
     }
+
+    public function test_multiple_buy_sell_tags_split_correctly(): void
+    {
+        $text = "#куплю\n❇️ Кожа - 21💰\n#продам\n🌂 Крылья [I] - 16500💰\n#куплю\n✴️ Дуб - 21💰";
+        $result = $this->parser->parse($text);
+
+        $buyNames  = array_column(array_filter($result['listings'], fn($i) => $i['type'] === 'buy'), 'name');
+        $sellNames = array_column(array_filter($result['listings'], fn($i) => $i['type'] === 'sell'), 'name');
+
+        $this->assertContains('Кожа', $buyNames);
+        $this->assertContains('Дуб', $buyNames);
+        $this->assertNotContains('Кожа', $sellNames);
+    }
 }
