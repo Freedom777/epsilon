@@ -592,9 +592,12 @@ class MessageParser
 
         // Поиск хэш-тегов
         foreach ($allTags as $tagInfo) {
-            $pos = mb_strpos($textLower, mb_strtolower($tagInfo['tag']));
-            if ($pos !== false) {
+            $tag    = mb_strtolower($tagInfo['tag']);
+            $tagLen = mb_strlen($tag);
+            $offset = 0;
+            while (($pos = mb_strpos($textLower, $tag, $offset)) !== false) {
                 $found[] = ['pos' => $pos, 'type' => $tagInfo['type']];
+                $offset  = $pos + $tagLen;
             }
         }
 
