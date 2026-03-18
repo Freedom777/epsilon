@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Mob extends Model
@@ -18,12 +19,17 @@ class Mob extends Model
     ];
 
     protected $casts = [
-        'id'            => 'integer',
+        'id' => 'integer',
     ];
 
     // =========================================================================
     // Связи
     // =========================================================================
+
+    public function locationRef(): BelongsTo
+    {
+        return $this->belongsTo(Location::class, 'location_id');
+    }
 
     public function dropAssets(): BelongsToMany
     {
@@ -37,10 +43,33 @@ class Mob extends Model
             ->withTimestamps();
     }
 
-// =========================================================================
-// Аксессоры — совместимость с фронтом (возвращают массив строк)
-// =========================================================================
+    // =========================================================================
+    // Аксессоры — совместимость с фронтом
+    // =========================================================================
 
+    /**
+     * Город: из связи Location → City, fallback на строковую колонку.
+     */
+    protected function cityName(): Attribute
+    {
+        return Attribute::get(fn () =>
+            $this->locationRef?->city?->title ?? $this->city
+        );
+    }
+
+    /**
+     * Локация: из связи Location, fallback на строковую колонку.
+     */
+    protected function locationName(): Attribute
+    {
+        return Attribute::get(fn () =>
+            $this->locationRef?->title ?? $this->location
+        );
+    }
+
+    /**
+     * Дроп ресурсов — массив строк (title) для HTML.
+     */
     protected function dropAsset(): Attribute
     {
         return Attribute::get(fn () =>
@@ -48,6 +77,9 @@ class Mob extends Model
         );
     }
 
+    /**
+     * Дроп предметов — массив строк (title) для HTML.
+     */
     protected function dropItem(): Attribute
     {
         return Attribute::get(fn () =>

@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Asset;
 use App\Models\Mob;
 use App\Models\MobDropIndex;
-use App\Services\MatchingService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class GenerateMobsHtml extends Command
 {
@@ -15,11 +12,6 @@ class GenerateMobsHtml extends Command
                             {--skip-index : Пропустить пересборку индекса дропа}';
 
     protected $description = 'Генерирует статическую HTML-страницу со списком мобов';
-
-    public function __construct(private readonly MatchingService $matchingService)
-    {
-        parent::__construct();
-    }
 
     public function handle(): int
     {
@@ -46,6 +38,7 @@ class GenerateMobsHtml extends Command
 
         $mobs = Mob::where('status', 'ok')
             ->whereHas('dropAssets')
+            ->with('dropAssets')
             ->get();
 
         $bar = $this->output->createProgressBar($mobs->count());
@@ -62,28 +55,12 @@ class GenerateMobsHtml extends Command
 
     private function indexMobDrop(Mob $mob): void
     {
-        $drops = $mob->drop_asset ?? [];
-
-        foreach ($drops as $dropText) {
-            // Убираем иконку и нормализуем
-            $clean      = trim(preg_replace('/^\p{So}\p{Sk}?\s*/u', '', $dropText));
-            $clean      = preg_replace('/\[.*?\]/', '', $clean); // убираем грейд
-            $normalized = mb_strtolower(trim($clean));
-
-            if (blank($normalized)) {
-                continue;
-            }
-
-            // Пытаемся найти asset
-            $asset = Asset::whereRaw('LOWER(normalized_title) = ?', [$normalized])
-                ->orWhereRaw('LOWER(title) LIKE ?', ['%' . $normalized . '%'])
-                ->first();
-
+        foreach ($mob->dropAssets as $asset) {
             MobDropIndex::create([
                 'mob_id'     => $mob->id,
-                'asset_id'   => $asset?->id,
-                'drop_text'  => $dropText,
-                'normalized' => $normalized,
+                'asset_id'   => $asset->id,
+                'drop_text'  => $asset->title,
+                'normalized' => $asset->normalized_title ?? mb_strtolower($asset->title),
             ]);
         }
     }
@@ -91,7 +68,7 @@ class GenerateMobsHtml extends Command
     private function renderHtml(): string
     {
         $mobs = Mob::where('status', 'ok')
-            ->with(['dropAssets', 'dropItems'])
+            ->with(['locationRef.city', 'dropAssets', 'dropItems'])
             ->orderBy('level')
             ->get();
 
@@ -116,7 +93,7 @@ HTML;
             <tr data-title="{$this->e($mob->title)}" data-level="{$mob->level}">
                 <td class="td-level">{$mob->level}</td>
                 <td class="td-title">{$this->e($mob->title)}</td>
-                <td class="td-location">{$this->e($mob->city)}<span class="location-sep">›</span>{$this->e($mob->location)}</td>
+                <td class="td-location">{$this->e($mob->city_name)}<span class="location-sep">›</span>{$this->e($mob->location_name)}</td>
                 <td class="td-exp">{$this->fmt($mob->exp)}</td>
                 <td class="td-gold">{$this->fmt($mob->gold)} 💰</td>
                 <td class="td-drop">{$dropHtml}</td>
