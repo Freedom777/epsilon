@@ -12,9 +12,9 @@ class Mob extends Model
     protected $keyType = 'integer';
 
     protected $fillable = [
-        'id', 'raw_response', 'title', 'level',
-        'city', 'location', 'exp', 'gold',
-        'extra', 'status',
+        'id', 'location_id', 'title', 'level',
+        'exp', 'gold', 'status',
+        'raw_response',
     ];
 
     protected $casts = [

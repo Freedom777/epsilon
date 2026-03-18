@@ -12,14 +12,13 @@ class Asset extends Model
 
     protected $fillable = [
         'id',
-        'raw_response',
         'title',
         'normalized_title',
         'type',
         'subtype',
-        'description',
-        'drop_monster',
         'status',
+        'description',
+        'raw_response',
     ];
 
     protected $casts = [

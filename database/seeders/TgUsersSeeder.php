@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TgUsersSeeder extends Seeder
+class TgUsersSeeder extends BaseSeeder
 {
     private string $usersFile = 'database/seeders/data/users.csv';
 
@@ -66,32 +66,5 @@ class TgUsersSeeder extends Seeder
         }
 
         $this->command->info("  Добавлено: {$imported}, обновлено: {$updated}");
-    }
-
-    private function readCsv(string $relativePath): array
-    {
-        $path = base_path($relativePath);
-
-        if (!file_exists($path)) {
-            $this->command->error("Файл не найден: {$path}");
-            return [];
-        }
-
-        $rows = [];
-        $handle = fopen($path, 'r');
-        $headers = null;
-
-        while (($line = fgetcsv($handle)) !== false) {
-            if ($headers === null) {
-                $headers = array_map('trim', $line);
-                continue;
-            }
-            if (count($line) === count($headers)) {
-                $rows[] = array_combine($headers, $line);
-            }
-        }
-
-        fclose($handle);
-        return $rows;
     }
 }

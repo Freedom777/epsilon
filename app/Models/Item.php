@@ -16,19 +16,19 @@ class Item extends Model
 
     protected $fillable = [
         'id',
-        'raw_response',
         'title',
-        'description',
         'type',
         'subtype',
         'grade',
         'rarity',
-        'extra',
         'durability_max',
+        'price',
         'is_personal',
         'is_event',
-        'price',
         'status',
+        'extra',
+        'description',
+        'raw_response',
     ];
 
     protected $casts = [

@@ -15,13 +15,15 @@ class DatabaseSeeder extends Seeder
      * (listings ссылаются на products и tg_users).
      *
      * CSV-файлы должны лежать в database/seeders/data/:
-     *   - cities.csv
-     *   - locations.csv
-     *   - users.csv
-     *   - products_final.csv
-     *   - products_aliases.csv
-     *   - prices_clean.csv
-     */
+     * assets.csv
+     * cities.csv
+     * items.csv
+     * locations.csv
+     * mob_drop_assets.csv
+     * mob_drop_items.csv
+     * mobs.csv
+     * users.csv
+ */
 
     public function run(): void
     {
@@ -31,11 +33,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            TgUsersSeeder::class,       // 706 пользователей
-            ProductsSeeder::class,      // 498 товаров + 16 алиасов зелий
-            InitialPricesSeeder::class, // базовая линия цен для детектора аномалий
             CitiesSeeder::class,        // города
             LocationsSeeder::class,     // локации
+            AssetsSeeder::class,
+            ItemsSeeder::class,
+            MobsSeeder::class,
+            TgUsersSeeder::class,       // 706 пользователей
+            // InitialPricesSeeder::class, // базовая линия цен для детектора аномалий
+            LinkTablesSeeder::class,    // таблицы связей (дроп предметов и ресурсов с мобов)
         ]);
     }
 }

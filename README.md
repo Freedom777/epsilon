@@ -1,59 +1,41 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Сделать дроп итемов для мобов (отображение в бирже, фронт)
+Сделать gaps для assets и items, а также обработать extra поле
+После этого создать CSV
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+mobs
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+title: коллация utf8mb4_bin → utf8mb4_unicode_ci (важное изменение!)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Mobs check gaps SQL:
+SELECT GROUP_CONCAT(`id`) FROM `mobs` WHERE raw_response IS NULL
+Mobs gaps:
+3,8,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,245,273,340,442,443
+Mobs remove gaps:
+DELETE FROM `mobs` WHERE raw_response IS NULL
+Mobs get CSV SQL:
+SELECT `id`, `location_id`, `title`, `level`, `exp`, `gold`, `raw_response`
+FROM `mobs`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+Assets check gaps SQL:
+SELECT GROUP_CONCAT(`id`) FROM `assets` WHERE raw_response IS NULL
+Assets gaps:
+1,2,4,5,19,26,27,35,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,97,98,99,104,206,212,213,288,289,290,291,292,293,392,393,395,396,397,398,399,400,401,402,403,404,405,406,407,408,409,571,572,866,987,996,997,1003,1041,1042,1043,1044,1090,1121,1122,1123,1124,1183,1230,1232,1233,1234,1236,1237,1239,1240,1281,1283,1300,1302,1303,1371
+DELETE FROM `assets` WHERE raw_response IS NULL
+Assets get CSV SQL:
+SELECT `id`, `title`, `normalized_title`, `type`, `subtype`, `grade`,
+`is_event`, `is_personal`, `description`, `raw_response`
+FROM `assets`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Items check gaps SQL:
+SELECT GROUP_CONCAT(`id`) FROM `items` WHERE raw_response IS NULL
+Items gaps:
+5,8,11,16,30,31,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,67,76,84,93,102,110,111,113,115,116,119,121,124,126,127,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,207,473,474,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,497,498,499,500,501,502,503,556,569,572,618,619,622,623,624,625,628,724,725,726,743,744,745,746,748,755,758,761,762,810,818,837,838,839,840,841,842,843,844,845,846,847,851,857,861,862
+DELETE FROM `items` WHERE raw_response IS NULL
+Items get CSV SQL:
+SELECT `id`, `title`, `normalized_title`, `type`, `subtype`, `grade`, `rarity`,
+`durability_max`, `is_personal`, `is_event`, `price`,
+`extra`, `description`, `raw_response`
+FROM `items`

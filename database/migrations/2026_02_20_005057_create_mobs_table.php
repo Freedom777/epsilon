@@ -13,18 +13,16 @@ return new class extends Migration
     {
         Schema::create('mobs', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
-            $table->text('raw_response')->nullable();
-            $table->string('title')->nullable();
+            $table->foreignId('location_id')->nullable()->constrained('locations')->cascadeOnUpdate()->nullOnDelete();
+            $table->string('title')->nullable()->collation('utf8mb4_bin');
             $table->unsignedSmallInteger('level')->nullable();
             $table->string('city')->nullable();
             $table->string('location')->nullable();
-            $table->unsignedInteger('exp')->nullable();
-            $table->unsignedInteger('gold')->nullable();
-            $table->json('drop_asset')->nullable();
-            $table->json('drop_item')->nullable();
-            $table->text('extra')->nullable();
+            $table->unsignedSmallInteger('exp')->nullable();
+            $table->unsignedSmallInteger('gold')->nullable();
             $table->enum('status', ['process', 'ok', 'empty', 'error'])->default('process');
             $table->timestamps();
+            $table->text('raw_response')->nullable();
         });
     }
 

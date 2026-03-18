@@ -10,14 +10,10 @@ return new class extends Migration
     {
         Schema::create('mob_drop_index', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('mob_id');
-            $table->unsignedBigInteger('asset_id')->nullable();
+            $table->foreignId('mob_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('asset_id')->nullable()->constrained()->nullOnDelete();
             $table->string('drop_text');   // оригинальная строка из drop_asset
             $table->string('normalized'); // нормализованное название для поиска
-            $table->timestamps();
-
-            $table->foreign('mob_id')->references('id')->on('mobs')->onDelete('cascade');
-            $table->foreign('asset_id')->references('id')->on('assets')->onDelete('set null');
 
             $table->index('normalized');
             $table->index('mob_id');

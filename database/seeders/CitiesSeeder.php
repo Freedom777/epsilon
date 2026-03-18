@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\City;
 use Illuminate\Database\Seeder;
 
-class CitiesSeeder extends Seeder
+class CitiesSeeder extends BaseSeeder
 {
     private string $usersFile = 'database/seeders/data/cities.csv';
 
@@ -34,32 +34,5 @@ class CitiesSeeder extends Seeder
         }
 
         $this->command->info("  Добавлено: {$imported}");
-    }
-
-    private function readCsv(string $relativePath): array
-    {
-        $path = base_path($relativePath);
-
-        if (!file_exists($path)) {
-            $this->command->error("Файл не найден: {$path}");
-            return [];
-        }
-
-        $rows = [];
-        $handle = fopen($path, 'r');
-        $headers = null;
-
-        while (($line = fgetcsv($handle)) !== false) {
-            if ($headers === null) {
-                $headers = array_map('trim', $line);
-                continue;
-            }
-            if (count($line) === count($headers)) {
-                $rows[] = array_combine($headers, $line);
-            }
-        }
-
-        fclose($handle);
-        return $rows;
     }
 }
