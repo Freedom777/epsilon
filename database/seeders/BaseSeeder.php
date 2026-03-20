@@ -44,7 +44,7 @@ abstract class BaseSeeder extends Seeder
     protected function normalize(string $name): string
     {
         // Убираем эмодзи
-        $name = preg_replace('/[\x{1F000}-\x{1FFFF}\x{2600}-\x{27FF}\x{2300}-\x{23FF}\x{FE00}-\x{FEFF}]+/u', '', $name);
+        $name = preg_replace('/[\x{200D}\x{20E3}\x{1F000}-\x{1FFFF}\x{2600}-\x{27FF}\x{2300}-\x{23FF}\x{FE00}-\x{FEFF}]+/u', '', $name);
         // Убираем лишние пробелы и приводим к нижнему регистру
         return mb_strtolower(trim(preg_replace('/\s+/', ' ', $name)));
     }

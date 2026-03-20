@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             TgUsersSeeder::class,       // 706 пользователей
             // InitialPricesSeeder::class, // базовая линия цен для детектора аномалий
             LinkTablesSeeder::class,    // таблицы связей (дроп предметов и ресурсов с мобов)
+            NpcsSeeder::class,  // Жители
         ]);
     }
 }

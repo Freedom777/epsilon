@@ -17,4 +17,9 @@ class City extends Model
     {
         return $this->hasMany(Location::class);
     }
+
+    public function npcs(): HasMany
+    {
+        return $this->hasMany(Npc::class);
+    }
 }
