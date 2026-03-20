@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('normalized_title')->nullable();
             $table->timestamps();
+            $table->text('description')->nullable();
         });
     }
 
