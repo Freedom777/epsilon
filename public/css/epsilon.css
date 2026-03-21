@@ -371,5 +371,47 @@ td span[title] {
     font-size: 1em;
 }
 
-/* Скрытые строки (поиск бестиария) */
+/* Скрытые строки (поиск) */
 tr.hidden { display: none; }
+
+/* =========================================================================
+   Крафт
+   ========================================================================= */
+
+.craft-table { table-layout: fixed; }
+.craft-table th:nth-child(1) { width: 28%; }   /* Предмет */
+.craft-table th:nth-child(2) { width: 16%; }   /* NPC */
+.craft-table th:nth-child(3) { width: 14%; }   /* Уровень */
+.craft-table th:nth-child(4) { width: 8%; }    /* Энергия */
+.craft-table th:nth-child(5) { width: auto; }  /* Компоненты */
+
+.td-npc { color: var(--accent2); font-size: 0.88em; }
+.td-energy { white-space: nowrap; }
+
+/* Крафт — компоненты (переиспользуем drop-details) */
+.comp-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.8rem;
+    margin-top: 0.4rem;
+}
+
+.comp-list li {
+    font-size: 0.85em;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+
+.comp-list li.highlight { color: var(--accent); }
+
+.comp-qty {
+    color: var(--accent-dim);
+    font-size: 0.9em;
+    margin-left: 2px;
+}
+
+.text-muted { color: var(--text-muted); }
+
+/* Поиск: табы с результатами подсвечиваются */
+.tab.tab-has-results { border-color: var(--accent2); color: var(--accent2); }

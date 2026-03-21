@@ -151,6 +151,7 @@ HTML;
 <nav class="site-nav">
     <a href="/market.html">🏪 Рынок</a>
     <a href="/mobs.html" class="active">⚔ Бестиарий</a>
+    <a href="/craft.html">🔨 Крафт</a>
 </nav>
 
 <div class="page-header">

@@ -2,6 +2,7 @@
 php artisan migrate
 php artisan db:seed
 
+php artisan migrate:fresh --seed
 
 composer require filament/filament:"^3.0"
 php artisan filament:install --panels  # ID панели: admin

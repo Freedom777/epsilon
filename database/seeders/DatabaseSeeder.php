@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             // InitialPricesSeeder::class, // базовая линия цен для детектора аномалий
             LinkTablesSeeder::class,    // таблицы связей (дроп предметов и ресурсов с мобов)
             NpcsSeeder::class,  // Жители
+            CraftRecipesSeeder::class, // Рецепты
         ]);
     }
 }

@@ -319,6 +319,7 @@ class MarketController extends Controller
     <nav class="site-nav">
         <a href="/market.html" class="active">🏪 Рынок</a>
         <a href="/mobs.html">⚔ Бестиарий</a>
+        <a href="/craft.html">🔨 Крафт</a>
     </nav>
 
     <div class="page-header">
