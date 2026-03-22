@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\MainStatusEnum;
 use App\Models\Mob;
+use danog\MadelineProto\Broadcast\Status;
 
 class MobsSeeder extends BaseSeeder
 {
@@ -22,6 +24,7 @@ class MobsSeeder extends BaseSeeder
             $level          = (int) trim($row['level']);
             $exp            = (int) trim($row['exp']);
             $gold           = (int) trim($row['gold']);
+            $status         = MainStatusEnum::OK;
             $rawResponse    = trim($row['raw_response']);
 
             if ($id) {
@@ -32,6 +35,7 @@ class MobsSeeder extends BaseSeeder
                     'level'         => $level,
                     'exp'           => $exp,
                     'gold'          => $gold,
+                    'status'        => $status,
                     'raw_response'  => $rawResponse,
                 ]);
                 $imported++;

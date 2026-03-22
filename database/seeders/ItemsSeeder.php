@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\MainStatusEnum;
 use App\Models\Item;
 
 class ItemsSeeder extends BaseSeeder
@@ -27,6 +28,7 @@ class ItemsSeeder extends BaseSeeder
             $price              = (int) trim($row['price']);
             $isPersonal         = (bool) trim($row['is_personal']);
             $isEvent            = (bool) trim($row['is_event']);
+            $status             = MainStatusEnum::OK;
             $extra              = trim($row['extra']) ?: null;
             $description        = trim($row['description']) ?: null;
             $rawResponse        = trim($row['raw_response']);
@@ -44,6 +46,7 @@ class ItemsSeeder extends BaseSeeder
                     'price'             => $price,
                     'is_personal'       => $isPersonal,
                     'is_event'          => $isEvent,
+                    'status'            => $status,
                     'extra'             => $extra,
                     'description'       => $description,
                     'raw_response'      => $rawResponse,

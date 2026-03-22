@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\MainStatusEnum;
 use App\Models\Asset;
 
 class AssetsSeeder extends BaseSeeder
@@ -23,6 +24,7 @@ class AssetsSeeder extends BaseSeeder
             $grade              = trim($row['grade']) ?: null;
             $isPersonal         = (bool) trim($row['is_personal']);
             $isEvent            = (bool) trim($row['is_event']);
+            $status             = MainStatusEnum::OK;
             $description        = trim($row['description']) ?: null;
             $rawResponse        = trim($row['raw_response']);
 
@@ -36,6 +38,7 @@ class AssetsSeeder extends BaseSeeder
                     'grade'             => $grade,
                     'is_personal'       => $isPersonal,
                     'is_event'          => $isEvent,
+                    'status'            => $status,
                     'description'       => $description,
                     'raw_response'      => $rawResponse,
                 ]);
