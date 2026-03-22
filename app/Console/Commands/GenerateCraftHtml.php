@@ -53,8 +53,8 @@ class GenerateCraftHtml extends Command
         // Сортируем внутри каждой группы по названию
         foreach ($grouped as &$group) {
             usort($group, function ($a, $b) {
-                $nameA = ($a->item ?? $a->asset)?->title ?? '';
-                $nameB = ($b->item ?? $b->asset)?->title ?? '';
+                $nameA = ($a->item ?? $a->asset)?->normalized_title ?? '';
+                $nameB = ($b->item ?? $b->asset)?->normalized_title ?? '';
                 return strcmp($nameA, $nameB);
             });
         }
