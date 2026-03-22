@@ -138,7 +138,11 @@ return [
             'path'   => storage_path('logs/mobs.log'),
             'days'   => 30,
         ],
-
+        'craft' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/craft.log'),
+            'days'   => 30,
+        ],
     ],
 
 ];

@@ -242,6 +242,7 @@ class GenerateCraftHtml extends Command
     const saved = localStorage.getItem('craft_tab');
     const target = saved && document.getElementById(saved) ? saved : '{$defaultTabId}';
     switchTab(target);
+    fetch('/api/craft/ping', { method: 'POST' });
 </script>
 
 </body>

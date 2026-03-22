@@ -46,6 +46,15 @@ Route::withoutMiddleware(ValidateCsrfToken::class)
         return response()->noContent();
     });
 
+Route::withoutMiddleware(ValidateCsrfToken::class)
+    ->post('/craft/ping', function () {
+        Log::channel('craft')->info('view', [
+            'ip'    => request()->ip(),
+            'agent' => request()->userAgent(),
+        ]);
+        return response()->noContent();
+    });
+
 
 Route::get('/mobs/search', function () {
     $q = request()->string('q')->trim()->lower()->toString();

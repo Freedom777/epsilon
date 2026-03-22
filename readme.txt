@@ -26,3 +26,20 @@ php artisan migrate:fresh --seed
 Латинская "с" в названиях товаров
 личный cброс параметров
 стих посвященный фелиции
+
+Migrations save DB
+688516706_
+listings
+product_pendings
+
+exchanges
+services
+service_listings
+tg_messages
+tg_users
+users
+
+php artisan mobs:generate
+php artisan craft:generate
+php artisan market:generate
+
