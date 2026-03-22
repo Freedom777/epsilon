@@ -103,7 +103,7 @@ class GenerateCraftHtml extends Command
                 . "<th>🏛 Город</th>"
                 . "<th>⚒ NPC</th>"
                 . "<th>📊 Уровень</th>"
-                . "<th>🔋 Энергия</th>"
+                . "<th>🔋</th>"
                 . "<th>📦 Компоненты</th>"
                 . "</tr></thead><tbody>{$rows}</tbody></table></div>"
                 . "</div>";
