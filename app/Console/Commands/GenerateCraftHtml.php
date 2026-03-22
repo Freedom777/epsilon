@@ -100,6 +100,7 @@ class GenerateCraftHtml extends Command
             $tablesHtml .= "<div class=\"tab-content\" id=\"{$tabId}\">"
                 . "<div class=\"table-wrap\"><table class=\"craft-table\"><thead><tr>"
                 . "<th>{$config['icon']} Предмет</th>"
+                . "<th>🏛 Город</th>"
                 . "<th>⚒ NPC</th>"
                 . "<th>📊 Уровень</th>"
                 . "<th>🔋 Энергия</th>"
@@ -254,8 +255,11 @@ HTML;
     {
         $product = $recipe->item ?? $recipe->asset;
         $title   = $this->e($product?->title ?? '—');
+        $city = $recipe->npc?->city?->title
+            ? $this->e($recipe->npc->city->title)
+            : '<span class="text-muted">—</span>';
         $npc = $recipe->npc
-            ? '<span title="' . $this->e($recipe->npc->city?->title ?? '') . '">' . $this->e($recipe->npc->title) . '</span>'
+            ? $this->e($recipe->npc->title)
             : '<span class="text-muted">—</span>';
         $level   = $recipe->craft_level ? $this->e($recipe->craft_level) : '—';
         $energy  = $recipe->energy_cost ? "{$recipe->energy_cost} 🔋" : '—';
@@ -288,6 +292,7 @@ HTML;
         return <<<HTML
             <tr data-search="{$searchData}" data-title="{$titleData}">
                 <td class="td-title">{$title}</td>
+                <td class="td-city">{$city}</td>
                 <td class="td-npc">{$npc}</td>
                 <td class="td-level">{$level}</td>
                 <td class="td-energy">{$energy}</td>
