@@ -294,7 +294,7 @@ HTML;
                 <td class="td-title">{$title}</td>
                 <td class="td-city">{$city}</td>
                 <td class="td-npc">{$npc}</td>
-                <td class="td-level">{$level}</td>
+                <td class="td-craft-level">{$level}</td>
                 <td class="td-energy">{$energy}</td>
                 <td class="td-components">{$compHtml}</td>
             </tr>
