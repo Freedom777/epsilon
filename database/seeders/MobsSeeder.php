@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\MainStatusEnum;
 use App\Models\Mob;
-use danog\MadelineProto\Broadcast\Status;
 
 class MobsSeeder extends BaseSeeder
 {
