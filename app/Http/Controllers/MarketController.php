@@ -167,6 +167,15 @@ class MarketController extends Controller
 
         usort($result, fn($a, $b) => strcmp($a['product_name'] ?? '', $b['product_name'] ?? ''));
 
+        \Log::info('Market counts', [
+            'asset_ids' => $allAssetIds->count(),
+            'item_ids'  => $allItemIds->count(),
+            'buy_asset' => $buyPricesAsset->count(),
+            'sell_asset' => $sellPricesAsset->count(),
+            'buy_item'  => $buyPricesItem->count(),
+            'sell_item' => $sellPricesItem->count(),
+        ]);
+
         return $result;
     }
 
