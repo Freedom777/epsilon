@@ -126,5 +126,10 @@ return [
     ],
     'cron' => [
         'enabled' => env('PARSER_CRON_ENABLED', true),
-    ]
+    ],
+    'price_ref' => [
+        // 'manual_only' — только подтверждённые админом
+        // 'all'         — все (включая авто-расчёт)
+        'display_mode' => env('PRICE_REF_DISPLAY_MODE', 'manual_only'),
+    ],
 ];

@@ -31,6 +31,17 @@ class TelegramFetcher
     }
 
     /**
+     * Публичный доступ к API — для BaseFetchCommand и других команд.
+     */
+    public function getApi(): API
+    {
+        $api = $this->getMadelineProto();
+        $api->start();
+
+        return $api;
+    }
+
+    /**
      * Инициализация MadelineProto с MySQL бэкендом для хранения сессии.
      */
     private function initMadelineProto(): void

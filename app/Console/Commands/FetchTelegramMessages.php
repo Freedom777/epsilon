@@ -11,27 +11,30 @@ class FetchTelegramMessages extends Command
 {
     protected $signature = 'telegram:fetch
                             {--login        : Выполнить первичную авторизацию}
-                            {--days=        : Загрузить сообщения за последние N дней (переопределяет PARSER_FETCH_DAYS из .env)}
+                            {--days=        : Загрузить сообщения за последние N дней}
                             {--from=        : Загрузить с даты (формат: Y-m-d или Y-m-d H:i:s)}
-                            {--to=          : Загрузить по дату включительно (формат: Y-m-d, по умолчанию: сейчас)}';
+                            {--to=          : Загрузить по дату включительно (формат: Y-m-d)}';
 
     protected $description = 'Загружает сообщения из Telegram-чата';
 
-    public function handle(TelegramFetcher $fetcher): int
+    public function __construct(private readonly TelegramFetcher $fetcher)
     {
-        // --- Авторизация ---
+        parent::__construct();
+    }
+
+    public function handle(): int
+    {
         if ($this->option('login')) {
             $this->info('Запуск авторизации в Telegram...');
             try {
-                $fetcher->login();
+                $this->fetcher->login();
                 $this->info('Авторизация успешна!');
             } finally {
-                $fetcher->disconnect();
+                $this->fetcher->disconnect();
             }
             return self::SUCCESS;
         }
 
-        // --- Определяем период ---
         [$from, $to] = $this->resolvePeriod();
 
         if (!$from) {
@@ -41,23 +44,19 @@ class FetchTelegramMessages extends Command
         $this->info("Загрузка сообщений с {$from->toDateTimeString()} по {$to->toDateTimeString()}");
 
         try {
-            $fetcher->fetchMessagesBetween($from, $to);
+            $this->fetcher->fetchMessagesBetween($from, $to);
             $this->info('Загрузка завершена.');
         } catch (\Throwable $e) {
             $this->error('Ошибка: ' . $e->getMessage());
             $this->error($e->getTraceAsString());
             return self::FAILURE;
         } finally {
-            $fetcher->disconnect();
+            $this->fetcher->disconnect();
         }
 
         return self::SUCCESS;
     }
 
-    /**
-     * Определяем период из опций.
-     * Приоритет: --from/--to > --days > автоматический (из БД или .env)
-     */
     private function resolvePeriod(): array
     {
         $to = now();
@@ -90,7 +89,6 @@ class FetchTelegramMessages extends Command
             return [now()->subDays($days)->startOfDay(), $to];
         }
 
-        // Автоматически: с последнего сообщения в БД или за FETCH_DAYS дней
         $lastMessage = TgMessage::orderByDesc('sent_at')->first();
 
         if ($lastMessage) {

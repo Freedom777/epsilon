@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Asset;
 use App\Models\Item;
 use App\Models\Listing;
+use App\Models\PriceReference;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -111,11 +112,28 @@ class MarketController extends Controller
         $allAssetIds = $buyPricesAsset->keys()->merge($sellPricesAsset->keys())->unique()->values();
         $allItemIds  = $buyPricesItem->keys()->merge($sellPricesItem->keys())->unique()->values();
 
+        // Справочные цены
+        // config: 'manual_only' — только подтверждённые админом, 'all' — все
+        $refMode = config('parser.price_ref.display_mode', 'manual_only');
+
+        $refQueryAsset = PriceReference::whereIn('asset_id', $allAssetIds);
+        $refQueryItem  = PriceReference::whereIn('item_id', $allItemIds);
+
+        if ($refMode === 'manual_only') {
+            $refQueryAsset->where('is_manual', true);
+            $refQueryItem->where('is_manual', true);
+        }
+
+        $refsByAsset = $refQueryAsset->get()->keyBy('asset_id');
+        $refsByItem  = $refQueryItem->get()->keyBy('item_id');
+
         $result = [];
 
         foreach ($allAssetIds as $assetId) {
             $asset = Asset::find($assetId);
             if (!$asset) continue;
+
+            $ref = $refsByAsset->get($assetId);
 
             $row = [
                 'asset_id'     => $asset->id,
@@ -127,6 +145,8 @@ class MarketController extends Controller
                 'currency'     => $currency ?? 'gold',
                 'buy'          => null,
                 'sell'         => null,
+                'ref_buy_avg'  => $ref?->buy_avg,
+                'ref_sell_avg' => $ref?->sell_avg,
             ];
 
             if ($buyPricesAsset->has($assetId)) {
@@ -143,6 +163,8 @@ class MarketController extends Controller
             $item = Item::find($itemId);
             if (!$item) continue;
 
+            $ref = $refsByItem->get($itemId);
+
             $row = [
                 'asset_id'     => null,
                 'item_id'      => $item->id,
@@ -153,6 +175,8 @@ class MarketController extends Controller
                 'currency'     => $currency ?? 'gold',
                 'buy'          => null,
                 'sell'         => null,
+                'ref_buy_avg'  => $ref?->buy_avg,
+                'ref_sell_avg' => $ref?->sell_avg,
             ];
 
             if ($buyPricesItem->has($itemId)) {
@@ -175,7 +199,7 @@ class MarketController extends Controller
         string  $column,
         ?string $currency,
         ?array  $ids,
-        \Carbon\Carbon $since
+        \Carbon\CarbonInterface $since
     ): \Illuminate\Support\Collection {
         $aggregate = $type === 'buy' ? 'MAX' : 'MIN';
 
@@ -284,8 +308,8 @@ class MarketController extends Controller
                 $name     = "<span{$desc}>" . e($item['product_name']) . "</span>";
                 $idAttr   = $item['asset_id'] ? 'asset_id' : 'item_id';
                 $idVal    = $item['asset_id'] ?: $item['item_id'];
-                $buyCell  = $this->formatPriceCell($item['buy'],  $idAttr, $idVal, 'buy');
-                $sellCell = $this->formatPriceCell($item['sell'], $idAttr, $idVal, 'sell');
+                $buyCell  = $this->formatPriceCell($item['buy'],  $idAttr, $idVal, 'buy',  $item['ref_buy_avg'] ?? null);
+                $sellCell = $this->formatPriceCell($item['sell'], $idAttr, $idVal, 'sell', $item['ref_sell_avg'] ?? null);
                 $rows    .= "<tr><td>{$name}</td>{$buyCell}{$sellCell}</tr>\n";
             }
 
@@ -450,6 +474,7 @@ HTML;
     <nav class="site-nav">
         <a href="/market.html" class="active">🏪 Рынок</a>
         <a href="/mobs.html">⚔ Бестиарий</a>
+        <a href="/craft.html">🔨 Крафт</a>
     </nav>
     <div class="page-header">
         <h1>🏪 Рынок Epsilion War</h1>
@@ -460,9 +485,14 @@ HTML;
 HTML;
     }
 
-    private function formatPriceCell(?array $data, string $idAttr = '', int $idVal = 0, string $listingType = ''): string
+    private function formatPriceCell(?array $data, string $idAttr = '', int $idVal = 0, string $listingType = '', ?int $refAvg = null): string
     {
         if (!$data) {
+            // Даже без актуального листинга показываем ref-цену
+            if ($refAvg) {
+                $refFormatted = number_format($refAvg, 0, '.', ' ');
+                return "<td class=\"no-data\"><span class=\"ref-price\" title=\"Средняя по рынку\">~{$refFormatted} 💰</span></td>";
+            }
             return '<td class="no-data">—</td>';
         }
 
@@ -486,8 +516,14 @@ HTML;
 
         $dataAttrs = "data-id-attr=\"{$idAttr}\" data-id-val=\"{$idVal}\" data-type=\"{$listingType}\"";
 
+        $refHtml = '';
+        if ($refAvg) {
+            $refFormatted = number_format($refAvg, 0, '.', ' ');
+            $refHtml = "<br><span class=\"ref-price\" title=\"Средняя по рынку\">~{$refFormatted} 💰</span>";
+        }
+
         return "<td class=\"price-cell\" {$dataAttrs}>
-            <span class=\"price\"{$statusAttr}>{$price} {$currencySymbol}</span><br>
+            <span class=\"price\"{$statusAttr}>{$price} {$currencySymbol}</span>{$refHtml}<br>
             <span class=\"user\">{$userHtml}</span><br>
             <span class=\"date\">{$dateHtml}</span>
         </td>";

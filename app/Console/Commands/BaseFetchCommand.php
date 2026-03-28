@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\MainStatusEnum;
+use App\Services\TelegramFetcher;
 use danog\MadelineProto\API;
 use Illuminate\Console\Command;
 
@@ -9,16 +11,128 @@ abstract class BaseFetchCommand extends Command
 {
     private const RESPONSE_TIMEOUT = 15;
 
+    public function __construct(protected readonly TelegramFetcher $fetcher)
+    {
+        parent::__construct();
+    }
+
+    // =========================================================================
+    // Абстрактные методы — реализуются в наследниках
+    // =========================================================================
+
+    /** Класс модели: Asset::class, Item::class, Mob::class */
+    abstract protected function modelClass(): string;
+
+    /** Команда бота: '/getasset', '/getequip', '/getmob' */
+    abstract protected function botCommand(): string;
+
+    /** Текст "не найден": '❗️ Ресурс не найден' */
+    abstract protected function notFoundText(): string;
+
+    /** Парсинг ответа бота → массив полей для update */
+    abstract protected function parseResponse(string $text): array;
+
+    /** Дополнительные поля для обнуления при status=PROCESS */
+    protected function processDefaults(): array
+    {
+        return ['raw_response' => null];
+    }
+
+    // =========================================================================
+    // Template Method — общий цикл fetch
+    // =========================================================================
+
+    protected function handleFetch(): int
+    {
+        $opts = $this->resolveOptions();
+
+        if (!$this->validateOptions($opts)) {
+            return self::FAILURE;
+        }
+
+        $model = $this->modelClass();
+        $total = $opts['to'] - $opts['from'] + 1;
+
+        $this->info("Запуск: ID {$opts['from']}..{$opts['to']}, чат: {$opts['chatName']}");
+
+        $mp  = $this->getMadelineProto();
+        $bar = $this->createProgressBar($total);
+
+        try {
+            for ($n = $opts['from']; $n <= $opts['to']; $n++) {
+                $bar->setMessage((string) $n);
+
+                if ($opts['skipDone']) {
+                    $existing = $model::find($n);
+                    if ($existing && $existing->status === MainStatusEnum::OK) {
+                        $bar->advance();
+                        continue;
+                    }
+                }
+
+                $model::updateOrCreate(
+                    ['id' => $n],
+                    ['status' => MainStatusEnum::PROCESS, ...$this->processDefaults()]
+                );
+
+                try {
+                    $response = $this->sendCommandAndGetResponse(
+                        $mp,
+                        $opts['chatName'],
+                        $this->botCommand() . " {$n}"
+                    );
+
+                    if ($response === null) {
+                        $model::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
+                        $this->newLine();
+                        $this->warn("ID {$n}: нет ответа за " . self::RESPONSE_TIMEOUT . " сек");
+                    } elseif (trim($response) === '' || $response === $this->notFoundText()) {
+                        $model::where('id', $n)->update(['status' => MainStatusEnum::EMPTY]);
+                    } else {
+                        $parsed = $this->parseResponse($response);
+
+                        $model::where('id', $n)->update([
+                            'raw_response' => $response,
+                            'status'       => MainStatusEnum::OK,
+                            ...$parsed,
+                        ]);
+                    }
+                } catch (\Throwable $e) {
+                    $model::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
+                    $this->newLine();
+                    $this->error("ID {$n}: {$e->getMessage()}");
+                }
+
+                $bar->advance();
+
+                if ($n < $opts['to']) {
+                    $this->randomDelay($opts['delayMin'], $opts['delayMax']);
+                }
+            }
+        } finally {
+            $this->fetcher->disconnect();
+        }
+
+        $bar->finish();
+        $this->newLine(2);
+        $this->info('Готово!');
+
+        return self::SUCCESS;
+    }
+
+    // =========================================================================
+    // Общие хелперы
+    // =========================================================================
+
     protected function resolveOptions(): array
     {
         return [
-            'from'        => (int) $this->option('from'),
-            'to'          => (int) $this->option('to'),
-            'chatName'    => $this->option('chat') ?: config('parser.telegram.epsilon_bot_chat_name'),
-            'sessionPath' => $this->option('session') ?: config('parser.telegram.session_path'),
-            'delayMin'    => (int) $this->option('delay-min'),
-            'delayMax'    => (int) $this->option('delay-max'),
-            'skipDone'    => (bool) $this->option('skip-done'),
+            'from'     => (int) $this->option('from'),
+            'to'       => (int) $this->option('to'),
+            'chatName' => $this->option('chat') ?: config('parser.telegram.epsilon_bot_chat_name'),
+            'delayMin' => (int) $this->option('delay-min'),
+            'delayMax' => (int) $this->option('delay-max'),
+            'skipDone' => (bool) $this->option('skip-done'),
         ];
     }
 
@@ -37,11 +151,9 @@ abstract class BaseFetchCommand extends Command
         return true;
     }
 
-    protected function initMadelineProto(string $sessionPath): API
+    protected function getMadelineProto(): API
     {
-        $mp = new API($sessionPath);
-        $mp->start();
-        return $mp;
+        return $this->fetcher->getApi();
     }
 
     protected function createProgressBar(int $total): \Symfony\Component\Console\Helper\ProgressBar
@@ -57,10 +169,6 @@ abstract class BaseFetchCommand extends Command
         usleep(rand($delayMin * 1000, $delayMax * 1000) * 1000);
     }
 
-    /**
-     * Отправляет команду в чат и ждёт ответа бота.
-     * Возвращает текст первого нового сообщения или null при таймауте.
-     */
     protected function sendCommandAndGetResponse(API $madelineProto, string|int $chatId, string $command): ?string
     {
         $historyBefore = $madelineProto->messages->getHistory(

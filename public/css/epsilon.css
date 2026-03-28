@@ -163,6 +163,7 @@ td span[title] {
 
 /* Рынок — цены */
 .price { font-weight: bold; color: var(--accent); }
+.ref-price { color: var(--text-muted); font-size: 0.78em; font-style: italic; }
 .price-cell { cursor: pointer; position: relative; }
 .price-cell:hover { background: var(--hover); }
 .user a { color: var(--accent2); text-decoration: none; }
