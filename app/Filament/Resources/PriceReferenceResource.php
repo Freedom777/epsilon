@@ -231,7 +231,7 @@ class PriceReferenceResource extends Resource
         $order  = $type === 'buy' ? 'desc' : 'asc';
 
         // Берём с запасом, потом оставляем уникальные по цена+игрок
-        $listings = Listing::with('tgUser')
+        $listings = Listing::with(['tgUser', 'tgMessage'])
             ->where($column, $id)
             ->where('type', $type)
             ->where('currency', 'gold')
@@ -258,14 +258,19 @@ class PriceReferenceResource extends Resource
         }
 
         $rows = $unique->map(function (Listing $listing) {
-            $price = number_format($listing->price, 0, '.', ' ');
-            $user  = e($listing->tgUser?->display_name ?? $listing->tgUser?->username ?? '—');
-            $date  = $listing->posted_at?->format('d.m.Y H:i') ?? '';
+            $price   = number_format($listing->price, 0, '.', ' ');
+            $user    = e($listing->tgUser?->display_name ?? $listing->tgUser?->username ?? '—');
+            $date    = $listing->posted_at?->format('d.m.Y H:i') ?? '';
+            $tgLink  = $listing->tgMessage?->tg_link;
+
+            $dateHtml = $tgLink
+                ? "<a href=\"{$tgLink}\" target=\"_blank\" style=\"color:#888;text-decoration:none\">{$date}</a>"
+                : "<span>{$date}</span>";
 
             return "<tr>
                 <td style='padding:3px 10px;font-weight:bold;color:#f0c040'>{$price} 💰</td>
                 <td style='padding:3px 10px;color:#7ec8e3'>{$user}</td>
-                <td style='padding:3px 10px;color:#888;font-size:0.85em'>{$date}</td>
+                <td style='padding:3px 10px;font-size:0.85em'>{$dateHtml}</td>
             </tr>";
         })->implode('');
 
