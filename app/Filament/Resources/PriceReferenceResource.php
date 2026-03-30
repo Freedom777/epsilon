@@ -230,6 +230,7 @@ class PriceReferenceResource extends Resource
         $id     = $record->item_id ?? $record->asset_id;
         $order  = $type === 'buy' ? 'desc' : 'asc';
 
+        // Берём с запасом, потом оставляем уникальные по цена+игрок
         $listings = Listing::with('tgUser')
             ->where($column, $id)
             ->where('type', $type)
@@ -237,14 +238,26 @@ class PriceReferenceResource extends Resource
             ->where('status', '!=', 'invalid')
             ->whereNotNull('price')
             ->orderBy('price', $order)
-            ->limit($limit)
+            ->orderByDesc('posted_at')
+            ->limit($limit * 3)
             ->get();
 
-        if ($listings->isEmpty()) {
+        // Дедупликация: уникальная пара цена + игрок
+        $seen    = [];
+        $unique  = $listings->filter(function (Listing $listing) use (&$seen) {
+            $key = $listing->price . '|' . ($listing->tg_user_id ?? 0);
+            if (in_array($key, $seen)) {
+                return false;
+            }
+            $seen[] = $key;
+            return true;
+        })->take($limit);
+
+        if ($unique->isEmpty()) {
             return new HtmlString('<span style="color:#888">Нет данных</span>');
         }
 
-        $rows = $listings->map(function (Listing $listing) {
+        $rows = $unique->map(function (Listing $listing) {
             $price = number_format($listing->price, 0, '.', ' ');
             $user  = e($listing->tgUser?->display_name ?? $listing->tgUser?->username ?? '—');
             $date  = $listing->posted_at?->format('d.m.Y H:i') ?? '';
