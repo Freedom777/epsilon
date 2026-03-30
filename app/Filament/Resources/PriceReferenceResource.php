@@ -99,6 +99,19 @@ class PriceReferenceResource extends Resource
                         'asset' => $query->whereNotNull('asset_id'),
                         default => $query,
                     }),
+
+                Tables\Filters\SelectFilter::make('product_type')
+                    ->label('Категория')
+                    ->options(fn () => static::getProductTypeOptions())
+                    ->query(function ($query, $data) {
+                        $type = $data['value'] ?? null;
+                        if (!$type) return $query;
+
+                        return $query->where(function ($q) use ($type) {
+                            $q->whereHas('item', fn ($q) => $q->where('type', $type))
+                                ->orWhereHas('asset', fn ($q) => $q->where('type', $type));
+                        });
+                    }),
             ])
             ->defaultSort('updated_at', 'desc')
             ->actions([
@@ -173,5 +186,16 @@ class PriceReferenceResource extends Resource
             'index' => Pages\ListPriceReferences::route('/'),
             'edit'  => Pages\EditPriceReference::route('/{record}/edit'),
         ];
+    }
+
+    private static function getProductTypeOptions(): array
+    {
+        $itemTypes  = Item::where('status', 'ok')->distinct()->pluck('type')->filter()->toArray();
+        $assetTypes = Asset::where('status', 'ok')->distinct()->pluck('type')->filter()->toArray();
+
+        $types = array_unique(array_merge($itemTypes, $assetTypes));
+        sort($types);
+
+        return array_combine($types, $types);
     }
 }
