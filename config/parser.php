@@ -131,5 +131,6 @@ return [
         // 'manual_only' — только подтверждённые админом
         // 'all'         — все (включая авто-расчёт)
         'display_mode' => env('PRICE_REF_DISPLAY_MODE', 'manual_only'),
+        'recent_listings' => env('PRICE_REF_RECENT_LISTINGS', 10),
     ],
 ];

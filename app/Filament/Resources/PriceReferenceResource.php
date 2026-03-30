@@ -5,12 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PriceReferenceResource\Pages;
 use App\Models\Asset;
 use App\Models\Item;
+use App\Models\Listing;
 use App\Models\PriceReference;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 
 class PriceReferenceResource extends Resource
 {
@@ -137,6 +139,24 @@ class PriceReferenceResource extends Resource
                 ])
                 ->visibleOn('edit'),
 
+            Forms\Components\Section::make('📈 Последние покупки')
+                ->schema([
+                    Forms\Components\Placeholder::make('recent_buy')
+                        ->label('')
+                        ->content(fn (?PriceReference $record) => static::renderRecentListings($record, 'buy')),
+                ])
+                ->collapsible()
+                ->visibleOn('edit'),
+
+            Forms\Components\Section::make('📉 Последние продажи')
+                ->schema([
+                    Forms\Components\Placeholder::make('recent_sell')
+                        ->label('')
+                        ->content(fn (?PriceReference $record) => static::renderRecentListings($record, 'sell')),
+                ])
+                ->collapsible()
+                ->visibleOn('edit'),
+
             Forms\Components\Section::make('Цены покупки (💰)')
                 ->description('Максимальная цена, по которой игроки покупают')
                 ->columns(3)
@@ -197,5 +217,56 @@ class PriceReferenceResource extends Resource
         sort($types);
 
         return array_combine($types, $types);
+    }
+
+    private static function renderRecentListings(?PriceReference $record, string $type): HtmlString
+    {
+        if (!$record) {
+            return new HtmlString('<span style="color:#888">—</span>');
+        }
+
+        $limit  = (int) config('parser.price_ref.recent_listings', 10);
+        $column = $record->item_id ? 'item_id' : 'asset_id';
+        $id     = $record->item_id ?? $record->asset_id;
+        $order  = $type === 'buy' ? 'desc' : 'asc';
+
+        $listings = Listing::with('tgUser')
+            ->where($column, $id)
+            ->where('type', $type)
+            ->where('currency', 'gold')
+            ->where('status', '!=', 'invalid')
+            ->whereNotNull('price')
+            ->orderBy('price', $order)
+            ->limit($limit)
+            ->get();
+
+        if ($listings->isEmpty()) {
+            return new HtmlString('<span style="color:#888">Нет данных</span>');
+        }
+
+        $rows = $listings->map(function (Listing $listing) {
+            $price = number_format($listing->price, 0, '.', ' ');
+            $user  = e($listing->tgUser?->display_name ?? $listing->tgUser?->username ?? '—');
+            $date  = $listing->posted_at?->format('d.m.Y H:i') ?? '';
+
+            return "<tr>
+                <td style='padding:3px 10px;font-weight:bold;color:#f0c040'>{$price} 💰</td>
+                <td style='padding:3px 10px;color:#7ec8e3'>{$user}</td>
+                <td style='padding:3px 10px;color:#888;font-size:0.85em'>{$date}</td>
+            </tr>";
+        })->implode('');
+
+        return new HtmlString("
+            <table style='border-collapse:collapse;width:100%'>
+                <thead>
+                    <tr style='border-bottom:1px solid #333'>
+                        <th style='padding:3px 10px;text-align:left;color:#aaa;font-size:0.85em'>Цена</th>
+                        <th style='padding:3px 10px;text-align:left;color:#aaa;font-size:0.85em'>Игрок</th>
+                        <th style='padding:3px 10px;text-align:left;color:#aaa;font-size:0.85em'>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>{$rows}</tbody>
+            </table>
+        ");
     }
 }
