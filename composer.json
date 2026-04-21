@@ -29,6 +29,12 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "@php /opt/php-preload/symlink-shared-vendor.php"
+        ],
+        "post-update-cmd": [
+            "@php /opt/php-preload/symlink-shared-vendor.php"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
