@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ItemResource\Pages;
 use App\Models\Item;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,9 +14,9 @@ class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
 
-    protected static ?string $navigationIcon  = 'heroicon-o-shield-check';
+    protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-shield-check';
     protected static ?string $navigationLabel = 'Экипировка';
-    protected static ?string $navigationGroup = 'Справочники';
+    protected static \UnitEnum|string|null $navigationGroup = 'Справочники';
     protected static ?int    $navigationSort  = 11;
 
     public static function table(Table $table): Table
@@ -137,9 +137,9 @@ class ItemResource extends Resource
             ]);
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             Forms\Components\Section::make('Основное')->schema([
                 Forms\Components\TextInput::make('title')
                     ->label('Название')

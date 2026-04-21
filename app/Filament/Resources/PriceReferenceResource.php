@@ -8,7 +8,7 @@ use App\Models\Item;
 use App\Models\Listing;
 use App\Models\PriceReference;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,9 +18,9 @@ class PriceReferenceResource extends Resource
 {
     protected static ?string $model = PriceReference::class;
 
-    protected static ?string $navigationIcon  = 'heroicon-o-currency-dollar';
+    protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-currency-dollar';
     protected static ?string $navigationLabel = 'Справочник цен';
-    protected static ?string $navigationGroup = 'Справочники';
+    protected static \UnitEnum|string|null $navigationGroup = 'Справочники';
     protected static ?int    $navigationSort  = 2;
 
     public static function table(Table $table): Table
@@ -128,9 +128,9 @@ class PriceReferenceResource extends Resource
             ]);
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             Forms\Components\Section::make('Товар')
                 ->schema([
                     Forms\Components\Placeholder::make('product_display')

@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ListingResource\Pages;
 use App\Models\Listing;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -14,9 +14,9 @@ class ListingResource extends Resource
 {
     protected static ?string $model = Listing::class;
 
-    protected static ?string $navigationIcon  = 'heroicon-o-exclamation-triangle';
+    protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-exclamation-triangle';
     protected static ?string $navigationLabel = 'Аномальные цены';
-    protected static ?string $navigationGroup = 'Модерация';
+    protected static \UnitEnum|string|null $navigationGroup = 'Модерация';
     protected static ?int    $navigationSort  = 2;
 
     public static function getNavigationBadge(): ?string
@@ -143,9 +143,9 @@ class ListingResource extends Resource
             ]);
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([]);
+        return $schema->components([]);
     }
 
     public static function getPages(): array

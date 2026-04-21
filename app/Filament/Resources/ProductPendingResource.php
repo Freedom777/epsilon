@@ -7,7 +7,7 @@ use App\Models\Asset;
 use App\Models\Item;
 use App\Models\ProductPending;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -17,9 +17,9 @@ class ProductPendingResource extends Resource
 {
     protected static ?string $model = ProductPending::class;
 
-    protected static ?string $navigationIcon  = 'heroicon-o-clock';
+    protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-clock';
     protected static ?string $navigationLabel = 'Очередь товаров';
-    protected static ?string $navigationGroup = 'Модерация';
+    protected static \UnitEnum|string|null $navigationGroup = 'Модерация';
     protected static ?int    $navigationSort  = 1;
 
     public static function getNavigationBadge(): ?string
@@ -313,9 +313,9 @@ class ProductPendingResource extends Resource
             ]);
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([]);
+        return $schema->components([]);
     }
 
     public static function getPages(): array
