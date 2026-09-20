@@ -53,21 +53,26 @@ abstract class BaseFetchCommand extends Command
         $model = $this->modelClass();
         $total = $opts['to'] - $opts['from'] + 1;
 
-        $this->info("Запуск: ID {$opts['from']}..{$opts['to']}, чат: {$opts['chatName']}");
+        $this->info('Запуск: ID ' . $opts['from'] . '..' . $opts['to'] . ', чат: ' . $opts['chatName']);
 
         $mp  = $this->getMadelineProto();
         $bar = $this->createProgressBar($total);
+
+        $completedIds = [];
+        if ($opts['skipDone']) {
+            $completedIds = $model::where('status', MainStatusEnum::OK)
+                ->whereBetween('id', [$opts['from'], $opts['to']])
+                ->pluck('id')
+                ->toArray();
+        }
 
         try {
             for ($n = $opts['from']; $n <= $opts['to']; $n++) {
                 $bar->setMessage((string) $n);
 
-                if ($opts['skipDone']) {
-                    $existing = $model::find($n);
-                    if ($existing && $existing->status === MainStatusEnum::OK) {
-                        $bar->advance();
-                        continue;
-                    }
+                if (!empty($completedIds) && in_array($n, $completedIds, true)) {
+                    $bar->advance();
+                    continue;
                 }
 
                 $model::updateOrCreate(
@@ -79,13 +84,13 @@ abstract class BaseFetchCommand extends Command
                     $response = $this->sendCommandAndGetResponse(
                         $mp,
                         $opts['chatName'],
-                        $this->botCommand() . " {$n}"
+                        $this->botCommand() . ' ' . $n
                     );
 
                     if ($response === null) {
                         $model::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
                         $this->newLine();
-                        $this->warn("ID {$n}: нет ответа за " . self::RESPONSE_TIMEOUT . " сек");
+                        $this->warn('ID ' . $n . ': нет ответа за ' . self::RESPONSE_TIMEOUT . ' сек');
                     } elseif (trim($response) === '' || $response === $this->notFoundText()) {
                         $model::where('id', $n)->update(['status' => MainStatusEnum::EMPTY]);
                     } else {
@@ -100,7 +105,7 @@ abstract class BaseFetchCommand extends Command
                 } catch (\Throwable $e) {
                     $model::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
                     $this->newLine();
-                    $this->error("ID {$n}: {$e->getMessage()}");
+                    $this->error('ID ' . $n . ': ' . $e->getMessage());
                 }
 
                 $bar->advance();
