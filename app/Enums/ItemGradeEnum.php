@@ -9,4 +9,5 @@ enum ItemGradeEnum: string
     case III   = 'III';
     case III_PLUS = 'III+';
     case IV    = 'IV';
+    case IV_PLUS = 'IV+';
 }
