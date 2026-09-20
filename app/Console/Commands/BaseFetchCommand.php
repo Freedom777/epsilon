@@ -11,9 +11,30 @@ abstract class BaseFetchCommand extends Command
 {
     private const RESPONSE_TIMEOUT = 15;
 
+    private bool $interrupted = false;
+
     public function __construct(protected readonly TelegramFetcher $fetcher)
     {
         parent::__construct();
+    }
+
+    private function setupSignalHandlers(): void
+    {
+        if (!extension_loaded('pcntl')) {
+            return;
+        }
+
+        pcntl_signal(SIGINT, function () {
+            $this->interrupted = true;
+            $this->newLine();
+            $this->warn('Получен сигнал прерывания. Завершение...');
+        });
+
+        pcntl_signal(SIGTERM, function () {
+            $this->interrupted = true;
+            $this->newLine();
+            $this->warn('Получен сигнал завершения. Завершение...');
+        });
     }
 
     // =========================================================================
@@ -44,6 +65,8 @@ abstract class BaseFetchCommand extends Command
 
     protected function handleFetch(): int
     {
+        $this->setupSignalHandlers();
+
         $opts = $this->resolveOptions();
 
         if (!$this->validateOptions($opts)) {
@@ -68,6 +91,10 @@ abstract class BaseFetchCommand extends Command
 
         try {
             for ($n = $opts['from']; $n <= $opts['to']; $n++) {
+                if ($this->interrupted) {
+                    break;
+                }
+
                 $bar->setMessage((string) $n);
 
                 if (!empty($completedIds) && in_array($n, $completedIds, true)) {
@@ -120,8 +147,13 @@ abstract class BaseFetchCommand extends Command
 
         $bar->finish();
         $this->newLine(2);
-        $this->info('Готово!');
 
+        if ($this->interrupted) {
+            $this->warn('Выполнение прервано пользователем.');
+            return self::FAILURE;
+        }
+
+        $this->info('Готово!');
         return self::SUCCESS;
     }
 
@@ -191,6 +223,10 @@ abstract class BaseFetchCommand extends Command
         $deadline = time() + self::RESPONSE_TIMEOUT;
 
         while (time() < $deadline) {
+            if ($this->interrupted) {
+                return null;
+            }
+
             sleep(1);
 
             $history = $madelineProto->messages->getHistory(
