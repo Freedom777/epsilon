@@ -16,12 +16,13 @@ class FetchItems extends BaseFetchCommand
 
     protected $description = 'Последовательно вызывает /getequip N в Telegram-чате и сохраняет ответы в БД';
 
+    /** Мап для точной идентификации полей по тексту перед двоеточием */
     private const FIELD_MAP = [
-        '❇️' => 'type',
-        '📏' => 'subtype',
-        '💎' => 'rarity',
-        '⚙️' => 'durability_max',
-        '💰' => 'price',
+        'Тип предмета' => 'type',
+        'Тип инструмента' => 'subtype',
+        'Редкость' => 'rarity',
+        'Максимальная прочность' => 'durability_max',
+        'Цена продажи' => 'price',
     ];
 
     protected function modelClass(): string { return Item::class; }
@@ -78,14 +79,19 @@ class FetchItems extends BaseFetchCommand
             $parsingDesc = false;
 
             $matched = false;
-            foreach (self::FIELD_MAP as $emoji => $field) {
-                if (str_starts_with($line, $emoji)) {
+
+            // Проверяем текстовые идентификаторы полей (более надёжно, чем эмодзи)
+            foreach (self::FIELD_MAP as $fieldLabel => $field) {
+                if (strpos($line, $fieldLabel) !== false && strpos($line, ':') !== false) {
                     $value = trim(substr($line, strpos($line, ':') + 1));
-                    $data[$field] = match($field) {
-                        'durability_max', 'price' => (int) $value,
-                        default                   => $value,
-                    };
-                    $matched = true;
+                    // Пропускаем пустые значения и очевидные ошибки парсинга
+                    if ($value !== '' && !str_contains($value, '(') && !str_contains($value, 'материал')) {
+                        $data[$field] = match($field) {
+                            'durability_max', 'price' => (int) $value,
+                            default                   => $value,
+                        };
+                        $matched = true;
+                    }
                     break;
                 }
             }
@@ -114,10 +120,10 @@ class FetchItems extends BaseFetchCommand
 
     private function isKnownFieldLine(string $line): bool
     {
-        $knownPrefixes = [...array_keys(self::FIELD_MAP), '☢️', '📌', 'Бонусы', 'Требования', '·'];
+        $knownPrefixes = [...array_values(self::FIELD_MAP), '☢️', '📌', 'Бонусы', 'Требования', '·', 'Грейд'];
 
         foreach ($knownPrefixes as $prefix) {
-            if (str_starts_with($line, $prefix)) {
+            if (strpos($line, $prefix) !== false) {
                 return true;
             }
         }
