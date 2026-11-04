@@ -130,7 +130,7 @@ abstract class BaseFetchCommand extends Command
                             $parsed = $this->parseResponse($response);
 
                             $model::where('id', $n)->update([
-                                'raw_response' => $response,
+                                'raw_response_new' => $response,
                                 'status'       => MainStatusEnum::OK,
                                 ...$parsed,
                             ]);
