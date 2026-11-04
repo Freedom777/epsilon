@@ -7,12 +7,13 @@ use App\Models\Item;
 class FetchItems extends BaseFetchCommand
 {
     protected $signature = 'items:fetch
-                            {--from=1      : ID с которого начинать}
-                            {--to=100      : ID по который брать включительно}
-                            {--chat=       : Username или числовой ID чата}
-                            {--delay-min=1 : Минимальная задержка в секундах}
-                            {--delay-max=2 : Максимальная задержка в секундах}
-                            {--skip-done   : Пропускать уже успешно обработанные}';
+                            {--from=1       : ID с которого начинать}
+                            {--to=100       : ID по который брать включительно}
+                            {--chat=        : Username или числовой ID чата}
+                            {--delay-min=1  : Минимальная задержка в секундах}
+                            {--delay-max=2  : Максимальная задержка в секундах}
+                            {--skip-done    : Пропускать уже успешно обработанные}
+                            {--new-response : Только получить новый response и записать в базу}';
 
     protected $description = 'Последовательно вызывает /getequip N в Telegram-чате и сохраняет ответы в БД';
 
