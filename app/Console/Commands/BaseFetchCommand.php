@@ -104,7 +104,7 @@ abstract class BaseFetchCommand extends Command
 
                 $model::updateOrCreate(
                     ['id' => $n],
-                    ['status' => MainStatusEnum::PROCESS, ...$this->processDefaults()]
+                    $opts['newResponse'] ? ['status' => MainStatusEnum::PROCESS] : ['status' => MainStatusEnum::PROCESS, ...$this->processDefaults()]
                 );
 
                 try {
