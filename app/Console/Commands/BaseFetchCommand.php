@@ -121,13 +121,20 @@ abstract class BaseFetchCommand extends Command
                     } elseif (trim($response) === '' || $response === $this->notFoundText()) {
                         $model::where('id', $n)->update(['status' => MainStatusEnum::EMPTY]);
                     } else {
-                        $parsed = $this->parseResponse($response);
+                        if ($opts['newResponse']) {
+                            $model::where('id', $n)->update([
+                                'raw_response_new' => $response,
+                                'status'       => MainStatusEnum::OK,
+                            ]);
+                        } else {
+                            $parsed = $this->parseResponse($response);
 
-                        $model::where('id', $n)->update([
-                            'raw_response' => $response,
-                            'status'       => MainStatusEnum::OK,
-                            ...$parsed,
-                        ]);
+                            $model::where('id', $n)->update([
+                                'raw_response' => $response,
+                                'status'       => MainStatusEnum::OK,
+                                ...$parsed,
+                            ]);
+                        }
                     }
                 } catch (\Throwable $e) {
                     $model::where('id', $n)->update(['status' => MainStatusEnum::ERROR]);
@@ -170,6 +177,7 @@ abstract class BaseFetchCommand extends Command
             'delayMin' => (int) $this->option('delay-min'),
             'delayMax' => (int) $this->option('delay-max'),
             'skipDone' => (bool) $this->option('skip-done'),
+            'newResponse' => (bool) $this->option('new-response'),
         ];
     }
 
