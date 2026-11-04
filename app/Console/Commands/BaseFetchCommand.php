@@ -82,7 +82,7 @@ abstract class BaseFetchCommand extends Command
         $bar = $this->createProgressBar($total);
 
         $completedIds = [];
-        if ($opts['skipDone']) {
+        if ($opts['skipDone'] && !$opts['newResponse']) {
             $completedIds = $model::where('status', MainStatusEnum::OK)
                 ->whereBetween('id', [$opts['from'], $opts['to']])
                 ->pluck('id')
